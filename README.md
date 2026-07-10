@@ -1,19 +1,7 @@
-<<<<<<< HEAD
 # Frontend 개발
 
 > 토모펫 서비스 프론트엔드 저장소입니다. 
 > 본 저장소는 **HTML5, CSS3, Vanilla JavaScript**를 사용하여 개발을 진행합니다.
-=======
-# TOMOPET (토모펫) — Frontend
-
-토모펫 서비스 프론트엔드 저장소입니다.
-본 저장소는 **HTML5, CSS3, Vanilla JavaScript** 를 사용하여 개발을 진행합니다.
-
-**데스크톱 전용** — 최소 지원 폭 1024px, 미디어 쿼리 미사용
-
-> 협업 규칙 상세는 [CONTRIBUTING.md](./CONTRIBUTING.md)
-> 남은 작업과 페이지별 주의점은 [ROADMAP.md](./ROADMAP.md)
->>>>>>> 1d3024b (feat: TOMOPET 프론트엔드 초기 구조)
 
 ---
 
