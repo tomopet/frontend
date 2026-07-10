@@ -1,0 +1,830 @@
+/* ============================================================
+   TOMOPET | components.css
+   전 페이지 공통 컴포넌트 스타일
+
+   로드 순서: variables.css -> common.css -> [components.css] -> [page].css
+   적용 범위: 전체 페이지 공통
+
+   포함 컴포넌트
+     1. 헤더 (site-header)
+     2. 푸터 (site-footer)
+     3. 버튼 (btn)
+     4. 폼 필드 (form-field)
+     5. 카드 (card)
+     6. 배지 / 칩 (badge, chip)
+     7. 배너 (banner)
+     8. 브레드크럼 (breadcrumb)
+     9. 페이지네이션 (pagination)
+    10. 아바타 (avatar)
+    11. 빈 상태 (empty-state)
+    12. 이미지 플레이스홀더 (thumb)
+   ============================================================ */
+
+
+/* ============================================================
+   1. [공통] 헤더
+   components/header.html 과 함께 사용
+   ============================================================ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  height: var(--header-height);
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  height: 100%;
+  max-width: var(--layout-max-width);
+  margin-inline: auto;
+  padding-inline: var(--spacing-lg);
+}
+
+/* 로고 */
+.site-header__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-shrink: 0;
+}
+
+.site-header__logo-mark {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-on-primary);
+  background-color: var(--color-primary);
+  border-radius: var(--radius-md);
+}
+
+.site-header__logo-text {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+}
+
+/* 주요 내비게이션 */
+.site-header__nav {
+  flex: 1;
+}
+
+.nav-list {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.nav-list__link {
+  position: relative;
+  display: inline-block;
+  padding-block: var(--spacing-xs);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.nav-list__link:hover {
+  color: var(--color-text);
+}
+
+.nav-list__link--active {
+  color: var(--color-primary-deep);
+}
+
+/* 활성 메뉴 하단 인디케이터 */
+.nav-list__link--active::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -2px;
+  height: 2px;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-full);
+}
+
+/* 헤더 우측 액션 */
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-left: auto;
+}
+
+/* 레이아웃 로드 실패 안내 - layout.js 가 삽입 */
+.layout-error {
+  padding: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+
+/* ============================================================
+   2. [공통] 푸터
+   components/footer.html 과 함께 사용
+   ============================================================ */
+/* 딥 톤 배경으로 페이지 하단을 닫음
+   전부 밝은 톤이면 스크롤 끝에서 화면이 붕 뜨는 느낌이 남 */
+.site-footer {
+  margin-top: var(--spacing-3xl);
+  padding-block: var(--spacing-xl);
+  background-color: var(--color-deep);
+}
+
+.site-footer__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  max-width: var(--layout-max-width);
+  margin-inline: auto;
+  padding-inline: var(--spacing-lg);
+}
+
+.footer-nav__list {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.footer-nav__link {
+  font-size: var(--font-size-sm);
+  color: var(--color-deep-text-muted);
+  transition: color var(--transition-fast);
+}
+
+.footer-nav__link:hover {
+  color: var(--color-deep-text);
+}
+
+.site-footer__copy {
+  font-size: var(--font-size-xs);
+  color: var(--color-deep-text-muted);
+}
+
+
+/* ============================================================
+   3. [공통] 버튼
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2xs);
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast),
+              border-color var(--transition-fast),
+              color var(--transition-fast);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 메인 액션 */
+.btn--primary {
+  color: var(--color-text-on-primary);
+  background-color: var(--color-primary);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+}
+
+/* 보조 액션 */
+.btn--secondary {
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+}
+
+.btn--secondary:hover:not(:disabled) {
+  color: var(--color-text);
+  background-color: var(--color-surface-hover);
+}
+
+/* 액센트 액션 - AI 기능, 안전 관련 */
+.btn--accent {
+  color: var(--color-text-on-accent);
+  background-color: var(--color-accent);
+}
+
+.btn--accent:hover:not(:disabled) {
+  background-color: var(--color-accent-hover);
+}
+
+/* 액센트 틴트 - 보조 액센트 액션 */
+.btn--accent-soft {
+  color: var(--color-accent-deep);
+  background-color: var(--color-accent-light);
+}
+
+.btn--accent-soft:hover:not(:disabled) {
+  color: var(--color-text-on-accent);
+  background-color: var(--color-accent);
+}
+
+/* 배경 없는 액션 */
+.btn--ghost {
+  color: var(--color-text-secondary);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  color: var(--color-text);
+  background-color: var(--color-surface-hover);
+}
+
+/* 파괴적 액션 */
+.btn--danger {
+  color: var(--color-danger);
+  background-color: transparent;
+  border: 1px solid var(--color-danger);
+}
+
+.btn--danger:hover:not(:disabled) {
+  color: var(--color-text-on-dark);
+  background-color: var(--color-danger);
+}
+
+/* 점선 테두리 - 추가 버튼 */
+.btn--dashed {
+  color: var(--color-text-muted);
+  background-color: transparent;
+  border: 1px dashed var(--color-border-strong);
+}
+
+.btn--dashed:hover:not(:disabled) {
+  color: var(--color-primary-deep);
+  border-color: var(--color-primary-deep);
+  background-color: var(--color-primary-light);
+}
+
+/* 크기 변형 */
+.btn--sm {
+  padding: var(--spacing-2xs) var(--spacing-sm);
+  font-size: var(--font-size-sm);
+}
+
+.btn--lg {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--font-size-lg);
+}
+
+.btn--full {
+  width: 100%;
+}
+
+/* 아이콘 전용 버튼 */
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast);
+}
+
+.icon-btn:hover {
+  color: var(--color-text);
+  background-color: var(--color-surface-hover);
+}
+
+
+/* ============================================================
+   3-1. [공통] 소셜 로그인 버튼
+   [추후 적용] login.html 에서 주석 해제 시 사용
+   ============================================================ */
+.btn--social {
+  gap: var(--spacing-xs);
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+}
+
+.btn--kakao {
+  color: var(--color-kakao-text);
+  background-color: var(--color-kakao);
+}
+
+.btn--kakao:hover {
+  filter: brightness(0.95);
+}
+
+.btn--naver {
+  color: var(--color-naver-text);
+  background-color: var(--color-naver);
+}
+
+.btn--naver:hover {
+  filter: brightness(0.95);
+}
+
+.btn--google {
+  color: var(--color-google-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-google-border);
+}
+
+.btn--google:hover {
+  background-color: var(--color-surface-hover);
+}
+
+
+/* ============================================================
+   4. [공통] 폼 필드
+   ============================================================ */
+.form-field {
+  margin-bottom: var(--spacing-md);
+}
+
+.form-field__label {
+  display: block;
+  margin-bottom: var(--spacing-2xs);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.form-field__input,
+.form-field__select,
+.form-field__textarea {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-sm);
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+  background-color: var(--color-surface-alt);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  transition: border-color var(--transition-fast),
+              box-shadow var(--transition-fast);
+}
+
+.form-field__input::placeholder,
+.form-field__textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+.form-field__input:hover,
+.form-field__select:hover,
+.form-field__textarea:hover {
+  background-color: var(--color-surface-hover);
+}
+
+/* 포커스 시에만 흰 배경 + 테두리로 활성 상태를 명확히 표시 */
+.form-field__input:focus,
+.form-field__select:focus,
+.form-field__textarea:focus {
+  background-color: var(--color-surface);
+  border-color: var(--color-border-focus);
+  box-shadow: var(--shadow-focus);
+  outline: none;
+}
+
+.form-field__textarea {
+  min-height: 120px;
+  line-height: var(--line-height-base);
+  resize: vertical;
+}
+
+/* 유효성 검사 실패 상태 */
+.form-field__input--error,
+.form-field__select--error,
+.form-field__textarea--error {
+  border-color: var(--color-danger);
+}
+
+.form-field__error {
+  display: block;
+  margin-top: var(--spacing-2xs);
+  font-size: var(--font-size-xs);
+  color: var(--color-danger);
+}
+
+.form-field__hint {
+  display: block;
+  margin-top: var(--spacing-2xs);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* 체크박스 / 라디오 */
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.check-item__input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-primary-deep);
+  cursor: pointer;
+}
+
+.check-item__label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+
+
+/* ============================================================
+   5. [공통] 카드
+   ============================================================ */
+/* 1px 테두리 대신 그림자로 배경과 분리
+   테두리 + 은은한 그림자 조합은 UI 템플릿처럼 보임 */
+.card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow var(--transition-base),
+              transform var(--transition-base);
+}
+
+/* 클릭 가능한 카드 */
+.card--clickable:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-3px);
+}
+
+/* 카드 전체를 감싸는 링크 - JS 렌더링 시 사용 */
+.card__link {
+  display: block;
+  color: inherit;
+  height: 100%;
+}
+
+.card__body {
+  padding: var(--spacing-md);
+}
+
+/* 카드 본문 내 배지는 제목 위에 여백을 두고 배치 */
+.card__body .badge {
+  margin-bottom: var(--spacing-xs);
+}
+
+.card__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--color-deep);
+}
+
+.card__desc {
+  margin-top: var(--spacing-2xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+
+/* ============================================================
+   6. [공통] 배지 / 칩
+   ============================================================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-2xs) var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-full);
+}
+
+.badge--primary {
+  color: var(--color-primary-deep);
+  background-color: var(--color-primary-light);
+}
+
+.badge--accent {
+  color: var(--color-accent-deep);
+  background-color: var(--color-accent-light);
+}
+
+.badge--success {
+  color: var(--color-success);
+  background-color: var(--color-success-bg);
+}
+
+/* 커뮤니티 카테고리 배지 - 목록에서 글 종류를 색으로 즉시 구분 */
+.badge--gallery {
+  color: var(--color-category-gallery);
+  background-color: var(--color-category-gallery-bg);
+}
+
+.badge--recipe {
+  color: var(--color-category-recipe);
+  background-color: var(--color-category-recipe-bg);
+}
+
+.badge--free {
+  color: var(--color-category-free);
+  background-color: var(--color-category-free-bg);
+}
+
+.badge--warning {
+  color: var(--color-warning);
+  background-color: var(--color-warning-bg);
+}
+
+.badge--danger {
+  color: var(--color-danger);
+  background-color: var(--color-danger-bg);
+}
+
+/* 태그 칩 */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  padding: var(--spacing-2xs) var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  transition: border-color var(--transition-fast);
+}
+
+.chip:hover {
+  border-color: var(--color-border-strong);
+}
+
+
+/* ------------------------------------------------------------
+   상태 칩 - 색 + 도형 + 텍스트 3중 표시
+
+   색만으로 상태를 구분하면 적록색약 사용자가 인식하지 못함
+   (남성 약 8%, WCAG 1.4.1 색에 의존하지 않기)
+
+   정상 = 원 / 주의 = 삼각 / 위험 = 사각
+   ------------------------------------------------------------ */
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.status-chip::before {
+  content: "";
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  background-color: currentColor;
+}
+
+/* 정상 - 원 */
+.status-chip--normal {
+  color: var(--color-success);
+}
+
+.status-chip--normal::before {
+  border-radius: var(--radius-full);
+}
+
+/* 주의 - 삼각 */
+.status-chip--caution {
+  color: var(--color-warning);
+}
+
+.status-chip--caution::before {
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+/* 위험 - 사각 */
+.status-chip--danger {
+  color: var(--color-danger);
+}
+
+.status-chip--danger::before {
+  border-radius: 2px;
+}
+
+/* 정보 없음 - 빈 원 */
+.status-chip--none {
+  color: var(--color-text-muted);
+}
+
+.status-chip--none::before {
+  background-color: transparent;
+  border: 1.5px solid currentColor;
+  border-radius: var(--radius-full);
+}
+
+
+/* ============================================================
+   7. [공통] 배너 (알림 / 경고 / 성공)
+   ============================================================ */
+.banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-md);
+}
+
+.banner--success {
+  color: var(--color-success);
+  background-color: var(--color-success-bg);
+}
+
+.banner--warning {
+  color: var(--color-warning);
+  background-color: var(--color-warning-bg);
+}
+
+.banner--danger {
+  color: var(--color-danger);
+  background-color: var(--color-danger-bg);
+}
+
+.banner--info {
+  color: var(--color-info);
+  background-color: var(--color-info-bg);
+}
+
+
+/* ============================================================
+   8. [공통] 브레드크럼
+   ============================================================ */
+.breadcrumb {
+  margin-bottom: var(--spacing-md);
+}
+
+.breadcrumb__list {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.breadcrumb__item:not(:last-child)::after {
+  content: "/";
+  margin-left: var(--spacing-2xs);
+  color: var(--color-border-strong);
+}
+
+.breadcrumb__item a:hover {
+  color: var(--color-text);
+}
+
+.breadcrumb__item[aria-current="page"] {
+  color: var(--color-text);
+  font-weight: var(--font-weight-medium);
+}
+
+
+/* ============================================================
+   9. [공통] 페이지네이션
+   ============================================================ */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-2xs);
+  margin-top: var(--spacing-xl);
+}
+
+.pagination__item {
+  display: grid;
+  place-items: center;
+  min-width: 36px;
+  height: 36px;
+  padding-inline: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+}
+
+.pagination__item:hover {
+  background-color: var(--color-surface-hover);
+}
+
+.pagination__item--active {
+  color: var(--color-text-on-primary);
+  background-color: var(--color-primary);
+}
+
+.pagination__item--active:hover {
+  background-color: var(--color-primary-hover);
+}
+
+
+/* ============================================================
+   10. [공통] 아바타
+   ============================================================ */
+.avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  color: var(--color-primary-deep);
+  background-color: var(--color-primary-light);
+  border-radius: var(--radius-full);
+  font-weight: var(--font-weight-medium);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar--sm { width: 28px; height: 28px; font-size: var(--font-size-xs); }
+.avatar--md { width: 40px; height: 40px; font-size: var(--font-size-sm); }
+.avatar--lg { width: 64px; height: 64px; font-size: var(--font-size-lg); }
+.avatar--xl { width: 88px; height: 88px; font-size: var(--font-size-2xl); }
+
+
+/* ============================================================
+   11. [공통] 빈 상태
+   API 연동 전 또는 데이터 0건일 때 표시
+   ============================================================ */
+.empty-state {
+  display: grid;
+  place-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-2xl) var(--spacing-md);
+  text-align: center;
+}
+
+.empty-state__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+.empty-state__desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* 빈 상태에는 반드시 다음 행동을 제시
+   문구만 두면 사용자가 무엇을 해야 할지 몰라 이탈함 */
+.empty-state__action {
+  margin-top: var(--spacing-sm);
+}
+
+
+/* ============================================================
+   12. [공통] 이미지 플레이스홀더
+   실제 이미지 로드 전 자리 확보용
+   ============================================================ */
+.thumb {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  color: var(--color-text-muted);
+  background-color: var(--color-surface-alt);
+  overflow: hidden;
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumb--square { aspect-ratio: 1 / 1; }
+.thumb--wide   { aspect-ratio: 16 / 9; }
+
+
+/* ============================================================
+   [공통] 그리드 유틸리티
+   카드 목록에서 반복 사용
+   ============================================================ */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-md);
+}
+
+

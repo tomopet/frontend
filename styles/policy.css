@@ -1,0 +1,173 @@
+/* ============================================================
+   TOMOPET | styles/policy.css
+   정책 페이지 공용 - terms.html, privacy.html
+
+   적용 범위: 이용약관, 개인정보처리방침
+   로드 순서: variables.css -> common.css -> components.css -> policy.css
+
+   긴 본문을 읽는 페이지이므로
+   행간을 넓히고 콘텐츠 폭을 720px 로 제한함
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   문서 본문
+   ------------------------------------------------------------ */
+
+.policy {
+  padding-bottom: var(--spacing-2xl);
+}
+
+/* 시행일 등 메타 정보 */
+.policy__meta {
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-md);
+}
+
+.policy__meta strong {
+  color: var(--color-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* ------------------------------------------------------------
+   목차 - 조항이 많아 상단 이동 링크 제공
+   ------------------------------------------------------------ */
+
+.policy-toc {
+  margin-bottom: var(--spacing-2xl);
+  padding: var(--spacing-lg);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.policy-toc__title {
+  margin-bottom: var(--spacing-sm);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-deep);
+}
+
+.policy-toc__list {
+  display: grid;
+  gap: var(--spacing-2xs);
+}
+
+.policy-toc__link {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.policy-toc__link:hover {
+  color: var(--color-primary-deep);
+}
+
+
+/* ------------------------------------------------------------
+   조항
+   ------------------------------------------------------------ */
+
+.policy-section {
+  margin-bottom: var(--spacing-2xl);
+
+  /* 목차 링크로 이동할 때 헤더에 가리지 않도록 여백 확보 */
+  scroll-margin-top: calc(var(--header-height) + var(--spacing-lg));
+}
+
+.policy-section__title {
+  margin-bottom: var(--spacing-sm);
+  padding-bottom: var(--spacing-xs);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-deep);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.policy-section__text {
+  margin-bottom: var(--spacing-sm);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-loose);
+  color: var(--color-text);
+}
+
+/* 번호 목록 - 조항 내 세부 항목 */
+.policy-list {
+  margin: var(--spacing-sm) 0 var(--spacing-md);
+  padding-left: var(--spacing-lg);
+  list-style: decimal;
+}
+
+.policy-list--disc {
+  list-style: disc;
+}
+
+.policy-list__item {
+  margin-bottom: var(--spacing-2xs);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-loose);
+  color: var(--color-text);
+}
+
+
+/* ------------------------------------------------------------
+   수집 항목 표
+   ------------------------------------------------------------ */
+
+.policy-table {
+  width: 100%;
+  margin: var(--spacing-md) 0;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.policy-table caption {
+  padding-bottom: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-align: left;
+}
+
+.policy-table th,
+.policy-table td {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.policy-table thead th {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-deep);
+  background-color: var(--color-surface-alt);
+}
+
+.policy-table tbody tr:last-child th,
+.policy-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.policy-table tbody th {
+  width: 30%;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+
+/* ------------------------------------------------------------
+   초안 안내 배너
+   법률 검토 전임을 명시
+   ------------------------------------------------------------ */
+
+.policy-draft-notice {
+  margin-bottom: var(--spacing-xl);
+}

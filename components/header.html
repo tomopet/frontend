@@ -1,0 +1,64 @@
+<!-- ============================================================
+     TOMOPET | components/header.html
+     전 페이지 공통 헤더 (데스크톱 전용)
+
+     사용법
+       1. 각 페이지에 <div id="header-placeholder"></div> 배치
+       2. scripts/layout.js 가 이 파일을 fetch 하여 삽입
+       3. 현재 페이지에 해당하는 nav 링크에 활성 클래스 자동 부여
+
+     주의
+       fetch 사용을 위해 로컬 서버 환경 필요 (file:// 프로토콜 불가)
+       VSCode Live Server 확장 또는 python -m http.server 사용
+     ============================================================ -->
+
+<header class="site-header" role="banner">
+  <div class="site-header__inner">
+
+    <!-- 로고 -->
+    <a href="./index.html" class="site-header__logo" aria-label="TOMOPET 홈으로 이동">
+      <span class="site-header__logo-mark" aria-hidden="true">T</span>
+      <span class="site-header__logo-text">TOMOPET</span>
+    </a>
+
+    <!-- 주요 내비게이션
+
+         [확인 필요] 아래 메뉴 4개는 이 패키지에 페이지 파일이 없어
+         클릭하면 404 가 발생함
+           community.html / health-record.html
+           food-recommend.html / ai-chat.html
+
+         전체 패키지에는 존재하므로 링크는 그대로 유지
+         이 패키지만 배포한다면 해당 <li> 를 주석 처리할 것 -->
+    <nav class="site-header__nav" aria-label="주요 메뉴">
+      <ul class="nav-list">
+        <li><a href="./community.html"      class="nav-list__link" data-nav="community">커뮤니티</a></li>
+        <li><a href="./health-record.html"  class="nav-list__link" data-nav="health-record">건강기록</a></li>
+        <li><a href="./food-recommend.html" class="nav-list__link" data-nav="food-recommend">사료추천</a></li>
+        <li><a href="./ai-chat.html"        class="nav-list__link" data-nav="ai-chat">AI 비서</a></li>
+      </ul>
+    </nav>
+
+    <!-- 우측 액션 -->
+    <div class="site-header__actions">
+      <!-- [추후 적용] 통합 검색
+           동작하지 않는 버튼을 노출하면 사용자가 고장으로 인식하므로
+           기능 구현 전까지 hidden 유지 -->
+      <button type="button" class="icon-btn" id="header-search-btn" aria-label="검색" hidden>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+        </svg>
+      </button>
+
+      <!-- layout.js 의 renderAuthState() 가 로그인 상태에 따라 둘 중 하나만 노출 -->
+      <a href="./login.html" class="btn btn--primary btn--sm" id="header-login-btn">로그인</a>
+
+      <!-- 로그인 상태에서 노출 -->
+      <a href="./my-page.html" class="avatar avatar--sm" id="header-profile-btn" aria-label="마이페이지" hidden>
+        <!-- src 는 layout.js 가 프로필 이미지 URL 로 채움 -->
+        <img alt="">
+      </a>
+    </div>
+
+  </div>
+</header>

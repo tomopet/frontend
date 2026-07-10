@@ -1,0 +1,245 @@
+/* ============================================================
+   TOMOPET | index.css
+   메인(홈) 페이지 전용 스타일
+   적용 범위: index.html
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   히어로
+   ------------------------------------------------------------ */
+/* 컨테이너 밖까지 배경을 채우기 위해 음수 마진 사용
+   그라데이션은 히어로에만 적용 - 여러 곳에 쓰면 산만해짐 */
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  align-items: center;
+  gap: var(--spacing-2xl);
+  margin-inline: calc(var(--spacing-lg) * -1);
+  padding: var(--spacing-3xl) var(--spacing-lg);
+  background: linear-gradient(135deg,
+              var(--color-bg) 0%,
+              var(--color-primary-light) 100%);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+/* 좌측 세로 바로 시선 유도 */
+.hero__eyebrow {
+  position: relative;
+  margin-bottom: var(--spacing-sm);
+  padding-left: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.02em;
+  color: var(--color-primary-deep);
+}
+
+/* 순수 장식 요소
+   브랜드 색은 클릭 가능한 것에만 쓴다는 규칙에 따라
+   현재 텍스트 색을 그대로 물려받음 */
+.hero__eyebrow::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  translate: 0 -50%;
+  width: 3px;
+  height: 14px;
+  background-color: currentColor;
+  border-radius: var(--radius-full);
+  opacity: 0.5;
+}
+
+/* 40px + 타이트한 자간/행간
+   본문(14px)과 3배 가까이 벌려야 위계가 명확히 보임 */
+.hero__title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.18;
+  letter-spacing: -0.035em;
+  color: var(--color-deep);
+}
+
+.hero__desc {
+  margin-top: var(--spacing-sm);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-loose);
+  color: var(--color-text-secondary);
+}
+
+.hero__cta {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-lg);
+}
+
+/* 정사각형 이미지를 우측에 놓는 배치는 랜딩페이지 클리셰
+   세로 비율 + 미세한 회전으로 손으로 놓은 사진처럼 보이게 함 */
+.hero__visual {
+  position: relative;
+  /* 쌓임 맥락 생성
+     없으면 아래 ::before 의 z-index:-1 이 .hero 배경 뒤로 숨음 */
+  z-index: 0;
+}
+
+.hero__visual .thumb {
+  aspect-ratio: 4 / 5;
+  background-color: var(--color-primary-light);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  rotate: 2deg;
+  transition: rotate var(--transition-slow);
+}
+
+.hero__visual:hover .thumb {
+  rotate: 0deg;
+}
+
+/* 뒤에 겹쳐진 액센트 색 카드 - 깊이감 */
+.hero__visual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-accent-light);
+  border-radius: var(--radius-xl);
+  rotate: -3deg;
+  z-index: -1;
+}
+
+
+/* ------------------------------------------------------------
+   서비스 통계
+   ------------------------------------------------------------ */
+/* 흰 카드에 4칸 균등 분할 + 세로 구분선은 전형적인 랜딩페이지 패턴
+   박스를 없애고 좌측 정렬로 풀어 본문의 일부처럼 읽히게 함 */
+.stats {
+  margin-block: var(--spacing-2xl);
+}
+
+.stats__list {
+  display: flex;
+  gap: var(--spacing-3xl);
+}
+
+.stats__item {
+  display: grid;
+  gap: 2px;
+}
+
+.stats__value {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  color: var(--color-deep);
+}
+
+.stats__label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+
+/* ------------------------------------------------------------
+   인기 게시글 - 매거진 레이아웃
+
+   3열 균등 그리드는 무엇이 중요한지 알려주지 않음
+   첫 카드를 좌측에 크게 배치하고 나머지 2개를 우측에 쌓음
+   API 가 limit=3 으로 고정이므로 :first-child 만으로 처리 가능
+   ------------------------------------------------------------ */
+.popular-posts .card-grid {
+  grid-template-columns: 1.35fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+.popular-posts .card-grid > :first-child {
+  grid-row: span 2;
+}
+
+.popular-posts .card-grid > :first-child .thumb {
+  aspect-ratio: 4 / 3;
+}
+
+.popular-posts .card-grid > :first-child .card__title {
+  font-size: var(--font-size-xl);
+  letter-spacing: -0.01em;
+}
+
+/* 우측 작은 카드는 가로형으로 - 이미지 좌측, 텍스트 우측 */
+.popular-posts .card-grid > :not(:first-child) .card__link {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  align-items: center;
+}
+
+.popular-posts .card-grid > :not(:first-child) .thumb {
+  aspect-ratio: 1 / 1;
+  height: 100%;
+}
+
+
+/* ------------------------------------------------------------
+   AI 분석 배너
+   ------------------------------------------------------------ */
+/* AI 기능은 액센트(세이지)로 통일
+   AI 분석 안전 판정, 건강 정상 상태와 같은 색 언어를 씀 */
+.ai-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  margin-block: var(--spacing-2xl);
+  padding: var(--spacing-xl);
+  background-color: var(--color-accent-light);
+  border-radius: var(--radius-xl);
+}
+
+.ai-banner__icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  color: var(--color-text-on-accent);
+  background-color: var(--color-accent);
+  border-radius: var(--radius-lg);
+}
+
+.ai-banner__content {
+  flex: 1;
+  min-width: 200px;
+}
+
+.ai-banner__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent-deep);
+}
+
+.ai-banner__desc {
+  margin-top: var(--spacing-2xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+
+/* ------------------------------------------------------------
+   섹션 간 여백
+   ------------------------------------------------------------ */
+.popular-posts {
+  margin-block: var(--spacing-2xl);
+}
+
+/* 섹션마다 배경 톤을 교차시켜 스크롤에 리듬을 만듦
+   전부 흰 배경이면 경계가 보이지 않아 밋밋하게 읽힘 */
+.food-recommend {
+  margin-block: var(--spacing-2xl);
+  margin-inline: calc(var(--spacing-lg) * -1);
+  padding: var(--spacing-xl) var(--spacing-lg);
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-xl);
+}
+
+

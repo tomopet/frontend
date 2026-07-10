@@ -1,0 +1,211 @@
+/* ============================================================
+   TOMOPET | login.css
+   로그인 / 회원가입 페이지 전용 스타일
+   적용 범위: login.html
+   ============================================================ */
+
+
+/* 인증 계열 페이지 공통 중앙 정렬
+   password-reset.css 에도 동일 정의 존재
+   두 파일이 동시 로드되지 않으므로 중복 아님 */
+.site-main--auth {
+  display: grid;
+  place-items: center;
+  padding-block: var(--spacing-xl);
+}
+
+
+/* ------------------------------------------------------------
+   인증 레이아웃 - 좌측 브랜딩 + 우측 폼
+   ------------------------------------------------------------ */
+.auth-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  max-width: 900px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+
+/* ------------------------------------------------------------
+   좌측 브랜딩 패널
+   랩탑 이상에서만 노출
+   ------------------------------------------------------------ */
+.auth-brand {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  background-color: var(--color-primary-light);
+}
+
+.auth-brand__logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-lg);
+}
+
+.auth-brand__logo-mark {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-on-primary);
+  background-color: var(--color-primary);
+  border-radius: var(--radius-md);
+}
+
+.auth-brand__logo-text {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+.auth-brand__tagline {
+  margin-bottom: var(--spacing-xl);
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-loose);
+  color: var(--color-text-secondary);
+}
+
+.auth-brand__features {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.auth-brand__feature {
+  position: relative;
+  padding-left: var(--spacing-lg);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* 체크 아이콘 대체 */
+.auth-brand__feature::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  translate: 0 -50%;
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-primary);
+  border-radius: var(--radius-full);
+}
+
+
+/* ------------------------------------------------------------
+   우측 인증 폼 패널
+   ------------------------------------------------------------ */
+.auth-panel {
+  padding: var(--spacing-2xl);
+}
+
+
+/* 탭 */
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-2xs);
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-2xs);
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-md);
+}
+
+.auth-tabs__btn {
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast);
+}
+
+.auth-tabs__btn--active {
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+
+/* 폼 */
+.auth-form__forgot {
+  display: block;
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary-deep);
+  text-align: right;
+}
+
+.auth-form__forgot:hover {
+  color: var(--color-primary-hover);
+}
+
+
+/* 서버 응답 메시지 - 성공/실패 배너 */
+.auth-form__message {
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-base);
+}
+
+
+/* 약관 동의 */
+.agree-group {
+  display: grid;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-md);
+}
+
+.agree-group__link {
+  margin-left: auto;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-decoration: underline;
+}
+
+
+/* ------------------------------------------------------------
+   [추후 적용] 소셜 로그인
+   login.html 주석 해제 시 함께 활성화
+   ------------------------------------------------------------ */
+.auth-divider {
+  position: relative;
+  margin-block: var(--spacing-lg);
+  text-align: center;
+}
+
+.auth-divider::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: 1px;
+  background-color: var(--color-border);
+}
+
+.auth-divider__text {
+  position: relative;
+  padding-inline: var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  background-color: var(--color-surface);
+}
+
+.social-login {
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+

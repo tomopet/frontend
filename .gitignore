@@ -1,0 +1,65 @@
+# ============================================================
+# TOMOPET | .gitignore
+# ============================================================
+
+# 압축 파일
+*.zip
+*.tar.gz
+*.rar
+
+# ------------------------------------------------------------
+# 폰트 파일
+#
+# 현재 프로젝트는 Pretendard CDN 만 사용하므로 해당 없음
+# 추후 웹폰트를 자체 호스팅할 경우 라이선스를 반드시 확인할 것
+# 무료 배포 폰트 상당수가 파일 재배포를 금지함
+# ------------------------------------------------------------
+/fonts/
+*.otf
+*.ttf
+*.woff
+*.woff2
+
+# 환경 변수 및 비밀 정보
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets.json
+
+# 에디터
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+desktop.ini
+
+# 의존성
+node_modules/
+package-lock.json
+
+# 로그
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# 빌드 산출물
+dist/
+build/
+out/
+
+# ------------------------------------------------------------
+# 백엔드 (Spring Boot) 추가 시 주석 해제
+# ------------------------------------------------------------
+# backend/build/
+# backend/.gradle/
+# backend/out/
+# backend/src/main/resources/application-local.yml

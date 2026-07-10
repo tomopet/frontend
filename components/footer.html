@@ -1,0 +1,26 @@
+<!-- ============================================================
+     TOMOPET | components/footer.html
+     전 페이지 공통 푸터
+
+     사용법
+       각 페이지에 <div id="footer-placeholder"></div> 배치 후
+       scripts/layout.js 가 fetch 하여 삽입
+     ============================================================ -->
+
+<footer class="site-footer" role="contentinfo">
+  <div class="site-footer__inner">
+
+    <nav class="footer-nav" aria-label="푸터 메뉴">
+      <ul class="footer-nav__list">
+        <li><a href="./terms.html" class="footer-nav__link">이용약관</a></li>
+        <li><a href="./privacy.html" class="footer-nav__link">개인정보처리방침</a></li>
+        <!-- [확인 필요] 고객센터 페이지 대신 메일 문의로 연결
+             실제 운영 메일 주소를 확정 후 교체할 것 -->
+        <li><a href="mailto:support@tomopet.example" class="footer-nav__link">고객센터</a></li>
+      </ul>
+    </nav>
+
+    <p class="site-footer__copy">&copy; 2026 TOMOPET. All rights reserved.</p>
+
+  </div>
+</footer>
