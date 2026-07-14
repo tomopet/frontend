@@ -1,0 +1,187 @@
+/* ============================================================
+   TOMOPET | 게시글 작성 및 수정 페이지 전용 스타일
+   공통 버튼·배너·폼 스타일은 components.css를 재사용합니다.
+   ============================================================ */
+
+.post-write__header,
+.post-write__label-row,
+.post-write__image-control,
+.post-write__tag-entry,
+.post-write__actions {
+  display: flex;
+  align-items: center;
+}
+
+.post-write__header,
+.post-write__label-row,
+.post-write__actions {
+  justify-content: space-between;
+}
+
+.post-write__message {
+  margin-bottom: var(--spacing-lg);
+}
+
+.post-write {
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.post-write__fieldset {
+  padding: 0;
+  margin: 0 0 var(--spacing-lg);
+  border: 0;
+}
+
+.post-write__categories,
+.post-write__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.post-write__category {
+  position: relative;
+  cursor: pointer;
+}
+
+.post-write__category input {
+  position: absolute;
+  opacity: 0;
+}
+
+.post-write__category span {
+  display: block;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface);
+  transition: color var(--transition-fast),
+              border-color var(--transition-fast),
+              background-color var(--transition-fast);
+}
+
+.post-write__category input:checked + span {
+  color: var(--color-primary-deep);
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-light);
+}
+
+.post-write__category input:focus-visible + span {
+  box-shadow: var(--shadow-focus);
+}
+
+.post-write__label-row {
+  gap: var(--spacing-md);
+}
+
+.post-write__counter,
+.post-write__file-name {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.post-write__content {
+  min-height: var(--spacing-3xl);
+}
+
+.post-write__image-control {
+  gap: var(--spacing-sm);
+}
+
+/* 시각적 숨김은 common.css의 .sr-only 유틸리티가 담당한다(HTML에서 함께 부여). */
+.post-write__file-input:focus-visible + .btn {
+  box-shadow: var(--shadow-focus);
+}
+
+.post-write__preview {
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface-alt);
+}
+
+.post-write__preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-sm);
+  padding: 0;
+}
+
+.post-write__preview-item {
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+}
+
+.post-write__preview-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.post-write__preview-remove {
+  width: 100%;
+  border-radius: 0;
+}
+
+.post-write__tag-entry {
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  background-color: var(--color-surface-alt);
+}
+
+.post-write__tag-entry:focus-within {
+  border-color: var(--color-border-focus);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-focus);
+}
+
+.post-write__tag-input {
+  flex: 1;
+  padding: var(--spacing-2xs) 0;
+  border: 0;
+  outline: 0;
+  color: var(--color-text);
+  background: transparent;
+}
+
+.post-write__tags {
+  padding: 0;
+  margin-top: var(--spacing-sm);
+}
+
+.post-write__tag {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  padding: var(--spacing-2xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  color: var(--color-primary-deep);
+  background-color: var(--color-primary-light);
+}
+
+.post-write__tag-remove {
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.post-write__actions {
+  gap: var(--spacing-sm);
+  padding-top: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+  border-top: 1px solid var(--color-border);
+}

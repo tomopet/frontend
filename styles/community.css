@@ -1,0 +1,133 @@
+/* ============================================================
+   TOMOPET | 커뮤니티 목록 페이지 전용 스타일
+   ============================================================ */
+
+.community__header {
+  align-items: flex-end;
+}
+
+.community__toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  border: thin solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+}
+
+.community__filter-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-deep);
+}
+
+.community__filters {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.community__filter {
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: thin solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface);
+  cursor: pointer;
+  transition: color var(--transition-fast),
+              border-color var(--transition-fast),
+              background-color var(--transition-fast);
+}
+
+.community__filter:hover,
+.community__filter.is-active {
+  color: var(--color-primary-deep);
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-light);
+}
+
+.community__filter:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+.community__result {
+  margin-left: auto;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.community-card__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.community__search {
+  display: grid;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+  border: thin solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+}
+
+.community__search-title {
+  font-size: var(--font-size-lg);
+  color: var(--color-deep);
+}
+
+.community__search-form {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.community__search-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+}
+
+.community__search-select {
+  width: 8rem;
+}
+
+.community__search-input {
+  flex: 1;
+}
+
+.community__search-error {
+  margin: 0;
+}
+
+.community__search-hint {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* [API 연동] 검색 아래에서 현재 데이터 원본을 명확히 알리고 전환한다. */
+.community__mode-switch {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  margin-top: var(--spacing-md);
+  border: thin solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+}
+.community__mode-title { font-size: var(--font-size-md); color: var(--color-deep); }
+.community__mode-status { margin-left: auto; font-size: var(--font-size-sm); color: var(--color-text-muted); }
+
+/* [API 연동] 페이지 이동은 화면 폭에 따라 재배치하지 않는 데스크톱 전용 구성이다. */
+.community__pagination { display: flex; align-items: center; justify-content: center; gap: var(--spacing-md); margin-top: var(--spacing-xl); }
+.community__page-status { min-width: 8rem; text-align: center; font-variant-numeric: tabular-nums; color: var(--color-text-secondary); }
