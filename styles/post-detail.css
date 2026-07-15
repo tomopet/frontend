@@ -1,0 +1,213 @@
+/* ============================================================
+   TOMOPET | 게시글 상세 페이지 전용 스타일
+   공통 버튼·배너·폼 스타일은 components.css를 재사용합니다.
+   ============================================================ */
+
+.post-detail__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.post-detail__owner-actions {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.post-detail__message {
+  margin-bottom: var(--spacing-lg);
+}
+
+.post-detail,
+.comments {
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.post-detail__header {
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* 클릭 가능한 링크/버튼과 혼동되지 않도록 기본색을 사용한다.
+   gallery/recipe/free 카테고리는 post-detail.js가 부여하는
+   .badge--* 클래스(components.css)가 색상을 담당한다. */
+.post-detail__category {
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-deep);
+}
+
+.post-detail__title {
+  margin-bottom: var(--spacing-sm);
+  font-size: var(--font-size-2xl);
+  color: var(--color-deep);
+}
+
+.post-detail__meta {
+  display: flex;
+  gap: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.post-detail__images {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+.post-detail__image {
+  display: block;
+  width: 100%;
+  height: 20rem;
+  border-radius: var(--radius-lg);
+  object-fit: cover;
+}
+
+.post-detail__content {
+  min-height: 10rem;
+  margin-top: var(--spacing-xl);
+  font-size: var(--font-size-lg);
+  line-height: 1.8;
+  color: var(--color-text);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.post-detail__actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+  border-top: 1px solid var(--color-border);
+}
+
+.post-detail__like {
+  font-variant-numeric: tabular-nums;
+}
+
+.post-detail__like.is-liked {
+  color: var(--color-primary-deep);
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-light);
+}
+
+.comments {
+  margin-top: var(--spacing-lg);
+}
+
+.comments__heading,
+.comments__form-actions,
+.comments__item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.comments__heading {
+  margin-bottom: var(--spacing-lg);
+}
+
+.comments__title {
+  font-size: var(--font-size-xl);
+  color: var(--color-deep);
+}
+
+.comments__count,
+.comments__limit,
+.comments__date {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.comments__count {
+  font-variant-numeric: tabular-nums;
+}
+
+.comments__form {
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface-alt);
+}
+
+.comments__form-actions {
+  margin-top: var(--spacing-sm);
+}
+
+.comments__list {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.comments__item {
+  padding: var(--spacing-lg) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.comments__item:last-child {
+  border-bottom: 0;
+}
+
+.comments__author {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-deep);
+}
+
+.comments__content {
+  margin-top: var(--spacing-sm);
+  color: var(--color-text);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.comments__delete {
+  margin-top: var(--spacing-sm);
+}
+
+.comments__empty {
+  margin-top: var(--spacing-lg);
+}
+
+.post-delete-dialog {
+  width: 100%;
+  max-width: var(--layout-max-width-narrow);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+  margin: auto;
+}
+
+.post-delete-dialog::backdrop {
+  background-color: var(--color-deep);
+  opacity: 0.48;
+}
+
+.post-delete-dialog__title {
+  font-size: var(--font-size-xl);
+  color: var(--color-deep);
+}
+
+.post-delete-dialog__description {
+  margin-top: var(--spacing-sm);
+  color: var(--color-text-secondary);
+}
+
+.post-delete-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-xl);
+}

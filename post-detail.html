@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <!-- 데스크톱 전용 - 프로젝트 최소 지원 폭 1024px -->
+  <meta name="viewport" content="width=1024">
+  <meta name="description" content="TOMOPET 커뮤니티 게시글 상세 페이지">
+  <title>게시글 상세 | TOMOPET</title>
+
+  <!-- [공통] 파비콘 -->
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+
+  <!-- [공통] 스타일 로드 순서 고정 -->
+  <link rel="stylesheet" href="./styles/variables.css">
+  <link rel="stylesheet" href="./styles/common.css">
+  <link rel="stylesheet" href="./styles/components.css">
+  <link rel="stylesheet" href="./styles/post-detail.css">
+</head>
+
+<body>
+  <!-- [접근성] 키보드 사용자가 반복 메뉴를 건너뛸 수 있도록 유지 -->
+  <a href="#main-content" class="skip-link">본문 바로가기</a>
+
+  <!-- [공통] layout.js가 공통 헤더를 삽입 -->
+  <div id="header-placeholder"></div>
+
+  <main class="site-main" id="main-content">
+    <div class="container container--narrow">
+      <div class="post-detail__topbar">
+        <a href="./community.html" class="btn btn--ghost">← 목록으로</a>
+        <div class="post-detail__owner-actions" id="post-owner-actions" hidden>
+          <a class="btn btn--secondary" id="post-edit-link" href="./post-write.html">수정하기</a>
+          <button class="btn btn--danger" id="post-delete-button" type="button">삭제하기</button>
+        </div>
+      </div>
+
+      <!-- API 오류와 처리 결과를 알리는 공통 배너 -->
+      <p class="banner post-detail__message" id="post-detail-message" role="alert" hidden></p>
+
+      <!-- 게시글 조회가 끝나기 전까지 숨김 -->
+      <article class="post-detail" id="post-detail" hidden>
+        <header class="post-detail__header">
+          <p class="post-detail__category" id="post-category"></p>
+          <!-- 페이지당 h1은 정확히 하나 -->
+          <h1 class="post-detail__title" id="post-title">게시글을 불러오는 중입니다</h1>
+          <div class="post-detail__meta">
+            <span id="post-author"></span>
+            <time id="post-created-at"></time>
+          </div>
+        </header>
+
+        <div class="post-detail__images" id="post-image-gallery" aria-label="게시글 첨부 이미지" hidden></div>
+        <p class="post-detail__content" id="post-content"></p>
+
+        <div class="post-detail__actions">
+          <button class="btn btn--secondary post-detail__like" id="post-like-button" type="button" aria-pressed="false">
+            좋아요 <span id="post-like-count">0</span>
+          </button>
+        </div>
+      </article>
+
+      <section class="comments" id="comments-section" aria-labelledby="comments-title" hidden>
+        <div class="comments__heading">
+          <h2 class="comments__title" id="comments-title">댓글</h2>
+          <span class="comments__count" id="comment-count">0개</span>
+        </div>
+
+        <form class="comments__form" id="comment-form">
+          <label class="form-field__label" for="comment-content">댓글 작성</label>
+          <textarea
+            class="form-field__textarea"
+            id="comment-content"
+            name="content"
+            rows="4"
+            maxlength="500"
+            placeholder="서로를 배려하는 댓글을 남겨주세요."
+            required
+          ></textarea>
+          <p class="form-field__error" id="comment-content-error" hidden></p>
+          <div class="comments__form-actions">
+            <span class="comments__limit">최대 500자</span>
+            <button class="btn btn--primary" id="comment-submit-button" type="submit">댓글 등록</button>
+          </div>
+        </form>
+
+        <ul class="comments__list" id="comment-list"></ul>
+        <div class="empty-state comments__empty" id="comment-empty" hidden>
+          <p class="empty-state__title">아직 댓글이 없습니다</p>
+          <p class="empty-state__desc">첫 댓글을 남겨보세요.</p>
+          <button class="btn btn--primary empty-state__action" id="comment-focus-button" type="button">댓글 작성하기</button>
+        </div>
+      </section>
+
+      <dialog class="post-delete-dialog" id="post-delete-dialog" aria-labelledby="post-delete-title" aria-describedby="post-delete-description">
+        <h2 class="post-delete-dialog__title" id="post-delete-title">게시글을 삭제할까요?</h2>
+        <p class="post-delete-dialog__description" id="post-delete-description">삭제한 게시글은 복구할 수 없습니다.</p>
+        <div class="post-delete-dialog__actions">
+          <button class="btn btn--secondary" id="post-delete-cancel" type="button">취소</button>
+          <button class="btn btn--danger" id="post-delete-confirm" type="button">삭제</button>
+        </div>
+      </dialog>
+
+      <dialog class="post-delete-dialog" id="comment-delete-dialog" aria-labelledby="comment-delete-title" aria-describedby="comment-delete-description">
+        <h2 class="post-delete-dialog__title" id="comment-delete-title">댓글을 삭제할까요?</h2>
+        <p class="post-delete-dialog__description" id="comment-delete-description">삭제한 댓글은 복구할 수 없습니다.</p>
+        <div class="post-delete-dialog__actions">
+          <button class="btn btn--secondary" id="comment-delete-cancel" type="button">취소</button>
+          <button class="btn btn--danger" id="comment-delete-confirm" type="button">삭제</button>
+        </div>
+      </dialog>
+    </div>
+  </main>
+
+  <!-- [공통] layout.js가 공통 푸터를 삽입 -->
+  <div id="footer-placeholder"></div>
+
+  <!-- [공통] 스크립트 로드 순서 고정 -->
+  <script src="./scripts/layout.js"></script>
+  <script src="./scripts/api.js" defer></script>
+  <script src="./scripts/ui.js" defer></script>
+  <script src="./scripts/post-detail.js" defer></script>
+</body>
+</html>

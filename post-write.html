@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <!-- 데스크톱 전용 - 프로젝트 최소 지원 폭 1024px -->
+  <meta name="viewport" content="width=1024">
+  <meta name="description" content="TOMOPET 커뮤니티 게시글 작성 및 수정 페이지">
+  <title>게시글 작성 | TOMOPET</title>
+
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+
+  <!-- [공통] 스타일 로드 순서 고정 -->
+  <link rel="stylesheet" href="./styles/variables.css">
+  <link rel="stylesheet" href="./styles/common.css">
+  <link rel="stylesheet" href="./styles/components.css">
+  <link rel="stylesheet" href="./styles/post-write.css">
+</head>
+
+<body>
+  <a href="#main-content" class="skip-link">본문 바로가기</a>
+
+  <div id="header-placeholder"></div>
+
+  <main class="site-main" id="main-content">
+    <div class="container container--narrow">
+      <div class="page-header post-write__header">
+        <div>
+          <h1 class="page-header__title" id="post-write-title">새 글 작성</h1>
+          <p class="page-header__desc" id="post-write-description">반려동물과 함께한 이야기를 들려주세요.</p>
+        </div>
+        <a href="./community.html" class="btn btn--ghost">← 목록으로</a>
+      </div>
+
+      <p class="banner post-write__message" id="post-write-message" role="alert" hidden></p>
+
+      <form class="post-write" id="post-form" novalidate>
+        <fieldset class="post-write__fieldset">
+          <legend class="form-field__label">카테고리</legend>
+          <div class="post-write__categories">
+            <label class="post-write__category">
+              <input type="radio" name="category" value="free" checked>
+              <span>자유</span>
+            </label>
+            <label class="post-write__category">
+              <input type="radio" name="category" value="gallery">
+              <span>갤러리</span>
+            </label>
+            <label class="post-write__category">
+              <input type="radio" name="category" value="recipe">
+              <span>레시피</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="form-field">
+          <div class="post-write__label-row">
+            <label class="form-field__label" for="post-title-input">제목</label>
+            <span class="post-write__counter" id="post-title-counter" aria-live="polite">0 / 100</span>
+          </div>
+          <input
+            class="form-field__input"
+            id="post-title-input"
+            name="title"
+            type="text"
+            maxlength="100"
+            placeholder="제목을 입력해주세요."
+            required
+          >
+          <p class="form-field__error" id="post-title-error" hidden></p>
+        </div>
+
+        <div class="form-field">
+          <div class="post-write__label-row">
+            <label class="form-field__label" for="post-content-input">내용</label>
+            <span class="post-write__counter" id="post-content-counter" aria-live="polite">0 / 5000</span>
+          </div>
+          <textarea
+            class="form-field__textarea post-write__content"
+            id="post-content-input"
+            name="content"
+            rows="14"
+            maxlength="5000"
+            placeholder="서로에게 도움이 되는 이야기를 자유롭게 작성해주세요."
+            required
+          ></textarea>
+          <p class="form-field__error" id="post-content-error" hidden></p>
+        </div>
+
+        <div class="form-field">
+          <label class="form-field__label" for="post-image-input">게시글 이미지</label>
+          <div class="post-write__image-control">
+            <input
+              class="post-write__file-input sr-only"
+              id="post-image-input"
+              name="images"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              multiple
+            >
+            <label class="btn btn--dashed" for="post-image-input">이미지 선택</label>
+            <span class="post-write__file-name" id="post-image-name">선택된 이미지 없음</span>
+          </div>
+          <p class="form-field__hint" id="post-image-limit">JPG, PNG, WEBP · 최대 3장 · 장당 1MB</p>
+          <p class="form-field__error" id="post-image-error" hidden></p>
+          <div class="post-write__preview" id="post-image-preview-wrap" hidden>
+            <ul class="post-write__preview-grid" id="post-image-preview-list" aria-label="선택한 이미지 미리보기"></ul>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-field__label" for="post-tag-input">태그</label>
+          <div class="post-write__tag-entry">
+            <span aria-hidden="true">#</span>
+            <input
+              class="post-write__tag-input"
+              id="post-tag-input"
+              type="text"
+              maxlength="20"
+              placeholder="태그 입력 후 Enter"
+              autocomplete="off"
+            >
+          </div>
+          <p class="form-field__hint">최대 5개 · Enter로 추가하고, 입력란이 비어 있을 때 Backspace로 마지막 태그를 삭제할 수 있어요.</p>
+          <p class="form-field__error" id="post-tag-error" hidden></p>
+          <ul class="post-write__tags" id="post-tag-list" aria-label="추가한 태그"></ul>
+        </div>
+
+        <div class="post-write__actions">
+          <a href="./community.html" class="btn btn--secondary">취소</a>
+          <button class="btn btn--primary btn--lg" id="post-submit-button" type="submit">게시하기</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <!-- [공통] 스크립트 로드 순서 고정 -->
+  <script src="./scripts/layout.js"></script>
+  <script src="./scripts/api.js" defer></script>
+  <script src="./scripts/ui.js" defer></script>
+  <script src="./scripts/post-write.js" defer></script>
+</body>
+</html>
