@@ -25,7 +25,7 @@
   --chat-primary-deep:  var(--color-primary-deep,   #B95536);
   --chat-accent:        var(--color-accent,         #567F63);
   --chat-deep:          var(--color-deep,           #2E2019);
-  --chat-bg:            var(--color-background,     #FBF6F0);
+  --chat-bg:            var(--color-bg,     #FBF6F0);
   --chat-surface:       var(--color-surface,        #FFFFFF);
   --chat-border:        var(--color-border,         #E8D6C8);
   --chat-muted:         var(--color-text-muted,     #7B665C);
@@ -47,22 +47,7 @@ body {
   background: var(--chat-bg);
 }
 
-/* [공통] 키보드 포커스 Skip Link — common.css 의 .skip-link 를 보강 */
-.skip-link {
-  position: fixed;
-  left: 16px;
-  top: -80px;
-  z-index: 999;
-  padding: 10px 14px;
-  background: var(--chat-deep);
-  color: white;
-  border-radius: var(--radius-md, 8px);
-  transition: top var(--transition-fast, 0.2s);
-}
 
-.skip-link:focus {
-  top: 16px;
-}
 
 /* [공통] [hidden] 규칙 — common.css 의 [hidden] { display: none !important }
    display 를 명시한 선택자도 hidden 속성이 우선 적용되도록 보장
@@ -72,14 +57,6 @@ body {
 }
 
 
-/* ------------------------------------------------------------
-   페이지 레이아웃
-   ------------------------------------------------------------ */
-.site-main {
-  width: 922px;
-  margin: 0 auto;
-  padding: 28px 0 48px;
-}
 
 /* 페이지 헤더
    제목 + 백엔드 연동 상태 배지 영역 */
@@ -124,8 +101,8 @@ body {
   min-height: 30px;
   padding: 0 10px;
   border-radius: var(--radius-full, 999px);
-  background: #F0F4F1;
-  color: #486752;
+  background: var(--color-accent-light);
+  color: var(--color-accent-deep);
   font-size: var(--font-size-xs, 11px);
   font-weight: 700;
 }
@@ -231,8 +208,8 @@ body {
 
 .conversation-item:hover,
 .conversation-item.is-active {
-  border-color: #E9D9CD;
-  background: #FFF7F2;
+  border-color: var(--color-border);
+  background: var(--color-primary-light);
 }
 
 .conversation-item__title {
@@ -287,7 +264,7 @@ body {
   width: 39px;
   height: 39px;
   border-radius: var(--radius-md, 12px);
-  background: #E9F1EB;
+  background: var(--color-accent-light);
   color: var(--chat-accent);
   font-weight: 900;
   flex: 0 0 auto;
@@ -315,7 +292,7 @@ body {
   gap: 15px;
   overflow-y: auto;
   padding: 24px 22px;
-  background: #FFFCFA;
+  background: var(--color-surface);
 }
 
 /* 메시지 공통 — 최대 너비 78% 로 말풍선 너비 제한 */
@@ -339,7 +316,7 @@ body {
   height: 30px;
   flex: 0 0 auto;
   border-radius: var(--radius-md, 10px);
-  background: #EEF3EF;
+  background: var(--color-accent-light);
   color: var(--chat-accent);
   font-size: var(--font-size-xs, 11px);
   font-weight: 800;
@@ -347,7 +324,7 @@ body {
 
 /* 사용자 아바타 — primary 계열 */
 .message--user .message__avatar {
-  background: #FAE5DC;
+  background: var(--color-primary-light);
   color: var(--chat-primary-deep);
 }
 
@@ -371,7 +348,7 @@ body {
 .message--user .message__bubble {
   border-color: var(--chat-primary);
   border-radius: 14px 4px 14px 14px;
-  background: #FFF1EA;
+  background: var(--color-primary-light);
 }
 
 .message__time {
@@ -409,7 +386,7 @@ body {
   padding: 9px;
   border: 1px solid #E7DAD1;
   border-radius: var(--radius-md, 10px);
-  background: #FFFDFB;
+  background: var(--color-surface);
 }
 
 .attachment-card__thumb {
@@ -418,7 +395,7 @@ body {
   width: 42px;
   height: 42px;
   border-radius: var(--radius-md, 9px);
-  background: #F3ECE6;
+  background: var(--color-surface-alt);
   font-size: 18px;
   flex: 0 0 auto;
 }
@@ -504,7 +481,7 @@ body {
   padding: 10px 12px;
   border: 1px solid var(--chat-border);
   border-radius: var(--radius-md, 10px);
-  background: #FBF7F3;
+  background: var(--color-bg);
   color: var(--chat-deep);
   font: inherit;
   line-height: 1.5;
@@ -551,8 +528,8 @@ body {
   padding: 13px 15px;
   border: 1px solid #D7E4DA;
   border-radius: var(--radius-md, 12px);
-  background: #F1F6F2;
-  color: #415D49;
+  background: var(--color-accent-light);
+  color: var(--color-accent-deep);
   font-size: var(--font-size-xs, 10px);
   line-height: 1.6;
 }

@@ -3,27 +3,17 @@
 > 토모펫 서비스 프론트엔드 저장소입니다. 
 > 본 저장소는 **HTML5, CSS3, Vanilla JavaScript**를 사용하여 개발을 진행합니다.
 
+**데스크톱 전용** — 최소 지원 폭 1024px, 미디어 쿼리 미사용
+
+> 협업 규칙 상세는 [CONTRIBUTING.md](./CONTRIBUTING.md)
+> 남은 작업과 페이지별 주의점은 [ROADMAP.md](./ROADMAP.md)
+> 담당 분량은 [분량배분.md](./분량배분.md)
+> 색상·타이포·간격 등 디자인 토큰은 [DESIGN-SYSTEM.md](./DESIGN-SYSTEM.md)
+
 ---
 
 ## 1. 프론트엔드 핵심 개발 일정표 (2026.07.09 ~ 2026.09.30)
 
-<<<<<<< HEAD
-> **지속 가능한 개발을 위해 기능별 퍼블리싱 직후 백엔드 API 연동을 주차별로 즉시 진행합니다.**
-
-| 주차 | 기간 (날짜) | 목표 작업 | 프론트엔드(FE) 세부 액션 플랜 |
-| :--- | :--- | :--- | :--- |
-| **기획** | **~ 07.09 (목)** | **디자인 확정** | 와이어프레임 및 디자인 시안 최종 확정 🏁 |
-| **1~2주차** | **07.10 (금) ~ 07.23 (목)** | **UI 레이아웃 기초** | 공통 UI 레이아웃(헤더, 푸터, 사이드바 등) 마크업 및 CSS 퍼블리싱 |
-| **3~4주차** | **07.24 (금) ~ 08.06 (목)** | **인증 및 회원** | 로그인 및 회원가입 화면 퍼블리싱 완료 ➡️ **백엔드 JWT 로그인 API 연동** |
-| **5~6주차** | **08.07 (금) ~ 08.20 (목)** | **반려견 관리** | 마이페이지 및 반려견 등록/수정 화면 퍼블리싱 ➡️ **반려견 CRUD API 연동** |
-| **7~8주차** | **08.21 (금) ~ 09.03 (목)** | **커뮤니티** | 커뮤니티(목록, 상세, 글쓰기) 화면 퍼블리싱 ➡️ **게시글/댓글/사진 업로드 API 연동** |
-| **9~10주차**| **09.04 (금) ~ 09.17 (목)** | **건강기록 & AI** | 대시보드(차트 라이브러리) 및 AI 채팅창 퍼블리싱 ➡️ **통계 및 챗봇 API 연동** |
-| **11~12주차**| **09.18 (금) ~ 09.30 (수)** | **종합 테스트** | 전체 UI/UX 디테일 수정, 프론트-백엔드 간 통합 에러 핸들링 및 **최종 마감** |
-
----
-
-## 2. 프론트엔드 코드 규칙 (Convention)
-=======
 지속 가능한 개발을 위해 기능별 퍼블리싱 직후 백엔드 API 연동을 주차별로 즉시 진행합니다.
 
 | 주차 | 기간 (날짜) | 목표 작업 | 프론트엔드(FE) 세부 액션 플랜 |
@@ -82,7 +72,10 @@ tomopet/
 ├── password-reset-confirm.html   비밀번호 재설정 2단계 (ㅇ)
 ├── terms.html                    이용약관 (ㅇ, 법률 검토 필요)
 ├── privacy.html                  개인정보처리방침 (ㅇ, 법률 검토 필요)
+├── my-page.html                  마이페이지 + 모달 6종 (ㅇ)
+├── diet.html                     식단 균형 분석 (ㅇ)
 │
+├── _example-page.html            협업자용 복사 견본 (ㅇ)
 ├── favicon.svg                   (ㅇ)
 ├── .gitignore                    Git 전용, 실행에 불필요
 ├── .nojekyll                     GitHub Pages 전용, 실행에 불필요
@@ -101,21 +94,30 @@ tomopet/
 │   ├── index.css                 홈 전용 (ㅇ)
 │   ├── login.css                 로그인 전용 (ㅇ)
 │   ├── password-reset.css        재설정 2개 페이지 공용 (ㅇ)
+│   ├── my-page.css               마이페이지 전용 (ㅇ)
+│   ├── diet.css                  식단 분석 전용 (ㅇ)
 │   └── policy.css                terms + privacy 공용 (ㅇ)
 │
 └── scripts/
+    ├── theme.js                  테마 적용 (head 에서 먼저 실행) (ㅇ)
     ├── layout.js                 헤더/푸터 로더 + 인증 (필수) (ㅇ)
     ├── api.js                    HTTP 통신 공통 모듈 (필수) (ㅇ)
     ├── ui.js                     DOM/포맷 공통 모듈 (필수) (ㅇ)
     ├── index.js                  홈 전용 (ㅇ)
     ├── login.js                  로그인 전용 (ㅇ)
     ├── password-reset.js         1단계 전용 (ㅇ)
-    └── password-reset-confirm.js 2단계 전용 (ㅇ)
+    ├── password-reset-confirm.js 2단계 전용 (ㅇ)
+    ├── my-page.js                마이페이지 전용 (ㅇ)
+    ├── diet.js                   식단 분석 전용 (ㅇ)
+    └── _example-page.js          협업자용 복사 견본 (ㅇ)
 ```
 
+`styles/_example-page.css` 도 함께 있습니다.
+협업자는 `_example-*` 3종을 복사해 새 페이지를 만듭니다. (CONTRIBUTING 섹션 3)
+
 이 저장소는 SG 담당 범위입니다.
-`community` `post-write` `post-detail` `health-record` `food-recommend`
-`food-detail` `ai-chat` `my-page` 는 협업자 담당이며 여기 포함되지 않습니다.
+`community` `post-write` `post-detail` `health-record` `feed-recommend`
+`feed-detail` `ai-chat` `my-page` 는 협업자 담당이며 여기 포함되지 않습니다.
 헤더 메뉴에서 해당 링크를 클릭하면 404 가 발생합니다.
 
 **협업자는 시작 전에 [CONTRIBUTING.md 섹션 0](./CONTRIBUTING.md) 을 읽으세요.**
@@ -126,26 +128,10 @@ PR 로 `main` 에 합칩니다.
 ---
 
 ## 4. 프론트엔드 코드 규칙 (Convention)
->>>>>>> 1d3024b (feat: TOMOPET 프론트엔드 초기 구조)
 
 코드가 꼬이거나 스타일이 깨지는 것을 방지하기 위해 반드시 아래 규칙을 준수해 주세요.
 
 ### 파일 및 함수 네이밍 규칙
-<<<<<<< HEAD
-- **HTML/CSS/JS 파일명:** 전체 소문자와 하이픈(`-`)을 사용하는 **케밥 케이스(kebab-case)**
-  - *예시: `login.html`, `main-page.html`, `main.css`, `community.js`*
-- **자바스크립트 변수 및 함수명:** 소문자로 시작하는 **카멜 케이스(camelCase)**
-  - *예시: `const dogList = [];`, `function fetchDogData() {}`*
-- **CSS 클래스명:** 구조 파악이 쉬운 **BEM 방법론** 지향
-  - *예시: `.auth-container`, `.form-field__input`, `.btn--primary`*
-
-### REST API 통신 표준 문법 (3주차부터 필수 사용)
-리액트 없이 순수 자바스크립트로 백엔드와 안전하게 통신하기 위한 약속입니다.
-
-#### 1. 백엔드 데이터 요청 (`fetch` + `async/await`)
-```javascript
-// 예시: 서버로부터 반려견 목록을 받아오는 표준 구조
-=======
 
 **HTML/CSS/JS 파일명**: 전체 소문자와 하이픈(`-`)을 사용하는 **케밥 케이스(kebab-case)**
 
@@ -159,8 +145,8 @@ login.html, index.html, index.css, community.js, password-reset-confirm.js
 **자바스크립트 변수 및 함수명**: 소문자로 시작하는 **카멜 케이스(camelCase)**
 
 ```js
-const dogList = [];
-function fetchDogData() {}
+const petList = [];
+function fetchPetData() {}
 ```
 
 **CSS 클래스명**: 구조 파악이 쉬운 **BEM 방법론** 지향
@@ -182,24 +168,17 @@ function fetchDogData() {}
 
 ```js
 // 서버로부터 반려견 목록을 받아오는 표준 구조
->>>>>>> 1d3024b (feat: TOMOPET 프론트엔드 초기 구조)
-async function fetchDogs() {
+async function fetchPets() {
     try {
-        const response = await fetch('/api/dogs'); // 백엔드 API 주소
+        const response = await fetch('/api/pets'); // 백엔드 API 주소
         if (!response.ok) throw new Error('네트워크 응답 플래그 에러');
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> 1d3024b (feat: TOMOPET 프론트엔드 초기 구조)
         const data = await response.json(); // JSON 데이터 변환
-        displayDogs(data); // 화면 렌더링 함수 호출
+        displayPets(data); // 화면 렌더링 함수 호출
     } catch (error) {
         console.error("데이터 로딩 실패:", error);
     }
 }
-<<<<<<< HEAD
-=======
 ```
 
 #### `scripts/api.js` 가 위 구조를 구현합니다
@@ -212,10 +191,10 @@ async function fetchDogs() {
 
 ```js
 // 표준 구조 그대로. fetch 자리에 Api.get 이 들어갈 뿐입니다.
-async function loadDogs() {
+async function loadPets() {
     try {
-        const data = await Api.get('/api/dogs');
-        displayDogs(data);
+        const data = await Api.get('/api/pets');
+        displayPets(data);
     } catch (error) {
         console.error("데이터 로딩 실패:", error);
     }
@@ -265,14 +244,19 @@ variables.css   →  common.css   →  components.css   →  [페이지].css
 
 `variables.css` 가 먼저 와야 나머지가 `var(--color-primary)` 를 읽을 수 있습니다.
 
-### JS (`</body>` 직전)
+### JS
+
+`theme.js` 만 `<head>` 에서 `defer` 없이 실행합니다.
+본문이 그려지기 전에 `data-theme` 을 정해야 화면이 번쩍이지 않기 때문입니다.
 
 ```
-layout.js  →  api.js  →  ui.js  →  [페이지].js
+<head>          theme.js
+</body> 직전     layout.js  →  api.js  →  ui.js  →  [페이지].js
 ```
 
 | 파일 | defer | 정의 | 의존 |
 |---|---|---|---|
+| `theme.js` | 없음 (head 에서 즉시) | `window.TomopetTheme` | - |
 | `layout.js` | 없음 (즉시 실행) | `window.TomopetAuth` | - |
 | `api.js` | 있음 | `window.TomopetApi` | TomopetAuth |
 | `ui.js` | 있음 | `window.TomopetUi` | - |
@@ -376,17 +360,46 @@ POST  /api/auth/password/reset-request   { email } -> 200 (미가입 이메일�
 GET   /api/auth/password/verify-token?token=xxx   -> 200 / 400 / 410
 POST  /api/auth/password/reset           { token, newPassword } -> 200 / 410
 
-GET   /api/stats                         -> { recipeCount, memberCount, dogCount }
+GET   /api/users/me                      -> { nickname, email, profileImageUrl }
+PUT   /api/users/me                      FormData (nickname, image) -> 갱신된 user
+                                                                       409 닉네임 중복
+PUT   /api/users/me/password             { currentPassword, newPassword }
+                                         -> 200 / 401 현재 비밀번호 불일치
+DELETE /api/users/me                     -> 204
+
+GET   /api/users/me/pets                 -> [{ petId, name, breed, birthDate, sex,
+                                               weight, neutered, activityLevel,
+                                               allergies[], imageUrl }]
+POST  /api/pets                          FormData -> 201
+PUT   /api/pets/:petId                   FormData -> 200
+DELETE /api/pets/:petId                  -> 204
+GET   /api/breeds                        -> ["말티즈", ...] 또는 [{ name }]
+
+GET   /api/stats                         -> { recipeCount, memberCount, petCount }
+
+식단 분석
+GET   /api/pets/:petId/diet/target       -> { der, targets: { protein, fat, fiber } }
+GET   /api/diet/logs?petId=&date=        -> { items: [...], analysis: {...} }
+                                            404 = 그날 기록 없음 (오류 아님)
+POST  /api/diet/logs                     { petId, date, items: [{ foodItemId, amountG }] }
+                                         -> { items: [...], analysis: {
+                                              calories: { actual, target },
+                                              nutrients: [{ label, ratio }],
+                                              score: 0~100,
+                                              toxicWarnings: [{ name, reason }] } }
+GET   /api/food-items?keyword=           -> [{ foodItemId, name, type, caloriesPer100g,
+                                               isToxic, toxicReason }]
+                                            type = FEED | TREAT | HUMAN
 GET   /api/posts?sort=popular&limit=3
-GET   /api/food?limit=3
+GET   /api/feeds?limit=3
 ```
 
 ### 응답 필드 이름
 
 ```
 게시글  postId, title, thumbnailUrl, authorNickname, likeCount, category
-사료    foodId, name, brand, price, imageUrl
-통계    recipeCount, memberCount, dogCount
+사료    feedId, name, brand, price, imageUrl
+통계    recipeCount, memberCount, petCount
 ```
 
 `category` 는 `"gallery" | "recipe" | "free"` 셋 중 하나입니다.
@@ -637,4 +650,3 @@ JS 가 꺼지면 네비게이션과 가입 폼에 접근할 수 없습니다.
 
 `index.html` 의 `og:url` 과 `og:image` 를 실제 배포 주소로 바꿔야
 링크 공유 시 미리보기 카드가 표시됩니다.
->>>>>>> 1d3024b (feat: TOMOPET 프론트엔드 초기 구조)

@@ -5,7 +5,7 @@
 | 담당 | 범위 |
 |---|---|
 | SG | `index.html` `login.html` `password-reset*.html` `terms.html` `privacy.html` + 공통 모듈 + 헤더/푸터 |
-| 협업자 | `community` `post-write` `post-detail` `health-record` `food-recommend` `food-detail` `ai-chat` `my-page` |
+| 협업자 | `community` `post-write` `post-detail` `health-record` `feed-recommend` `feed-detail` `ai-chat` `my-page` |
 
 남은 작업의 상세 순서와 페이지별 주의점은 [ROADMAP.md](./ROADMAP.md) 에 있습니다.
 
@@ -102,7 +102,7 @@ scripts/ui.js             DOM/포맷
 
 **추가는 괜찮습니다.** 기존 값을 바꾸는 것이 위험합니다.
 
-예를 들어 `components.css` 에 `.dog-card` 를 새로 추가하는 건 자유입니다.
+예를 들어 `components.css` 에 `.pet-card` 를 새로 추가하는 건 자유입니다.
 하지만 `.card` 의 `border-radius` 를 바꾸면 홈 화면의 카드가 함께 바뀝니다.
 
 ---
@@ -135,6 +135,34 @@ variables.css  →  common.css  →  components.css  →  [페이지].css
 ---
 
 ## 3. 새 페이지를 만들 때 반드시 넣을 것
+
+### 견본 파일을 복사하세요 (가장 쉬운 방법)
+
+저장소에 복사용 견본 3종이 있습니다.
+
+```
+_example-page.html
+styles/_example-page.css
+scripts/_example-page.js
+```
+
+새 페이지는 이 셋을 복사해서 이름만 바꾸면 됩니다.
+
+```
+_example-page.html        ->  community.html
+styles/_example-page.css  ->  styles/community.css
+scripts/_example-page.js  ->  scripts/community.js
+```
+
+그다음 파일 안의 `example` 을 본인 담당 이름(`community`)으로 전부 바꾸고,
+엔드포인트와 카드 모양을 실제에 맞게 고칩니다.
+
+견본에는 로드 순서, XSS 안전 렌더링, try/catch, 빈 상태 처리가
+이미 올바르게 들어 있으니 규칙을 외우지 않아도 됩니다.
+
+견본 3종(`_example-*`)은 지우지 말고 그대로 두세요. 다음 담당자도 참고합니다.
+
+### 직접 만들 경우의 뼈대
 
 파일 3개를 아래 위치에 둡니다. (섹션 0 참고)
 
@@ -237,7 +265,7 @@ README 의 REST API 표준 문법(`async / await` + `try / catch`)을 그대로 
 
 ```js
 ./post-detail.html?postId=123
-./food-detail.html?foodId=7
+./feed-detail.html?feedId=7
 ```
 
 `?id=` 나 `?no=` 로 바꾸면 홈에서 넘어온 사용자가 빈 화면을 봅니다.
@@ -255,7 +283,7 @@ var postId = params.get("postId");   // "id" 아님
 ```
 community.html      -> data-nav="community"
 health-record.html  -> data-nav="health-record"
-food-recommend.html -> data-nav="food-recommend"
+feed-recommend.html -> data-nav="feed-recommend"
 ai-chat.html        -> data-nav="ai-chat"
 ```
 
@@ -265,7 +293,7 @@ ai-chat.html        -> data-nav="ai-chat"
 var NAV_PARENT_MAP = {
   "post-detail": "community",
   "post-write": "community",
-  "food-detail": "food-recommend"
+  "feed-detail": "feed-recommend"
 };
 ```
 
@@ -290,13 +318,13 @@ postId, title, thumbnailUrl, authorNickname, likeCount, category
 ### 사료
 
 ```
-foodId, name, brand, price, imageUrl
+feedId, name, brand, price, imageUrl
 ```
 
 ### 통계
 
 ```
-recipeCount, memberCount, dogCount
+recipeCount, memberCount, petCount
 ```
 
 ### 목록 응답 형태

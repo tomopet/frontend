@@ -191,7 +191,7 @@
 }
 
 .post-delete-dialog::backdrop {
-  background-color: var(--color-deep);
+  background-color: var(--color-backdrop);
   opacity: 0.48;
 }
 

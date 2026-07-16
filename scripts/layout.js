@@ -151,7 +151,7 @@
   var NAV_PARENT_MAP = {
     "post-detail": "community",
     "post-write": "community",
-    "food-detail": "food-recommend"
+    "feed-detail": "feed-recommend"
   };
 
   function markActiveNav() {

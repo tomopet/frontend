@@ -234,7 +234,7 @@
 
 /* 섹션마다 배경 톤을 교차시켜 스크롤에 리듬을 만듦
    전부 흰 배경이면 경계가 보이지 않아 밋밋하게 읽힘 */
-.food-recommend {
+.feed-recommend {
   margin-block: var(--spacing-2xl);
   margin-inline: calc(var(--spacing-lg) * -1);
   padding: var(--spacing-xl) var(--spacing-lg);

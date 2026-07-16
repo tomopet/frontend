@@ -20,13 +20,13 @@
   --prototype-primary-deep:  var(--color-primary-deep,   #B95536);
   --prototype-accent:        var(--color-accent,         #567F63);
   --prototype-deep:          var(--color-deep,           #2E2019);
-  --prototype-bg:            var(--color-background,     #FBF6F0);
+  --prototype-bg:            var(--color-bg,     #FBF6F0);
   --prototype-card:          var(--color-surface,        #FFFFFF);
   --prototype-border:        var(--color-border,         #E8D6C8);
   --prototype-muted:         var(--color-text-muted,     #7B665C);
-  --prototype-soft:          #F5EEE7;
-  --prototype-danger:        #B8493D;
-  --prototype-amber:         #B56C1E;
+  --prototype-soft:          var(--color-surface-alt,   #F9F3EC);
+  --prototype-danger:        var(--color-danger,        #C83434);
+  --prototype-amber:         var(--color-warning,       #9A621D);
   --prototype-shadow:        0 14px 38px rgba(77, 49, 35, 0.08);
 }
 
@@ -40,33 +40,9 @@ body {
   font-family: Pretendard, "Noto Sans KR", Arial, sans-serif;
 }
 
-/* [공통] 키보드 포커스 Skip Link — common.css 의 .skip-link 를 보강 */
-.skip-link {
-  position: fixed;
-  left: 16px;
-  top: -80px;
-  z-index: 999;
-  padding: 10px 14px;
-  background: var(--prototype-deep);
-  color: white;
-  border-radius: var(--radius-md, 8px);
-  transition: top var(--transition-fast, 0.2s);
-}
-
-.skip-link:focus {
-  top: 16px;
-}
 
 
-/* ------------------------------------------------------------
-   페이지 헤더
-   제목 + 반려견 선택 셀렉트 + 새 기록 추가 버튼 영역
-   ------------------------------------------------------------ */
-.site-main {
-  width: 922px;
-  margin: 0 auto;
-  padding: 28px 0 50px;
-}
+
 
 .page-head {
   display: flex;
@@ -126,41 +102,9 @@ body {
 }
 
 
-/* ------------------------------------------------------------
-   버튼
-   components.css 의 .btn 구조와 동일한 패턴으로 확장
-   ------------------------------------------------------------ */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 38px;
-  padding: 0 15px;
-  border-radius: var(--radius-md, 9px);
-  border: 1px solid var(--prototype-border);
-  background: white;
-  color: var(--prototype-deep);
-  font-weight: 700;
-  font-size: var(--font-size-xs, 12px);
-  transition: transform var(--transition-fast, 0.1s);
-}
 
-.btn:hover {
-  transform: translateY(-1px);
-}
 
-/* CTA 버튼 — primary 배경 위에는 흰 글자가 아닌 --color-text-on-primary 사용 */
-.btn--primary {
-  border-color: var(--prototype-primary);
-  background: var(--prototype-primary);
-  color: var(--color-text-on-primary, #2E2019);
-}
 
-/* Ghost 버튼 — 취소 등 보조 액션 */
-.btn--ghost {
-  background: transparent;
-  border-color: var(--prototype-border);
-}
 
 
 /* ------------------------------------------------------------
@@ -244,7 +188,7 @@ body {
 .period-tab.is-active {
   border-color: var(--prototype-primary);
   color: var(--prototype-primary-deep);
-  background: #FFF4EF;
+  background: var(--color-primary-light);
 }
 
 
@@ -269,7 +213,7 @@ body {
   width: 46px;
   height: 46px;
   border-radius: var(--radius-lg, 14px);
-  background: #F9E5DB;
+  background: var(--color-primary-light);
   font-size: 22px;
 }
 
@@ -315,7 +259,7 @@ body {
 
 /* ------------------------------------------------------------
    이상 징후 알림 위젯
-   [API 연동] GET /api/dogs/:dogId/health/alerts 응답이 있을 때만 노출
+   [API 연동] GET /api/pets/:petId/health/alerts 응답이 있을 때만 노출
    건강 화면 카피는 담백하게: "최근 2주간 체중이 12% 줄었어요" 형식
    ------------------------------------------------------------ */
 .alert-panel {
@@ -333,7 +277,7 @@ body {
   height: 38px;
   flex: 0 0 auto;
   border-radius: var(--radius-md, 12px);
-  background: #FFF0E5;
+  background: var(--color-warning-bg);
   color: var(--prototype-amber);
   font-weight: 900;
 }
@@ -355,76 +299,11 @@ body {
 }
 
 
-/* ------------------------------------------------------------
-   상태 칩 (도형 + 색상 + 텍스트)
-   [접근성] 색만으로 상태를 구분하지 않음. 도형 + 텍스트 병행.
-   협업가이드 8항 디자인 규칙 준수.
-   ------------------------------------------------------------ */
-.status-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  min-height: 26px;
-  padding: 0 9px;
-  border-radius: var(--radius-full, 999px);
-  font-size: var(--font-size-xs, 11px);
-  font-weight: 700;
-  white-space: nowrap;
-}
 
-/* 도형 — ::before 로 삽입, 클래스별로 모양이 다름 */
-.status-chip::before {
-  content: "";
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  background: currentColor;
-  flex: 0 0 auto;
-}
 
-/* 정상: 세이지 + 원형 */
-.status-chip--normal {
-  color: #3F684B;
-  background: #EAF3ED;
-}
-.status-chip--normal::before {
-  border-radius: var(--radius-full, 50%);
-}
 
-/* 주의: 앰버 + 삼각형 */
-.status-chip--caution {
-  color: #8C5415;
-  background: #FFF1D9;
-}
-.status-chip--caution::before {
-  width: 0;
-  height: 0;
-  background: transparent;
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-bottom: 7px solid currentColor;
-  border-radius: 0;
-}
 
-/* 위험: 레드 + 정사각형 */
-.status-chip--danger {
-  color: #A23C32;
-  background: #FBE8E5;
-}
-.status-chip--danger::before {
-  border-radius: var(--radius-sm, 2px);
-}
 
-/* 기록 없음: 그레이 + 빈 원형 */
-.status-chip--none {
-  color: #6E6864;
-  background: #EFECE9;
-}
-.status-chip--none::before {
-  background: transparent;
-  border: 1px solid currentColor;
-  border-radius: var(--radius-full, 50%);
-}
 
 
 /* ------------------------------------------------------------
@@ -493,7 +372,7 @@ body {
   padding: 12px 13px;
   border: 1px solid #F0E2D8;
   border-radius: var(--radius-lg, 12px);
-  background: #FFFCFA;
+  background: var(--color-surface);
 }
 
 .timeline-item__date {
@@ -513,28 +392,8 @@ body {
 }
 
 
-/* ------------------------------------------------------------
-   빈 상태
-   협업가이드 8항: 빈 상태에는 행동 버튼 반드시 포함
-   ------------------------------------------------------------ */
-.empty-state {
-  display: grid;
-  place-items: center;
-  min-height: 180px;
-  text-align: center;
-}
 
-.empty-state__title {
-  margin: 0 0 5px;
-  font-size: var(--font-size-sm, 13px);
-  font-weight: 800;
-}
 
-.empty-state__desc {
-  margin: 0 0 14px;
-  color: var(--prototype-muted);
-  font-size: var(--font-size-xs, 11px);
-}
 
 
 /* ------------------------------------------------------------
@@ -588,45 +447,14 @@ body {
   gap: 13px;
 }
 
-/* 폼 필드 — login.css 의 .form-field 와 동일한 레이블+인풋 구조 */
-.form-field {
-  display: grid;
-  gap: 6px;
-}
 
 .form-field--full {
   grid-column: 1 / -1;
 }
 
-.form-field label {
-  color: var(--prototype-muted);
-  font-size: var(--font-size-xs, 11px);
-  font-weight: 700;
-}
 
-.form-field input,
-.form-field select,
-.form-field textarea {
-  width: 100%;
-  border: 1px solid var(--prototype-border);
-  border-radius: var(--radius-md, 9px);
-  background: #FFFDFB;
-  color: var(--prototype-deep);
-  padding: 10px 11px;
-  outline: none;
-}
 
-/* 포커스 시 primary 테두리 — login.css 와 동일한 포커스 패턴 */
-.form-field input:focus,
-.form-field select:focus,
-.form-field textarea:focus {
-  border-color: var(--prototype-primary);
-}
 
-.form-field textarea {
-  min-height: 82px;
-  resize: vertical;
-}
 
 
 /* ------------------------------------------------------------
