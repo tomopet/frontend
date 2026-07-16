@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>TOMOPET - 맞춤 사료 추천</title>
+  <link rel="stylesheet" href="./styles/variables.css">
+  <link rel="stylesheet" href="./styles/common.css">
+  <link rel="stylesheet" href="./styles/components.css">
+  <link rel="stylesheet" href="./styles/layout.css">
+  <link rel="stylesheet" href="./styles/feed-recommend.css">
+  <!-- 공통 레이아웃 제어 및 API 통신 스크립트 -->
+  <script src="./scripts/layout.js" defer></script>
+  <script src="./scripts/api.js" defer></script>
+  <script src="./scripts/ui.js" defer></script>
+  <script src="./scripts/feed-recommend.js" defer></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- 헤더 영역 (layout.js에 의해 동적 로드됨) -->
+    <header id="header-container"></header>
+
+    <main class="feed-recommend">
+      <div class="feed-recommend__inner">
+        <header class="feed-recommend__header">
+          <h1 class="feed-recommend__title">우리 아이 맞춤 사료 추천</h1>
+          <p class="feed-recommend__subtitle">반려견의 나이, 무게, 품종에 딱 맞는 영양 사료를 제안합니다.</p>
+        </header>
+
+        <!-- 사료 필터 검색 영역 -->
+        <section class="feed-recommend__filter-section">
+          <form id="feed-filter-form" class="feed-filter">
+            <div class="feed-filter__group">
+              <label for="breed-select" class="feed-filter__label">품종</label>
+              <select id="breed-select" name="breed" class="feed-filter__select">
+                <option value="">전체 품종</option>
+                <!-- 퍼블리싱 테스트용 기본 더미 옵션 유지 (JS 로드 시 동적 대체 가능) -->
+                <option value="poodle">푸들</option>
+                <option value="maltese">말티즈</option>
+                <option value="pomeranian">포메라니안</option>
+                <option value="retriever">리트리버</option>
+              </select>
+            </div>
+
+            <div class="feed-filter__group">
+              <label for="age-select" class="feed-filter__label">연령대</label>
+              <select id="age-select" name="age" class="feed-filter__select">
+                <option value="">전체 연령</option>
+                <option value="PUPPY">퍼피 (1년 미만)</option>
+                <option value="ADULT" selected>어덜트 (1년 이상 ~ 7년 미만)</option>
+                <option value="SENIOR">시니어 (7년 이상)</option>
+              </select>
+            </div>
+
+            <div class="feed-filter__group">
+              <label for="weight-input" class="feed-filter__label">몸무게 (kg)</label>
+              <input type="number" id="weight-input" name="weight" class="feed-filter__input" min="0" step="0.1" value="5.4" placeholder="예: 5.4">
+            </div>
+
+            <button type="submit" id="filter-submit-btn" class="btn btn--primary feed-filter__submit-btn">맞춤 사료 검색</button>
+          </form>
+        </section>
+
+        <!-- 추천 결과 그리드 영역 -->
+        <section class="feed-recommend__results">
+          <!-- 로딩 상태 표시 영역 -->
+          <div id="feed-loading-view" class="feed-recommend__status-view" hidden>
+            <p class="feed-recommend__status-text">반려견 맞춤 사료를 분석하고 있습니다...</p>
+          </div>
+
+          <!-- 빈 상태 처리 영역 -->
+          <div id="feed-empty-view" class="feed-recommend__status-view" hidden>
+            <p class="feed-recommend__status-text">조건에 부합하는 사료 추천 데이터가 존재하지 않습니다.</p>
+            <button type="button" id="reset-filter-btn" class="btn btn--secondary">필터 초기화</button>
+          </div>
+
+          <!-- 그리드가 비어 보이지 않도록 '예쁜 더미 카드' 4개 구성 -->
+          <div id="feed-grid-container" class="feed-grid">
+            
+            <!-- 카드 1 -->
+            <article class="feed-card" data-dummy-card>
+              <a href="./feed-detail.html?feedId=1" class="feed-card__link">
+                <div class="feed-card__image-container">
+                  <img src="https://images.unsplash.com/photo-1589722244358-9dec9158a278?auto=format&fit=crop&q=80&w=300" alt="가수분해 연어 사료" class="feed-card__img">
+                </div>
+                <div class="feed-card__info">
+                  <span class="feed-card__brand">토모푸드</span>
+                  <h3 class="feed-card__name">민감한 피부를 위한 가수분해 연어</h3>
+                  <span class="feed-card__price">28,500원</span>
+                </div>
+              </a>
+            </article>
+
+            <!-- 카드 2 -->
+            <article class="feed-card" data-dummy-card>
+              <a href="./feed-detail.html?feedId=2" class="feed-card__link">
+                <div class="feed-card__image-container">
+                  <img src="https://images.unsplash.com/photo-1608454509000-19aac974f87a?auto=format&fit=crop&q=80&w=300" alt="고단백 칠면조 레시피" class="feed-card__img">
+                </div>
+                <div class="feed-card__info">
+                  <span class="feed-card__brand">네이처스 픽</span>
+                  <h3 class="feed-card__name">그레인프리 고단백 칠면조 레시피</h3>
+                  <span class="feed-card__price">34,000원</span>
+                </div>
+              </a>
+            </article>
+
+            <!-- 카드 3 -->
+            <article class="feed-card" data-dummy-card>
+              <a href="./feed-detail.html?feedId=3" class="feed-card__link">
+                <div class="feed-card__image-container">
+                  <img src="https://images.unsplash.com/photo-1568640347023-a616a30bc3bd?auto=format&fit=crop&q=80&w=300" alt="소형견 유기농 소프트 사료" class="feed-card__img">
+                </div>
+                <div class="feed-card__info">
+                  <span class="feed-card__brand">오가닉가든</span>
+                  <h3 class="feed-card__name">소형견용 유기농 촉촉한 소프트 95%</h3>
+                  <span class="feed-card__price">31,900원</span>
+                </div>
+              </a>
+            </article>
+
+            <!-- 카드 4 -->
+            <article class="feed-card" data-dummy-card>
+              <a href="./feed-detail.html?feedId=4" class="feed-card__link">
+                <div class="feed-card__image-container">
+                  <img src="https://images.unsplash.com/photo-1544568100-847a948585b9?auto=format&fit=crop&q=80&w=300" alt="시니어 관절 튼튼 치킨" class="feed-card__img">
+                </div>
+                <div class="feed-card__info">
+                  <span class="feed-card__brand">웰니스케어</span>
+                  <h3 class="feed-card__name">7세 이상 시니어 관절 튼튼 닭고기</h3>
+                  <span class="feed-card__price">29,000원</span>
+                </div>
+              </a>
+            </article>
+
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- 푸터 영역 (layout.js에 의해 동적 로드됨) -->
+    <footer id="footer-container"></footer>
+  </div>
+</body>
+</html>

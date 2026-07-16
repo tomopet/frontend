@@ -1,0 +1,174 @@
+/* ==========================================================================
+   맞춤 사료 추천 페이지 스타일 (feed-recommend.css)
+   ========================================================================== */
+
+.feed-recommend {
+  background-color: var(--color-background);
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  padding: 60px 0;
+}
+
+.feed-recommend__inner {
+  width: 1024px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+/* 헤더 타이틀 블록 */
+.feed-recommend__header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.feed-recommend__title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-brown-900);
+  margin-bottom: var(--spacing-xs);
+}
+
+.feed-recommend__subtitle {
+  font-size: var(--font-size-base);
+  color: var(--color-brown-600);
+}
+
+/* 필터 검색 폼 */
+.feed-recommend__filter-section {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 24px 32px;
+  margin-bottom: 48px;
+  box-shadow: var(--shadow-sm);
+}
+
+.feed-filter {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.feed-filter__group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.feed-filter__label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-brown-800);
+}
+
+.feed-filter__select,
+.feed-filter__input {
+  width: 100%;
+  height: 44px;
+  padding: 0 var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  color: var(--color-brown-900);
+  background-color: var(--color-white);
+  transition: border-color 0.2s;
+}
+
+.feed-filter__select:focus,
+.feed-filter__input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.feed-filter__submit-btn {
+  height: 44px;
+  padding: 0 32px;
+  flex-shrink: 0;
+}
+
+/* 상태 메시지 뷰 (로딩 및 데이터 없음 상태) */
+.feed-recommend__status-view {
+  text-align: center;
+  padding: 80px 0;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--color-border);
+}
+
+.feed-recommend__status-text {
+  font-size: var(--font-size-lg);
+  color: var(--color-brown-600);
+  margin-bottom: var(--spacing-md);
+}
+
+/* 사료 그리드 레이아웃 */
+.feed-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* 사료 카드 개별 컴포넌트 */
+.feed-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.feed-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.feed-card__link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.feed-card__image-container {
+  aspect-ratio: 1 / 1;
+  background-color: var(--color-background-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.feed-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.feed-card__info {
+  padding: var(--spacing-md);
+}
+
+.feed-card__brand {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--color-brown-500);
+  margin-bottom: var(--spacing-xxs);
+}
+
+.feed-card__name {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-brown-900);
+  margin-bottom: var(--spacing-sm);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 링크로 오해할 수 있는 오렌지 브랜드 색상 배제 */
+.feed-card__price {
+  display: block;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-deep);
+}
