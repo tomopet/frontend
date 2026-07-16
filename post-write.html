@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <!-- 문서 메타데이터 묶음: 문자 인코딩, 뷰포트, 검색엔진/공유용 설명, 브라우저 탭 제목을 정의한다 -->
   <meta charset="UTF-8">
   <!-- 데스크톱 전용 - 프로젝트 최소 지원 폭 1024px -->
   <meta name="viewport" content="width=1024">
   <meta name="description" content="TOMOPET 커뮤니티 게시글 작성 및 수정 페이지">
   <title>게시글 작성 | TOMOPET</title>
 
+  <!-- [공통] 파비콘 -->
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 
   <!-- [공통] 스타일 로드 순서 고정 -->
@@ -17,12 +19,15 @@
 </head>
 
 <body>
+  <!-- 키보드 사용자가 반복되는 헤더 메뉴를 건너뛰고 #main-content 로 바로 이동할 수 있게 하는 링크. 평소에는 화면 밖으로 숨겨져 있다가 Tab 포커스가 들어오면 나타난다 -->
   <a href="#main-content" class="skip-link">본문 바로가기</a>
 
+  <!-- 처음에는 빈 div 이며, layout.js 가 공통 헤더 마크업을 불러와 이 자리에 채워 넣는다 -->
   <div id="header-placeholder"></div>
 
   <main class="site-main" id="main-content">
     <div class="container container--narrow">
+      <!-- 제목/설명과 "목록으로" 링크를 한 줄에 배치하는 페이지 헤더. id가 부여되어 있어, 이 폼이 새 글 작성이 아니라 기존 글 수정으로 쓰일 때 스크립트가 제목·설명 문구를 바꿔 넣을 수 있는 자리다 -->
       <div class="page-header post-write__header">
         <div>
           <h1 class="page-header__title" id="post-write-title">새 글 작성</h1>
@@ -31,11 +36,15 @@
         <a href="./community.html" class="btn btn--ghost">← 목록으로</a>
       </div>
 
+      <!-- role="alert" 이므로 hidden 이 풀려 텍스트가 채워지는 순간 스크린리더가 자동으로 읽는다. 저장 성공/실패 등 처리 결과 안내에 쓰인다 -->
       <p class="banner post-write__message" id="post-write-message" role="alert" hidden></p>
 
+      <!-- novalidate 로 브라우저 기본 검증 팝업을 끄고, 각 입력 필드 아래의 form-field__error 문단에 스크립트가 직접 오류 메시지를 채우는 방식으로 검증한다 -->
       <form class="post-write" id="post-form" novalidate>
+        <!-- fieldset/legend 로 라디오 버튼 묶음을 하나의 의미 단위로 그룹화해, 스크린리더가 "카테고리" 라는 이름의 선택 그룹임을 알 수 있게 한다 -->
         <fieldset class="post-write__fieldset">
           <legend class="form-field__label">카테고리</legend>
+          <!-- label 이 input과 텍스트를 함께 감싸 클릭/탭 가능한 영역을 넓히고 라벨과 입력을 자동으로 연결한다. "자유"가 checked 로 기본 선택된 카테고리다 -->
           <div class="post-write__categories">
             <label class="post-write__category">
               <input type="radio" name="category" value="free" checked>
@@ -52,6 +61,7 @@
           </div>
         </fieldset>
 
+        <!-- 라벨과 글자 수 카운터를 한 줄에 배치하는 제목 입력 영역. 카운터는 aria-live="polite" 로 입력할 때마다 스크린리더에 남은/사용한 글자 수 변화를 알린다. maxlength 는 브라우저가 입력 자체를 100자로 제한한다 -->
         <div class="form-field">
           <div class="post-write__label-row">
             <label class="form-field__label" for="post-title-input">제목</label>
@@ -66,9 +76,11 @@
             placeholder="제목을 입력해주세요."
             required
           >
+          <!-- 제목 검증 실패 시 스크립트가 메시지를 채우고 hidden 을 해제하는 자리 -->
           <p class="form-field__error" id="post-title-error" hidden></p>
         </div>
 
+        <!-- 제목 필드와 동일한 구조(라벨+카운터, maxlength, 오류 문단)를 본문 입력에도 적용한다 -->
         <div class="form-field">
           <div class="post-write__label-row">
             <label class="form-field__label" for="post-content-input">내용</label>
@@ -86,6 +98,7 @@
           <p class="form-field__error" id="post-content-error" hidden></p>
         </div>
 
+        <!-- 실제 파일 입력(input[type=file])은 sr-only 로 시각적으로 숨기고, for 속성으로 연결된 스타일링된 label(btn--dashed)을 대신 눌러 파일 선택 창을 열게 하는 커스텀 업로드 버튼 패턴이다. 선택된 파일명 요약은 옆 span 에 표시된다 -->
         <div class="form-field">
           <label class="form-field__label" for="post-image-input">게시글 이미지</label>
           <div class="post-write__image-control">
@@ -100,13 +113,16 @@
             <label class="btn btn--dashed" for="post-image-input">이미지 선택</label>
             <span class="post-write__file-name" id="post-image-name">선택된 이미지 없음</span>
           </div>
+          <!-- accept 속성이 허용하는 확장자(JPG/PNG/WEBP)와 개수·용량 제한을 사용자에게 미리 안내하는 힌트 텍스트 -->
           <p class="form-field__hint" id="post-image-limit">JPG, PNG, WEBP · 최대 3장 · 장당 1MB</p>
           <p class="form-field__error" id="post-image-error" hidden></p>
+          <!-- 이미지를 하나 이상 선택했을 때만 스크립트가 hidden 을 해제해 미리보기 그리드를 보여준다 -->
           <div class="post-write__preview" id="post-image-preview-wrap" hidden>
             <ul class="post-write__preview-grid" id="post-image-preview-list" aria-label="선택한 이미지 미리보기"></ul>
           </div>
         </div>
 
+        <!-- 태그 입력 - "#" 기호는 시각적 장식일 뿐 실제 값이 아니므로 aria-hidden="true" 로 스크린리더 낭독에서 제외한다. 힌트 문단이 Enter로 추가/빈 입력에서 Backspace로 마지막 태그 삭제라는 키보드 상호작용 규칙을 설명한다 -->
         <div class="form-field">
           <label class="form-field__label" for="post-tag-input">태그</label>
           <div class="post-write__tag-entry">
@@ -122,9 +138,11 @@
           </div>
           <p class="form-field__hint">최대 5개 · Enter로 추가하고, 입력란이 비어 있을 때 Backspace로 마지막 태그를 삭제할 수 있어요.</p>
           <p class="form-field__error" id="post-tag-error" hidden></p>
+          <!-- Enter 로 추가된 태그들이 쌓이는 목록. aria-label 로 "추가한 태그" 목록임을 스크린리더에 알린다 -->
           <ul class="post-write__tags" id="post-tag-list" aria-label="추가한 태그"></ul>
         </div>
 
+        <!-- 취소 링크와 게시하기 제출 버튼을 묶은 폼 하단 액션 영역 -->
         <div class="post-write__actions">
           <a href="./community.html" class="btn btn--secondary">취소</a>
           <button class="btn btn--primary btn--lg" id="post-submit-button" type="submit">게시하기</button>
@@ -133,12 +151,17 @@
     </div>
   </main>
 
+  <!-- 처음에는 빈 div 이며, layout.js 가 공통 푸터 마크업을 불러와 이 자리에 채워 넣는다 -->
   <div id="footer-placeholder"></div>
 
   <!-- [공통] 스크립트 로드 순서 고정 -->
+  <!-- layout.js 는 defer 없이 즉시 실행되어 헤더/푸터를 먼저 채운다 -->
   <script src="./scripts/layout.js"></script>
+  <!-- api.js 는 window.TomopetApi 전역을 노출해 서버 통신을 공통으로 처리한다 -->
   <script src="./scripts/api.js" defer></script>
+  <!-- ui.js 는 window.TomopetUi 전역을 노출해 DOM 생성/렌더링/폼 메시지 표시 등 공통 UI 유틸을 제공한다 -->
   <script src="./scripts/ui.js" defer></script>
+  <!-- 이 페이지 전용 로직(카테고리·태그·이미지 처리, 글자 수 카운팅, 폼 검증/제출 등)을 담당하며 앞서 로드된 전역들에 의존한다 -->
   <script src="./scripts/post-write.js" defer></script>
 </body>
 </html>

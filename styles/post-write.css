@@ -3,6 +3,7 @@
    공통 버튼·배너·폼 스타일은 components.css를 재사용합니다.
    ============================================================ */
 
+/* 페이지 헤더, 라벨+카운터 줄, 이미지 업로드 컨트롤, 태그 입력창, 폼 하단 액션까지 - 이 페이지 곳곳에서 반복되는 가로 정렬(flex) 기본값을 한 번에 지정한다 */
 .post-write__header,
 .post-write__label-row,
 .post-write__image-control,
@@ -12,6 +13,7 @@
   align-items: center;
 }
 
+/* 위 다섯 곳 중 양 끝으로 벌려 배치해야 하는 세 곳(헤더, 라벨-카운터 줄, 하단 액션)만 space-between 을 추가로 적용한다 */
 .post-write__header,
 .post-write__label-row,
 .post-write__actions {
@@ -22,6 +24,7 @@
   margin-bottom: var(--spacing-lg);
 }
 
+/* 폼 전체를 감싸는 카드 형태(테두리·그림자·둥근 모서리) */
 .post-write {
   padding: var(--spacing-xl);
   border: 1px solid var(--color-border);
@@ -30,12 +33,14 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* fieldset 의 기본 테두리/여백을 제거해, 접근성을 위한 의미론적 그룹핑(fieldset/legend)만 남기고 시각적으로는 다른 form-field 들과 이질감 없이 이어지게 한다 */
 .post-write__fieldset {
   padding: 0;
   margin: 0 0 var(--spacing-lg);
   border: 0;
 }
 
+/* 카테고리 라디오 묶음과 태그 칩 목록이 같은 방식으로 줄바꿈 가능한 가로 나열을 사용한다 */
 .post-write__categories,
 .post-write__tags {
   display: flex;
@@ -43,16 +48,19 @@
   gap: var(--spacing-xs);
 }
 
+/* 커스텀 라디오 버튼 패턴의 바깥 label - position: relative 로 내부의 absolute 처리된 실제 input 의 기준점 역할을 한다 */
 .post-write__category {
   position: relative;
   cursor: pointer;
 }
 
+/* 실제 radio input 은 화면에서 보이지 않게 겹쳐 놓지만(opacity: 0) DOM 상에는 남겨 키보드 포커스/클릭/폼 제출 값은 그대로 유지한다 */
 .post-write__category input {
   position: absolute;
   opacity: 0;
 }
 
+/* 숨겨진 input 대신 실제로 보이는 알약 모양 버튼 - 사용자에게는 이 span 이 라디오 버튼처럼 보인다 */
 .post-write__category span {
   display: block;
   padding: var(--spacing-xs) var(--spacing-md);
@@ -65,12 +73,14 @@
               background-color var(--transition-fast);
 }
 
+/* 인접 형제 선택자(+)로 실제 input 이 checked 상태일 때만 바로 뒤 span 에 강조 색을 입혀, 현재 선택된 카테고리를 표시한다 */
 .post-write__category input:checked + span {
   color: var(--color-primary-deep);
   border-color: var(--color-primary);
   background-color: var(--color-primary-light);
 }
 
+/* input 자체는 보이지 않으므로, 키보드 포커스가 갔을 때(:focus-visible) 바로 뒤 span 에 포커스 링을 대신 그려준다 */
 .post-write__category input:focus-visible + span {
   box-shadow: var(--shadow-focus);
 }
@@ -79,6 +89,7 @@
   gap: var(--spacing-md);
 }
 
+/* 글자 수 카운터(예: "0 / 100")와 선택된 파일명 요약 텍스트에 공통으로 적용되는 보조 텍스트 스타일. 숫자가 바뀌어도 폭이 흔들리지 않도록 고정폭 숫자를 사용한다 */
 .post-write__counter,
 .post-write__file-name {
   font-size: var(--font-size-sm);
@@ -86,6 +97,7 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* 본문 textarea 의 최소 높이를 지정해, 내용이 적어도 충분한 작성 공간이 보이게 한다 */
 .post-write__content {
   min-height: var(--spacing-3xl);
 }
@@ -95,10 +107,12 @@
 }
 
 /* 시각적 숨김은 common.css의 .sr-only 유틸리티가 담당한다(HTML에서 함께 부여). */
+/* 숨겨진 실제 file input 이 키보드 포커스를 받으면(:focus-visible), 바로 옆의 "이미지 선택" 버튼 역할 label(.btn)에 포커스 링을 대신 그려 키보드 사용자도 현재 포커스 위치를 알 수 있게 한다 */
 .post-write__file-input:focus-visible + .btn {
   box-shadow: var(--shadow-focus);
 }
 
+/* 이미지를 선택했을 때만 노출되는 미리보기 영역을 옅은 배경 박스로 감싼다 */
 .post-write__preview {
   padding: var(--spacing-md);
   margin-top: var(--spacing-md);
@@ -106,6 +120,7 @@
   background-color: var(--color-surface-alt);
 }
 
+/* 선택한 이미지 썸네일을 3열 그리드로 배치 */
 .post-write__preview-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -113,6 +128,7 @@
   padding: 0;
 }
 
+/* 개별 썸네일 카드 - overflow: hidden 으로 안쪽 이미지가 둥근 모서리 밖으로 삐져나오지 않게 자른다 */
 .post-write__preview-item {
   overflow: hidden;
   border: 1px solid var(--color-border);
@@ -120,6 +136,7 @@
   background-color: var(--color-surface);
 }
 
+/* aspect-ratio: 1/1 로 정사각형 비율을 고정하고, object-fit: cover 로 원본 이미지 비율과 무관하게 정사각형을 꽉 채우도록 잘라 보여줘 그리드 칸 크기를 균일하게 유지한다 */
 .post-write__preview-image {
   display: block;
   width: 100%;
@@ -127,11 +144,13 @@
   object-fit: cover;
 }
 
+/* 썸네일 카드 하단에 꽉 차게 배치되는 제거 버튼 - 카드 폭에 맞춰 둥근 모서리는 없앤다 */
 .post-write__preview-remove {
   width: 100%;
   border-radius: 0;
 }
 
+/* 태그 입력창 바깥 박스 - 실제 텍스트 입력(input)을 감싸는 테두리 있는 상자로, 태그 칩이 나열되기 전 새 태그를 타이핑하는 영역이다 */
 .post-write__tag-entry {
   gap: var(--spacing-xs);
   padding: var(--spacing-xs) var(--spacing-sm);
@@ -141,12 +160,14 @@
   background-color: var(--color-surface-alt);
 }
 
+/* :focus-within 으로 내부의 input 이 포커스를 받으면 상자 자체의 테두리/배경/그림자가 함께 바뀌어, 어디에 입력 중인지 시각적으로 강조한다 */
 .post-write__tag-entry:focus-within {
   border-color: var(--color-border-focus);
   background-color: var(--color-surface);
   box-shadow: var(--shadow-focus);
 }
 
+/* 상자 안의 실제 입력 필드 - 자체 테두리/아웃라인/배경을 모두 지워(border: 0, outline: 0, background: transparent) 바깥 .post-write__tag-entry 의 테두리만 보이게 하고, flex: 1 로 남은 가로 공간을 채운다 */
 .post-write__tag-input {
   flex: 1;
   padding: var(--spacing-2xs) 0;
@@ -156,11 +177,13 @@
   background: transparent;
 }
 
+/* 입력 완료된 태그들이 칩 형태로 나열되는 목록 - 위에서 정의한 flex-wrap 가로 나열을 그대로 사용한다 */
 .post-write__tags {
   padding: 0;
   margin-top: var(--spacing-sm);
 }
 
+/* 개별 태그 칩 - border-radius: var(--radius-full) 로 알약(pill) 모양을 만들고, 옅은 강조 배경색으로 카테고리 라디오 버튼의 선택 상태와 비슷한 톤을 사용한다 */
 .post-write__tag {
   display: flex;
   align-items: center;
@@ -171,6 +194,7 @@
   background-color: var(--color-primary-light);
 }
 
+/* 태그 칩 안의 삭제 버튼 - 테두리와 배경을 없애(border: 0, background: transparent) 칩 안에 아이콘만 떠 있는 인라인 버튼처럼 보이게 한다 */
 .post-write__tag-remove {
   padding: 0;
   border: 0;
@@ -179,6 +203,7 @@
   cursor: pointer;
 }
 
+/* 폼 맨 아래 취소/제출 버튼이 놓이는 영역 - border-top 으로 위 콘텐츠와 구분선을 그어, 여기부터가 폼을 마무리하는 액션 영역임을 시각적으로 분리한다 */
 .post-write__actions {
   gap: var(--spacing-sm);
   padding-top: var(--spacing-lg);

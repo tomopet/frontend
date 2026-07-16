@@ -3,6 +3,7 @@
    공통 버튼·배너·폼 스타일은 components.css를 재사용합니다.
    ============================================================ */
 
+/* "목록으로" 링크는 왼쪽, 수정/삭제 액션 묶음은 오른쪽에 붙도록 양끝 정렬하는 상단 바 */
 .post-detail__topbar {
   display: flex;
   align-items: center;
@@ -11,6 +12,7 @@
   margin-bottom: var(--spacing-md);
 }
 
+/* 수정하기/삭제하기 버튼을 가로로 나열 */
 .post-detail__owner-actions {
   display: flex;
   gap: var(--spacing-xs);
@@ -20,6 +22,7 @@
   margin-bottom: var(--spacing-lg);
 }
 
+/* 게시글 본문과 댓글 영역이 같은 카드 형태(테두리·그림자·둥근 모서리)를 공유하도록 함께 지정 */
 .post-detail,
 .comments {
   padding: var(--spacing-xl);
@@ -29,6 +32,7 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* 제목/메타 정보 영역과 본문 사이를 구분선으로 나눈다 */
 .post-detail__header {
   padding-bottom: var(--spacing-lg);
   border-bottom: 1px solid var(--color-border);
@@ -50,6 +54,7 @@
   color: var(--color-deep);
 }
 
+/* 작성자와 작성일시를 가로로 나란히 배치 */
 .post-detail__meta {
   display: flex;
   gap: var(--spacing-md);
@@ -57,6 +62,7 @@
   color: var(--color-text-muted);
 }
 
+/* 첨부 이미지를 2열 그리드로 배치하는 갤러리 레이아웃 */
 .post-detail__images {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -64,6 +70,7 @@
   margin-top: var(--spacing-lg);
 }
 
+/* object-fit: cover 로 원본 이미지 비율과 무관하게 지정된 높이(20rem)를 꽉 채우면서 잘라 보여줘, 갤러리 칸 크기를 균일하게 유지한다 */
 .post-detail__image {
   display: block;
   width: 100%;
@@ -72,6 +79,7 @@
   object-fit: cover;
 }
 
+/* white-space: pre-wrap 으로 작성자가 입력한 줄바꿈/공백을 그대로 보존하고, overflow-wrap: anywhere 로 긴 영단어·URL도 컨테이너 밖으로 넘치지 않게 강제로 줄바꿈한다 */
 .post-detail__content {
   min-height: 10rem;
   margin-top: var(--spacing-xl);
@@ -82,6 +90,7 @@
   overflow-wrap: anywhere;
 }
 
+/* 좋아요 버튼을 오른쪽 끝에 배치하고 위쪽 구분선으로 본문과 분리한다 */
 .post-detail__actions {
   display: flex;
   justify-content: flex-end;
@@ -90,10 +99,12 @@
   border-top: 1px solid var(--color-border);
 }
 
+/* 좋아요 수 자릿수가 바뀌어도 버튼 폭이 흔들리지 않도록 고정폭 숫자 사용 */
 .post-detail__like {
   font-variant-numeric: tabular-nums;
 }
 
+/* is-liked 클래스는 aria-pressed="true" 상태와 함께 스크립트가 토글해, 좋아요를 누른 상태를 강조 색으로 보여준다 */
 .post-detail__like.is-liked {
   color: var(--color-primary-deep);
   border-color: var(--color-primary);
@@ -104,6 +115,7 @@
   margin-top: var(--spacing-lg);
 }
 
+/* 댓글 영역 안에서 반복되는 "왼쪽 텍스트 - 오른쪽 부가 정보" 양끝 정렬 패턴을 세 곳(전체 헤딩, 폼 하단 액션, 댓글 한 개의 헤더)에서 공유한다 */
 .comments__heading,
 .comments__form-actions,
 .comments__item-header {
@@ -122,6 +134,7 @@
   color: var(--color-deep);
 }
 
+/* 댓글 개수/글자 제한 안내/댓글 작성일 표기에 공통으로 쓰이는 보조 텍스트 스타일 */
 .comments__count,
 .comments__limit,
 .comments__date {
@@ -129,10 +142,12 @@
   color: var(--color-text-muted);
 }
 
+/* 댓글 수가 바뀌어도 자릿수로 인한 폭 흔들림이 없도록 고정폭 숫자 사용 */
 .comments__count {
   font-variant-numeric: tabular-nums;
 }
 
+/* 댓글 작성 폼을 옅은 배경 박스로 감싸 본문 카드 안에서도 입력 영역임을 구분되게 한다 */
 .comments__form {
   padding: var(--spacing-lg);
   margin-bottom: var(--spacing-xl);
@@ -144,11 +159,13 @@
   margin-top: var(--spacing-sm);
 }
 
+/* 댓글 항목들을 세로로 나열 */
 .comments__list {
   display: grid;
   gap: var(--spacing-md);
 }
 
+/* 댓글 항목 사이 구분선. 마지막 댓글에서는 아래쪽에 구분선이 남지 않도록 제거한다 */
 .comments__item {
   padding: var(--spacing-lg) 0;
   border-bottom: 1px solid var(--color-border);
@@ -163,6 +180,7 @@
   color: var(--color-deep);
 }
 
+/* 게시글 본문과 동일하게 줄바꿈 보존(pre-wrap)과 긴 문자열 강제 줄바꿈(overflow-wrap: anywhere)을 적용한다 */
 .comments__content {
   margin-top: var(--spacing-sm);
   color: var(--color-text);
@@ -178,6 +196,7 @@
   margin-top: var(--spacing-lg);
 }
 
+/* 네이티브 dialog 요소의 패널 스타일 - margin: auto 는 dialog 가 showModal() 로 열렸을 때 브라우저가 뷰포트 중앙에 배치하도록 돕는다. 게시글 삭제/댓글 삭제 두 다이얼로그가 이 클래스를 함께 사용한다 */
 .post-delete-dialog {
   width: 100%;
   max-width: var(--layout-max-width-narrow);
@@ -190,6 +209,7 @@
   margin: auto;
 }
 
+/* ::backdrop 은 dialog 가 showModal() 로 열릴 때 브라우저가 자동 생성하는 배경 오버레이 - 반투명하게 어둡게 칠해 뒤 페이지 내용과 시각적으로 분리한다 */
 .post-delete-dialog::backdrop {
   background-color: var(--color-deep);
   opacity: 0.48;
@@ -205,6 +225,7 @@
   color: var(--color-text-secondary);
 }
 
+/* 취소/삭제 버튼을 오른쪽 끝에 나란히 배치 */
 .post-delete-dialog__actions {
   display: flex;
   justify-content: flex-end;
