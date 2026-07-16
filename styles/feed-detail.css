@@ -5,7 +5,8 @@
 
 .feed-detail {
   padding: 40px 0 80px;
-  background-color: var(--color-background, #fdfdfd);
+  /* 배경색을 투명하게 지정하여 바디의 따뜻한 연베이지색이 투과되도록 수정 */
+  background-color: transparent; 
 }
 
 .feed-detail__inner {
