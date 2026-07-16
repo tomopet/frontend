@@ -12,12 +12,16 @@
   <script src="./scripts/layout.js" defer></script>
   <script src="./scripts/api.js" defer></script>
   <script src="./scripts/ui.js" defer></script>
-  <script src="./scripts/feed-recommend.js" defer></script>
+  <!--<script src="./scripts/feed-recommend.js" defer></script>-->
 </head>
 <body>
   <div class="app-container">
-    <!-- 헤더 영역 (layout.js에 의해 동적 로드됨) -->
-    <header id="header-container"></header>
+    <!-- 
+      ============================================================
+      TOMOPET 공통 레이아웃 가이드 준수 (헤더)
+      ============================================================
+    -->
+    <div id="header-placeholder"></div>
 
     <main class="feed-recommend">
       <div class="feed-recommend__inner">
@@ -33,7 +37,6 @@
               <label for="breed-select" class="feed-filter__label">품종</label>
               <select id="breed-select" name="breed" class="feed-filter__select">
                 <option value="">전체 품종</option>
-                <!-- 퍼블리싱 테스트용 기본 더미 옵션 유지 (JS 로드 시 동적 대체 가능) -->
                 <option value="poodle">푸들</option>
                 <option value="maltese">말티즈</option>
                 <option value="pomeranian">포메라니안</option>
@@ -60,6 +63,9 @@
           </form>
         </section>
 
+        <!-- [추가] API 연동 실패 시 에러 메시지가 표시될 공간 -->
+        <div id="feed-recommend-message" style="margin: 10px 0;"></div>
+
         <!-- 추천 결과 그리드 영역 -->
         <section class="feed-recommend__results">
           <!-- 로딩 상태 표시 영역 -->
@@ -73,7 +79,7 @@
             <button type="button" id="reset-filter-btn" class="btn btn--secondary">필터 초기화</button>
           </div>
 
-          <!-- 그리드가 비어 보이지 않도록 '예쁜 더미 카드' 4개 구성 -->
+          <!-- 그리드가 비어 보이지 않도록 '예쁜 더미 카드' 4개 유지 (JS 로드 시 원활히 덮어씌워짐) -->
           <div id="feed-grid-container" class="feed-grid">
             
             <!-- 카드 1 -->
@@ -137,8 +143,12 @@
       </div>
     </main>
 
-    <!-- 푸터 영역 (layout.js에 의해 동적 로드됨) -->
-    <footer id="footer-container"></footer>
+    <!-- 
+      ============================================================
+      TOMOPET 공통 레이아웃 가이드 준수 (푸터)
+      ============================================================
+    -->
+    <div id="footer-placeholder"></div>
   </div>
 </body>
 </html>

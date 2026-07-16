@@ -12,20 +12,27 @@
   <script src="./scripts/layout.js" defer></script>
   <script src="./scripts/api.js" defer></script>
   <script src="./scripts/ui.js" defer></script>
-  <script src="./scripts/feed-detail.js" defer></script>
+  <!--<script src="./scripts/feed-detail.js" defer></script>-->
 </head>
 <body>
   <div class="app-container">
-    <!-- 헤더 영역 (layout.js에 의해 동적 로드됨) -->
-    <header id="header-container"></header>
+    <!-- 
+      ============================================================
+      TOMOPET 공통 레이아웃 가이드 준수 (헤더)
+      ============================================================
+    -->
+    <div id="header-placeholder"></div>
 
     <main class="feed-detail">
       <div class="feed-detail__inner">
+
+        <!-- [추가] API 상세 데이터 조회 실패 시 에러 메시지가 표시될 공간 -->
+        <div id="feed-detail-message" style="margin-bottom: 20px;"></div>
+
         <!-- 상단 상세 정보 블록 -->
         <section class="feed-detail__main-section">
           <!-- 사료 이미지 영역 -->
           <div class="feed-detail__image-box">
-            <!-- 묵시적 빈 src 바인딩 방지 (기본 더미 이미지를 노출하되 JS 바인딩 시 제거) -->
             <img id="feed-detail-img" src="https://images.unsplash.com/photo-1589722244358-9dec9158a278?auto=format&fit=crop&q=80&w=400" alt="사료 원본 이미지" class="feed-detail__img">
           </div>
 
@@ -34,7 +41,7 @@
             <span id="feed-detail-brand" class="feed-detail__brand">토모푸드</span>
             <h1 id="feed-detail-name" class="feed-detail__name">민감한 피부를 위한 가수분해 연어 사료</h1>
             
-            <!-- 가격 표기 영역 (정적 데이터이므로 브랜드 오렌지색 배제) -->
+            <!-- 가격 표기 영역 -->
             <div class="feed-detail__price-wrapper">
               <span class="feed-detail__price-label">판매가</span>
               <strong id="feed-detail-price" class="feed-detail__price">28,500원</strong>
@@ -103,8 +110,12 @@
       </div>
     </main>
 
-    <!-- 푸터 영역 (layout.js에 의해 동적 로드됨) -->
-    <footer id="footer-container"></footer>
+    <!-- 
+      ============================================================
+      TOMOPET 공통 레이아웃 가이드 준수 (푸터)
+      ============================================================
+    -->
+    <div id="footer-placeholder"></div>
   </div>
 </body>
 </html>
