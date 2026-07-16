@@ -17,7 +17,7 @@
 | 비밀번호 재설정 | 완료 |
 | 이용약관 / 개인정보처리방침 | 초안 완료 (법률 검토 필요) |
 | 나머지 8개 페이지 | HTML · CSS 완료, JS 미구현 |
-| 모달 컴포넌트 | **없음** |
+| 모달 컴포넌트 | 완료 (`<dialog>` 기반, components.css) |
 | 백엔드 | 없음 |
 
 ---
@@ -27,7 +27,7 @@
 | 담당 | 파일 |
 |---|---|
 | SG | `index` `login` `password-reset` `password-reset-confirm` `terms` `privacy` + 공통 모듈 3개 + `header` `footer` |
-| 협업자 | `community` `post-write` `post-detail` `health-record` `food-recommend` `food-detail` `ai-chat` `my-page` |
+| 협업자 | `community` `post-write` `post-detail` `health-record` `feed-recommend` `feed-detail` `ai-chat` `my-page` |
 | 백엔드 | Spring Boot + MySQL + JWT |
 
 ---
@@ -37,13 +37,13 @@
 의존 관계를 고려한 순서입니다. 앞선 항목을 건너뛰면 뒤가 막힙니다.
 
 ```
-0. 모달 컴포넌트          ← my-page 가 통째로 대기 중
+0. 모달 컴포넌트          ← 완료 (SG)
 1. community.js
 2. post-detail.js
 3. post-write.js
-4. my-page.js             ← 0번 필요
-5. food-recommend.js
-6. food-detail.js
+4. my-page.js             ← 완료 (SG)
+5. feed-recommend.js
+6. feed-detail.js
 7. health-record.js       ← Chart.js 필요
 8. ai-chat.js             ← 백엔드 AI 필요
 9. 소셜 로그인             ← 백엔드 OAuth 필요
@@ -57,7 +57,7 @@
 마이페이지의 4개 기능이 전부 이것을 기다리고 있습니다.
 
 ```
-#add-dog-btn                 반려견 등록 / 수정
+#add-pet-btn                 반려견 등록 / 수정
 #change-password-btn         비밀번호 변경
 #notification-setting-btn    알림 설정
 #change-theme-btn            테마 변경
@@ -69,9 +69,9 @@
 `<dialog>` 는 브라우저가 기본 제공합니다.
 
 ```html
-<dialog class="modal" id="dog-modal" aria-labelledby="dog-modal-title">
+<dialog class="modal" id="pet-modal" aria-labelledby="pet-modal-title">
   <form method="dialog" class="modal__inner">
-    <h2 class="modal__title" id="dog-modal-title">반려견 등록</h2>
+    <h2 class="modal__title" id="pet-modal-title">반려견 등록</h2>
     <!-- 폼 필드 -->
     <div class="modal__actions">
       <button type="button" class="btn btn--secondary" data-modal-close>취소</button>
@@ -82,8 +82,8 @@
 ```
 
 ```js
-dogModal.showModal();   // 열기. show() 가 아님 (show() 는 포커스 트랩 없음)
-dogModal.close();       // 닫기
+petModal.showModal();   // 열기. show() 가 아님 (show() 는 포커스 트랩 없음)
+petModal.close();       // 닫기
 ```
 
 ### 주의
@@ -97,8 +97,8 @@ form.addEventListener("submit", async function (event) {
   Ui.setLoading(saveBtn, true, "저장 중...");
 
   try {
-    await Api.post("/api/dogs", body);
-    dogModal.close();
+    await Api.post("/api/pets", body);
+    petModal.close();
   } catch (error) {
     console.error("반려견 등록 실패:", error);
   } finally {
@@ -265,8 +265,8 @@ var ALLOWED = ["image/jpeg", "image/png", "image/webp"];
 | 기능 | 엔드포인트 |
 |---|---|
 | 프로필 조회 | `GET /api/users/me` |
-| 반려견 목록 | `GET /api/users/me/dogs` |
-| 반려견 등록 / 수정 / 삭제 | `POST` / `PUT` / `DELETE /api/dogs/:dogId` |
+| 반려견 목록 | `GET /api/users/me/pets` |
+| 반려견 등록 / 수정 / 삭제 | `POST` / `PUT` / `DELETE /api/pets/:petId` |
 | 비밀번호 변경 | `PUT /api/users/me/password` |
 | 회원 탈퇴 | `DELETE /api/users/me` |
 
@@ -295,21 +295,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
 ---
 
-## 5·6. food-recommend.js / food-detail.js — 4건 · 3건
+## 5·6. feed-recommend.js / feed-detail.js — 4건 · 3건
 
-**만들 파일** — `food-recommend.html` / `food-detail.html`(루트) · 각 `styles/*.css` · `scripts/*.js`
-브랜치 `feat/food-recommend`, `feat/food-detail` 에서 작업 후 PR
+**만들 파일** — `feed-recommend.html` / `feed-detail.html`(루트) · 각 `styles/*.css` · `scripts/*.js`
+브랜치 `feat/feed-recommend`, `feat/feed-detail` 에서 작업 후 PR
 
 | 기능 | 엔드포인트 |
 |---|---|
-| 사료 목록 | `GET /api/food?breed=&age=&weight=` |
+| 사료 목록 | `GET /api/feeds?breed=&age=&weight=` |
 | 품종 목록 | `GET /api/breeds` |
-| 사료 상세 | `GET /api/food/:foodId` |
+| 사료 상세 | `GET /api/feeds/:feedId` |
 
 ### 반드시 지킬 것
 
 ```js
-var foodId = params.get("foodId");   // 홈이 이 이름으로 링크를 만듦
+var feedId = params.get("feedId");   // 홈이 이 이름으로 링크를 만듦
 ```
 
 ### 가격과 칼로리는 브랜드 색을 쓰지 마세요
@@ -326,7 +326,7 @@ color: var(--color-deep);   /* --color-primary-deep 아님 */
 
 ```js
 var nutrition = {};
-try { nutrition = JSON.parse(food.nutritionInfo); } catch (e) { /* 빈 상태 노출 */ }
+try { nutrition = JSON.parse(feed.nutritionInfo); } catch (e) { /* 빈 상태 노출 */ }
 ```
 
 ---
@@ -338,10 +338,10 @@ try { nutrition = JSON.parse(food.nutritionInfo); } catch (e) { /* 빈 상태 �
 
 | 기능 | 엔드포인트 |
 |---|---|
-| 최근 기록 | `GET /api/dogs/:dogId/health/latest` |
-| 기록 목록 | `GET /api/dogs/:dogId/health/records` |
-| 기록 추가 | `POST /api/dogs/:dogId/health/records` |
-| 이상 징후 | `GET /api/dogs/:dogId/health/alerts` |
+| 최근 기록 | `GET /api/pets/:petId/health/latest` |
+| 기록 목록 | `GET /api/pets/:petId/health/records` |
+| 기록 추가 | `POST /api/pets/:petId/health/records` |
+| 이상 징후 | `GET /api/pets/:petId/health/alerts` |
 
 ### Chart.js 를 추가해야 합니다
 
@@ -472,9 +472,9 @@ POST  /api/auth/signup                   -> 201 / 409 { field: "email" | "nickna
 POST  /api/auth/password/reset-request   { email } -> 200
 GET   /api/auth/password/verify-token?token=xxx  -> 200 / 400 / 410
 POST  /api/auth/password/reset           { token, newPassword } -> 200 / 410
-GET   /api/stats                         -> { recipeCount, memberCount, dogCount }
+GET   /api/stats                         -> { recipeCount, memberCount, petCount }
 GET   /api/posts?sort=popular&limit=3
-GET   /api/food?limit=3
+GET   /api/feeds?limit=3
 ```
 
 ### 아직 아무도 호출하지 않음
@@ -483,10 +483,10 @@ GET   /api/food?limit=3
 게시글    GET/POST/PUT/DELETE /api/posts
           POST /api/posts/:postId/like
 댓글      GET/POST/DELETE /api/posts/:postId/comments
-반려견    GET/POST/PUT/DELETE /api/dogs
-건강기록  GET/POST /api/dogs/:dogId/health/records
-          GET /api/dogs/:dogId/health/alerts
-사료      GET /api/food/:foodId, GET /api/breeds
+반려견    GET/POST/PUT/DELETE /api/pets
+건강기록  GET/POST /api/pets/:petId/health/records
+          GET /api/pets/:petId/health/alerts
+사료      GET /api/feeds/:feedId, GET /api/breeds
 AI 채팅   GET/POST /api/chats, /api/chats/:chatId/messages
 사용자    GET /api/users/me
           PUT /api/users/me/password
@@ -497,8 +497,8 @@ AI 채팅   GET/POST /api/chats, /api/chats/:chatId/messages
 
 ```
 게시글  postId, title, thumbnailUrl, authorNickname, likeCount, category
-사료    foodId, name, brand, price, imageUrl
-통계    recipeCount, memberCount, dogCount
+사료    feedId, name, brand, price, imageUrl
+통계    recipeCount, memberCount, petCount
 ```
 
 `category` 는 `"gallery" | "recipe" | "free"` 셋 중 하나입니다.

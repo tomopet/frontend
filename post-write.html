@@ -10,6 +10,10 @@
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
 
   <!-- [공통] 스타일 로드 순서 고정 -->
+  <!-- [공통] 테마 - 반드시 스타일보다 먼저, defer 없이 실행
+       본문이 그려지기 전에 data-theme 을 정해야 화면이 번쩍이지 않음 -->
+  <script src="./scripts/theme.js"></script>
+
   <link rel="stylesheet" href="./styles/variables.css">
   <link rel="stylesheet" href="./styles/common.css">
   <link rel="stylesheet" href="./styles/components.css">

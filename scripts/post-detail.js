@@ -36,7 +36,7 @@
 
     var link = Ui.createEl("a", "card__link");
     /* 상세 페이지로 갈 때 쿼리 파라미터 이름을 팀 약속대로 쓸 것
-       예: post-detail 은 ?postId=, food-detail 은 ?foodId= */
+       예: post-detail 은 ?postId=, feed-detail 은 ?feedId= */
     link.href = "./index.html?exampleId=" + encodeURIComponent(item.id);
 
     /* 이미지 - URL 이 없으면 img 를 만들지 않음 (빈 src 금지) */

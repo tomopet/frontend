@@ -21,6 +21,9 @@
 
 
 :root {
+  /* 브라우저 기본 UI(스크롤바, 폼 컨트롤)도 테마를 따르게 함 */
+  color-scheme: light dark;
+
 
   /* ==========================================================
      [공통] 브랜드 컬러 - 파스텔 웜톤
@@ -58,6 +61,10 @@
   /* 딥 톤 - 푸터 배경, 히어로 타이틀. 사용량 약 10%
      기존 팔레트에 검정에 가까운 톤이 없어 화면이 붕 뜨는 문제 해결 */
   --color-deep:             #2E2019;
+
+  /* 푸터 배경과 모달 백드롭 - 다크 모드에서도 어두워야 하므로
+     글자용 --color-deep 과 분리함 */
+  --color-backdrop:         #2E2019;
   --color-deep-surface:     #3B2A21;   /* 딥 배경 위 카드 */
   --color-deep-border:      #4A362B;
   --color-deep-text:        #EFE4DA;   /* 딥 배경 위 본문 */
@@ -245,14 +252,119 @@
    유저 테마 기능 구현 시 theme.css 로 분리 예정
    ============================================================ */
 /*
+/* ============================================================
+   다크 모드
+
+   기본값은 사용자의 OS 설정을 따르고, 마이페이지에서 직접 바꿀 수 있음
+     data-theme 없음        OS 설정을 따름
+     data-theme="light"     라이트 강제
+     data-theme="dark"      다크 강제
+
+   scripts/theme.js 가 <head> 에서 저장된 값을 읽어 <html> 에 부여함
+   (본문보다 먼저 실행해야 화면이 번쩍이지 않음)
+
+   모든 조합은 대비 4.5:1 이상으로 검증됨
+   @media (prefers-color-scheme) 는 반응형이 아니라 환경 설정이므로
+   "미디어 쿼리 금지" 규칙의 예외임 (prefers-reduced-motion 과 동일)
+   ============================================================ */
+
+/* OS 가 다크이고 사용자가 라이트로 강제하지 않은 경우 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  /* 표면 - 순검정 대신 따뜻한 톤을 유지해 브랜드 느낌을 살림 */
+  --color-bg:                     #1C1917;
+  --color-surface:                #292524;
+  --color-surface-alt:            #37312D;
+  --color-border:                 #44403C;
+  --color-border-strong:          #57534E;
+
+  /* 텍스트 - 전부 4.5:1 이상 검증 완료 */
+  --color-text:                   #F5F0EB;   /* on surface  13.40:1 */
+  --color-text-secondary:         #C4B5A8;   /* on surface   7.60:1 */
+  --color-text-muted:             #AC9C8D;   /* on surface   5.70:1, on alt 4.81:1 */
+
+  /* 제목 - 라이트 모드의 딥 브라운이 다크에서는 밝은 톤이 되어야 함
+     배경으로 쓰는 푸터/백드롭은 --color-backdrop 이 따로 담당 */
+  --color-deep:                   #F0EAE4;   /* on surface  12.71:1 */
+
+  /* 브랜드 - 채워진 버튼 배경은 그대로 두고
+     글자로 쓰이는 deep 계열만 밝게 올림 */
+  --color-primary-deep:           #F0A183;   /* on surface   7.32:1 */
+  --color-primary-light:          #3A2A22;   /* 다크용 틴트 배경 */
+  --color-accent-deep:            #8FBF9E;   /* on surface   7.31:1 */
+  --color-accent-light:           #253028;
+
+  /* 상태 - 배경 틴트도 어둡게 뒤집음 */
+  --color-success:                #8FBF9E;
+  --color-success-bg:             #253028;   /* 6.60:1 */
+  --color-warning:                #E0A458;
+  --color-warning-bg:             #35291A;   /* 6.49:1 */
+  --color-danger:                 #F09595;
+  --color-danger-bg:              #3A2222;   /* 6.59:1 */
+  --color-info:                   #8FB4D9;
+  --color-info-bg:                #1F2A38;   /* 6.70:1 */
+
+  /* 카테고리 */
+  --color-category-gallery:       #E8A184;
+  --color-category-gallery-bg:    #3A2A22;   /* 6.43:1 */
+  --color-category-recipe:        #8FBF9E;
+  --color-category-recipe-bg:     #253028;   /* 6.60:1 */
+  --color-category-free:          #B9A6D4;
+  --color-category-free-bg:       #2E2838;   /* 6.41:1 */
+
+  /* 그림자 - 어두운 배경에서는 더 진하게 해야 층이 보임 */
+  --shadow-sm:  0 1px 2px rgb(0 0 0 / 40%);
+  --shadow-md:  0 4px 12px rgb(0 0 0 / 45%);
+  --shadow-lg:  0 12px 32px rgb(0 0 0 / 50%);
+  }
+}
+
+/* 사용자가 직접 다크를 고른 경우 - OS 설정보다 우선 */
 [data-theme="dark"] {
-  --color-bg:             #1C1917;
-  --color-surface:        #292524;
-  --color-surface-alt:    #37312D;
-  --color-text:           #F5F0EB;
-  --color-text-secondary: #C4B5A8;
-  --color-text-muted:     #8A7A6D;
-  --color-border:         #44403C;
-  --color-border-strong:  #57534E;
+  /* 표면 - 순검정 대신 따뜻한 톤을 유지해 브랜드 느낌을 살림 */
+  --color-bg:                     #1C1917;
+  --color-surface:                #292524;
+  --color-surface-alt:            #37312D;
+  --color-border:                 #44403C;
+  --color-border-strong:          #57534E;
+
+  /* 텍스트 - 전부 4.5:1 이상 검증 완료 */
+  --color-text:                   #F5F0EB;   /* on surface  13.40:1 */
+  --color-text-secondary:         #C4B5A8;   /* on surface   7.60:1 */
+  --color-text-muted:             #AC9C8D;   /* on surface   5.70:1, on alt 4.81:1 */
+
+  /* 제목 - 라이트 모드의 딥 브라운이 다크에서는 밝은 톤이 되어야 함
+     배경으로 쓰는 푸터/백드롭은 --color-backdrop 이 따로 담당 */
+  --color-deep:                   #F0EAE4;   /* on surface  12.71:1 */
+
+  /* 브랜드 - 채워진 버튼 배경은 그대로 두고
+     글자로 쓰이는 deep 계열만 밝게 올림 */
+  --color-primary-deep:           #F0A183;   /* on surface   7.32:1 */
+  --color-primary-light:          #3A2A22;   /* 다크용 틴트 배경 */
+  --color-accent-deep:            #8FBF9E;   /* on surface   7.31:1 */
+  --color-accent-light:           #253028;
+
+  /* 상태 - 배경 틴트도 어둡게 뒤집음 */
+  --color-success:                #8FBF9E;
+  --color-success-bg:             #253028;   /* 6.60:1 */
+  --color-warning:                #E0A458;
+  --color-warning-bg:             #35291A;   /* 6.49:1 */
+  --color-danger:                 #F09595;
+  --color-danger-bg:              #3A2222;   /* 6.59:1 */
+  --color-info:                   #8FB4D9;
+  --color-info-bg:                #1F2A38;   /* 6.70:1 */
+
+  /* 카테고리 */
+  --color-category-gallery:       #E8A184;
+  --color-category-gallery-bg:    #3A2A22;   /* 6.43:1 */
+  --color-category-recipe:        #8FBF9E;
+  --color-category-recipe-bg:     #253028;   /* 6.60:1 */
+  --color-category-free:          #B9A6D4;
+  --color-category-free-bg:       #2E2838;   /* 6.41:1 */
+
+  /* 그림자 - 어두운 배경에서는 더 진하게 해야 층이 보임 */
+  --shadow-sm:  0 1px 2px rgb(0 0 0 / 40%);
+  --shadow-md:  0 4px 12px rgb(0 0 0 / 45%);
+  --shadow-lg:  0 12px 32px rgb(0 0 0 / 50%);
 }
 */

@@ -1,0 +1,296 @@
+/* ============================================================
+   TOMOPET | styles/my-page.css
+   마이페이지 전용
+
+   로드 순서: variables -> common -> components -> my-page
+
+   모달, 아바타, 폼 필드, 버튼은 components.css 의 공통 클래스를
+   그대로 사용하므로 여기서 다시 정의하지 않음
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   섹션
+   ------------------------------------------------------------ */
+
+.my-section {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.my-section__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.my-section__title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-deep);
+}
+
+/* head 없이 제목만 있는 섹션 */
+.my-section > .my-section__title {
+  margin-bottom: var(--spacing-md);
+}
+
+
+/* ------------------------------------------------------------
+   반려견 카드
+
+   사진을 크게 보여주는 증명사진 형태
+   card-grid(3열) 대신 자동 채움을 써서
+   아이가 1~2마리일 때도 카드 폭이 과하게 늘어나지 않게 함
+   ------------------------------------------------------------ */
+
+.pet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.pet-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-lg) var(--spacing-md) var(--spacing-md);
+  text-align: center;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-base);
+}
+
+.pet-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* 사진 테두리 - 아바타 위에 링을 얹어 아이를 구분 */
+.pet-card__photo {
+  margin-bottom: var(--spacing-sm);
+  border: 3px solid var(--color-primary);
+}
+
+/* 두 번째 아이부터 다른 링 색 - 시각적 구분
+   :nth-child 로 자동 순환시켜 등록 순서에 따라 색이 배정됨 */
+.pet-card:nth-child(2n) .pet-card__photo {
+  border-color: var(--color-accent);
+}
+
+.pet-card__name {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-deep);
+}
+
+.pet-card__meta {
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.pet-card__actions {
+  display: flex;
+  gap: var(--spacing-xs);
+  width: 100%;
+  margin-top: auto;
+}
+
+/* 수정 버튼이 남은 폭을 차지하고 삭제는 아이콘 크기만 */
+.pet-card__actions .btn:first-child {
+  flex: 1;
+}
+
+
+/* ------------------------------------------------------------
+   등록 유도 카드 - 점선 테두리
+   ------------------------------------------------------------ */
+
+.pet-add-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  min-height: 220px;
+  padding: var(--spacing-lg);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  background: none;
+  border: 2px dashed var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.pet-add-card:hover {
+  color: var(--color-primary-deep);
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary);
+}
+
+/* 사진 자리와 같은 크기의 점선 원 - 카드끼리 높이를 맞춤 */
+.pet-add-card__circle {
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  border: 2px dashed currentColor;
+  border-radius: var(--radius-full);
+  opacity: 0.7;
+}
+
+
+/* ------------------------------------------------------------
+   내 정보 관리 패널
+   프로필 요약과 메뉴를 하나의 덩어리로 묶음
+   ------------------------------------------------------------ */
+
+.account-panel {
+  overflow: hidden;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.profile-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background-color: var(--color-surface-alt);
+}
+
+.profile-summary__info {
+  min-width: 0;
+}
+
+.profile-summary__name {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-deep);
+}
+
+.profile-summary__email {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  /* 긴 이메일이 레이아웃을 밀지 않도록 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* ------------------------------------------------------------
+   계정 메뉴
+   ------------------------------------------------------------ */
+
+.account-menu__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-family: inherit;
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+  text-align: left;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.account-menu__item:hover {
+  background-color: var(--color-surface-alt);
+}
+
+.account-menu__label {
+  font-weight: var(--font-weight-medium);
+}
+
+.account-menu__meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* 탈퇴 - 위험 동작임을 색으로 알림
+   단, 색만으로 구분하지 않도록 항목 위치(맨 아래)와 문구로도 구분됨 */
+.account-menu__item--danger .account-menu__label {
+  color: var(--color-danger);
+}
+
+.account-menu__item--danger:hover {
+  background-color: var(--color-danger-bg);
+}
+
+
+/* ------------------------------------------------------------
+   사진 선택 필드 - 모달 안에서 사용
+   ------------------------------------------------------------ */
+
+.photo-field {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.photo-field__preview {
+  border: 2px solid var(--color-border);
+}
+
+.photo-field__control {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-2xs);
+}
+
+/* 파일 입력은 감추고 label 을 버튼처럼 사용
+   display:none 을 쓰면 키보드 접근이 막히므로 시각적으로만 숨김 */
+.photo-field__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* [접근성] 키보드로 파일 입력에 포커스했을 때 label 에 표시 */
+.photo-field__input:focus-visible + .btn,
+.photo-field__input:focus-visible ~ .btn {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+
+/* ------------------------------------------------------------
+   테마 선택 - 세로 배치
+
+   choice-group 은 가로 배치라 3개가 들어가면 글자가 좁아짐
+   테마는 항목당 설명이 필요하므로 세로로 쌓음
+   ------------------------------------------------------------ */
+
+.theme-choice {
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+.theme-choice__item {
+  position: relative;
+}
+
+/* choice-group__label 을 그대로 재사용하되 왼쪽 정렬로 바꿈 */
+.theme-choice .choice-group__label {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+}

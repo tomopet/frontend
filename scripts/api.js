@@ -10,7 +10,7 @@
 
    제공
      window.TomopetApi.get / post / put / patch / del
-     window.TomopetApi.upload      FormData 전송
+     window.TomopetApi.upload      FormData 전송 (options.method 로 PUT 가능)
      window.TomopetApi.toMessage   오류를 사용자 문구로 변환
      window.TomopetApi.toList      배열 또는 {items:[]} 정규화
 
@@ -25,7 +25,7 @@
      README 의 REST API 표준 문법은 아래 구조입니다.
 
        try {
-         const response = await fetch("/api/dogs");
+         const response = await fetch("/api/pets");
          if (!response.ok) throw new Error("네트워크 응답 에러");
          const data = await response.json();
        } catch (error) {
@@ -221,9 +221,15 @@
       return request("DELETE", path, undefined, options);
     },
 
-    /* 이미지 등 파일 전송 - FormData 를 그대로 넘김 */
+    /* 이미지 등 파일 전송 - FormData 를 그대로 넘김
+
+       기본은 POST 이며, 수정처럼 다른 메서드가 필요하면
+       options.method 로 지정함
+         Api.upload("/api/pets", formData)                       등록
+         Api.upload("/api/pets/3", formData, { method: "PUT" })  수정 */
     upload: function (path, formData, options) {
-      return request("POST", path, formData, options);
+      options = options || {};
+      return request(options.method || "POST", path, formData, options);
     },
 
     toMessage: toMessage,

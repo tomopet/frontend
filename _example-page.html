@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!-- ============================================================
+     TOMOPET | _example-page.html
+     협업자용 견본 페이지 (복사해서 쓰세요)
+
+     이 파일은 실제 서비스 페이지가 아닙니다.
+     새 페이지를 만들 때 이 파일을 복사한 뒤
+     [페이지] 부분을 본인 담당 이름으로 바꾸면 됩니다.
+
+     예) 커뮤니티 담당이라면
+       _example-page.html   -> community.html
+       _example-page.css    -> styles/community.css
+       _example-page.js     -> scripts/community.js
+       파일 안의 "example" -> "community" 로 전부 치환
+
+     완성 후 이 견본 3종(_example-*)은 저장소에서 지우지 말고 그대로 두세요.
+     다음 담당자도 참고합니다.
+     ============================================================ -->
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <!-- 데스크톱 전용 - 최소 지원 폭 1024px -->
+  <meta name="viewport" content="width=1024">
+  <meta name="description" content="견본 페이지">
+  <title>견본 페이지 | TOMOPET</title>
+
+  <!-- [공통] 파비콘 -->
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+
+  <!-- [공통] 테마 - 반드시 스타일보다 먼저, defer 없이 실행
+       본문이 그려지기 전에 data-theme 을 정해야 화면이 번쩍이지 않음 -->
+  <script src="./scripts/theme.js"></script>
+
+  <!-- ============================================================
+       [공통] 스타일 - 로드 순서 고정 (바꾸면 디자인이 깨짐)
+         variables -> common -> components -> [내 페이지]
+       ============================================================ -->
+  <link rel="stylesheet" href="./styles/variables.css">
+  <link rel="stylesheet" href="./styles/common.css">
+  <link rel="stylesheet" href="./styles/components.css">
+  <link rel="stylesheet" href="./styles/_example-page.css">
+</head>
+<body>
+
+  <!-- [공통] 본문 바로가기 - 키보드 접근성. 지우지 말 것 -->
+  <a href="#main-content" class="skip-link">본문 바로가기</a>
+
+  <!-- [공통] 헤더가 삽입되는 자리. layout.js 가 채움 -->
+  <div id="header-placeholder"></div>
+
+  <main class="site-main" id="main-content">
+    <div class="container">
+
+      <!-- 페이지 제목 - h1 은 페이지당 정확히 1개 -->
+      <div class="page-header">
+        <h1 class="page-header__title">견본 페이지</h1>
+        <p class="page-header__desc">이 구조를 복사해서 본인 페이지를 만드세요</p>
+      </div>
+
+      <!-- ========================================================
+           폼 상단 배너 - API 오류 시 ui.js 가 여기에 메시지를 씀
+           ======================================================== -->
+      <p class="banner" id="example-message" role="alert" hidden></p>
+
+      <!-- ========================================================
+           목록이 들어갈 자리
+           JS 가 example-list 를 채우고,
+           데이터가 없으면 example-empty 를 노출함
+           ======================================================== -->
+      <ul class="card-grid" id="example-list"></ul>
+
+      <!-- 빈 상태 - 반드시 행동 버튼을 포함할 것 -->
+      <div class="empty-state" id="example-empty" hidden>
+        <p class="empty-state__title">아직 아무것도 없어요</p>
+        <p class="empty-state__desc">첫 항목을 추가해보세요</p>
+        <a href="./index.html" class="btn btn--primary empty-state__action">홈으로</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- [공통] 푸터가 삽입되는 자리. layout.js 가 채움 -->
+  <div id="footer-placeholder"></div>
+
+
+  <!-- ============================================================
+       [공통] 스크립트 - 로드 순서 고정
+         layout(즉시) -> api(defer) -> ui(defer) -> [내 페이지](defer)
+       layout.js 에만 defer 가 없음. 순서를 바꾸면 동작하지 않음
+       ============================================================ -->
+  <script src="./scripts/layout.js"></script>
+  <script src="./scripts/api.js" defer></script>
+  <script src="./scripts/ui.js" defer></script>
+  <script src="./scripts/_example-page.js" defer></script>
+
+</body>
+</html>

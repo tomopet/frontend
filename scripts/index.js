@@ -8,9 +8,9 @@
      ui.js      window.TomopetUi
 
    연동 엔드포인트
-     GET /api/stats                        { recipeCount, memberCount, dogCount }
+     GET /api/stats                        { recipeCount, memberCount, petCount }
      GET /api/posts?sort=popular&limit=3
-     GET /api/food?limit=3
+     GET /api/feeds?limit=3
 
    세 요청은 서로 독립적이므로 병렬로 보내고
    각 로더가 자체적으로 catch 하므로
@@ -33,7 +33,7 @@
     var mapping = [
       ["stat-recipe-count", stats.recipeCount],
       ["stat-member-count", stats.memberCount],
-      ["stat-dog-count", stats.dogCount]
+      ["stat-pet-count", stats.petCount]
     ];
 
     mapping.forEach(function (pair) {
@@ -114,20 +114,20 @@
      맞춤 사료 추천
      ========================================================== */
 
-  function createFoodCard(food) {
+  function createFeedCard(feed) {
     var item = Ui.createEl("li", "card card--clickable");
 
     var link = Ui.createEl("a", "card__link");
-    link.href = "./food-detail.html?foodId=" + encodeURIComponent(food.foodId);
+    link.href = "./feed-detail.html?feedId=" + encodeURIComponent(feed.feedId);
 
-    link.appendChild(Ui.createThumb(food.imageUrl, food.name, "thumb--square"));
+    link.appendChild(Ui.createThumb(feed.imageUrl, feed.name, "thumb--square"));
 
     var body = Ui.createEl("div", "card__body");
-    body.appendChild(Ui.createEl("p", "card__desc", food.brand || "-"));
-    body.appendChild(Ui.createEl("h3", "card__title", food.name || "이름 없음"));
+    body.appendChild(Ui.createEl("p", "card__desc", feed.brand || "-"));
+    body.appendChild(Ui.createEl("h3", "card__title", feed.name || "이름 없음"));
 
     var meta = Ui.createEl("div", "card__meta");
-    meta.appendChild(Ui.createEl("strong", null, Ui.formatPrice(food.price)));
+    meta.appendChild(Ui.createEl("strong", null, Ui.formatPrice(feed.price)));
     body.appendChild(meta);
 
     link.appendChild(body);
@@ -135,16 +135,16 @@
     return item;
   }
 
-  async function loadFoodRecommend() {
-    var list = $("food-recommend-list");
-    var empty = $("food-recommend-empty");
+  async function loadFeedRecommend() {
+    var list = $("feed-recommend-list");
+    var empty = $("feed-recommend-empty");
 
     try {
-      var data = await Api.get("/api/food?limit=3");
-      Ui.renderList(list, Api.toList(data), createFoodCard, empty);
+      var data = await Api.get("/api/feeds?limit=3");
+      Ui.renderList(list, Api.toList(data), createFeedCard, empty);
     } catch (error) {
       console.error("사료 추천 로딩 실패:", error);
-      Ui.renderList(list, [], createFoodCard, empty);
+      Ui.renderList(list, [], createFeedCard, empty);
     }
   }
 
@@ -172,6 +172,6 @@
   document.addEventListener("DOMContentLoaded", function () {
     adjustHeroCta();
 
-    Promise.all([loadStats(), loadPopularPosts(), loadFoodRecommend()]);
+    Promise.all([loadStats(), loadPopularPosts(), loadFeedRecommend()]);
   });
 })();
