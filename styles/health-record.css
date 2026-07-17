@@ -15,28 +15,12 @@
    직접 수정하지 말고 variables.css 를 통해 변경할 것.
    login.css / password-reset.css 와 동일한 방식으로 var() 상속.
    ------------------------------------------------------------ */
-:root {
-  --prototype-primary:       var(--color-primary,        #E8845F);
-  --prototype-primary-deep:  var(--color-primary-deep,   #B95536);
-  --prototype-accent:        var(--color-accent,         #567F63);
-  --prototype-deep:          var(--color-deep,           #2E2019);
-  --prototype-bg:            var(--color-bg,     #FBF6F0);
-  --prototype-card:          var(--color-surface,        #FFFFFF);
-  --prototype-border:        var(--color-border,         #E8D6C8);
-  --prototype-muted:         var(--color-text-muted,     #7B665C);
-  --prototype-soft:          var(--color-surface-alt,   #F9F3EC);
-  --prototype-danger:        var(--color-danger,        #C83434);
-  --prototype-amber:         var(--color-warning,       #9A621D);
-  --prototype-shadow:        0 14px 38px rgba(77, 49, 35, 0.08);
-}
-
-
 /* ------------------------------------------------------------
    기본 레이아웃 및 폰트
    common.css 리셋 위에 페이지 기반 서체를 덮어씀
    ------------------------------------------------------------ */
 body {
-  color: var(--prototype-deep);
+  color: var(--color-deep);
   font-family: Pretendard, "Noto Sans KR", Arial, sans-serif;
 }
 
@@ -55,22 +39,22 @@ body {
 /* 섹션 레이블 - 협업가이드 카피 톤: 영문 대문자로 카테고리 표기 */
 .page-head__eyebrow {
   margin: 0 0 7px;
-  color: var(--prototype-primary-deep);
+  color: var(--color-primary-deep);
   font-weight: 700;
-  font-size: var(--font-size-xs, 12px);
+  font-size: var(--font-size-xs);
 }
 
 .page-head h1 {
   margin: 0;
-  font-size: var(--font-size-2xl, 24px);
+  font-size: var(--font-size-2xl);
   line-height: 1.25;
   letter-spacing: -.02em;
 }
 
 .page-head__desc {
   margin: 7px 0 0;
-  color: var(--prototype-muted);
-  font-size: var(--font-size-xs, 12px);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
 }
 
 .page-head__actions {
@@ -90,15 +74,15 @@ body {
   min-width: 128px;
   height: 38px;
   padding: 0 12px;
-  border: 1px solid var(--prototype-border);
-  border-radius: var(--radius-md, 10px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   background: white;
-  color: var(--prototype-deep);
+  color: var(--color-deep);
   outline: none;
 }
 
 .pet-select:focus {
-  border-color: var(--prototype-primary);
+  border-color: var(--color-primary);
 }
 
 
@@ -112,9 +96,9 @@ body {
    대시보드 내 모든 카드에 공통으로 적용
    ------------------------------------------------------------ */
 .panel {
-  border: 1px solid var(--prototype-border);
-  border-radius: var(--radius-xl, 16px);
-  background: var(--prototype-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
   box-shadow: 0 2px 0 rgba(90, 54, 37, 0.02);
 }
 
@@ -128,12 +112,12 @@ body {
 
 .panel__title {
   margin: 0;
-  font-size: var(--font-size-md, 15px);
+  font-size: var(--font-size-md);
 }
 
 .panel__meta {
-  color: var(--prototype-muted);
-  font-size: var(--font-size-xs, 11px);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
 }
 
 /* 대시보드 2열 그리드 구조 */
@@ -177,17 +161,17 @@ body {
   min-width: 46px;
   height: 29px;
   padding: 0 10px;
-  border: 1px solid var(--prototype-border);
-  border-radius: var(--radius-full, 999px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
   background: white;
-  color: var(--prototype-muted);
-  font-size: var(--font-size-xs, 11px);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
 }
 
 /* 활성 기간 탭 — primary 계열 색상 적용 */
 .period-tab.is-active {
-  border-color: var(--prototype-primary);
-  color: var(--prototype-primary-deep);
+  border-color: var(--color-primary);
+  color: var(--color-primary-deep);
   background: var(--color-primary-light);
 }
 
@@ -212,20 +196,20 @@ body {
   place-items: center;
   width: 46px;
   height: 46px;
-  border-radius: var(--radius-lg, 14px);
+  border-radius: var(--radius-lg);
   background: var(--color-primary-light);
   font-size: 22px;
 }
 
 .pet-profile__name {
   margin: 0 0 4px;
-  font-size: var(--font-size-md, 16px);
+  font-size: var(--font-size-md);
 }
 
 .pet-profile__info {
   margin: 0;
-  color: var(--prototype-muted);
-  font-size: var(--font-size-xs, 11px);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
 }
 
 .metric-list {
@@ -247,12 +231,12 @@ body {
 }
 
 .metric-row__label {
-  color: var(--prototype-muted);
-  font-size: var(--font-size-xs, 11px);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
 }
 
 .metric-row__value {
-  font-size: var(--font-size-sm, 13px);
+  font-size: var(--font-size-sm);
   font-weight: 800;
 }
 
@@ -267,7 +251,7 @@ body {
   display: flex;
   align-items: center;
   gap: 14px;
-  border: 1.5px solid var(--prototype-amber);
+  border: 1.5px solid var(--color-warning);
 }
 
 .alert-panel__icon {
@@ -276,9 +260,9 @@ body {
   width: 38px;
   height: 38px;
   flex: 0 0 auto;
-  border-radius: var(--radius-md, 12px);
+  border-radius: var(--radius-md);
   background: var(--color-warning-bg);
-  color: var(--prototype-amber);
+  color: var(--color-warning);
   font-weight: 900;
 }
 
@@ -289,13 +273,13 @@ body {
 
 .alert-panel__title {
   margin: 0 0 4px;
-  font-size: var(--font-size-xs, 12px);
+  font-size: var(--font-size-xs);
 }
 
 .alert-panel__text {
   margin: 0;
-  color: var(--prototype-muted);
-  font-size: var(--font-size-xs, 11px);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
 }
 
 
@@ -327,23 +311,23 @@ body {
 .filter-select {
   height: 31px;
   padding: 0 10px;
-  border: 1px solid var(--prototype-border);
-  border-radius: var(--radius-sm, 8px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   background: white;
-  color: var(--prototype-deep);
-  font-size: var(--font-size-xs, 11px);
+  color: var(--color-deep);
+  font-size: var(--font-size-xs);
 }
 
 .records-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: var(--font-size-xs, 11px);
+  font-size: var(--font-size-xs);
 }
 
 .records-table th {
   padding: 10px 8px;
-  border-bottom: 1px solid var(--prototype-border);
-  color: var(--prototype-muted);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-muted);
   text-align: left;
   font-weight: 700;
 }
@@ -371,24 +355,24 @@ body {
   align-items: center;
   padding: 12px 13px;
   border: 1px solid #F0E2D8;
-  border-radius: var(--radius-lg, 12px);
+  border-radius: var(--radius-lg);
   background: var(--color-surface);
 }
 
 .timeline-item__date {
-  color: var(--prototype-muted);
-  font-size: var(--font-size-xs, 11px);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
 }
 
 .timeline-item__main {
   display: flex;
   align-items: center;
   gap: 16px;
-  font-size: var(--font-size-xs, 11px);
+  font-size: var(--font-size-xs);
 }
 
 .timeline-item__main strong {
-  font-size: var(--font-size-sm, 13px);
+  font-size: var(--font-size-sm);
 }
 
 
@@ -404,8 +388,8 @@ body {
   width: 520px;
   padding: 0;
   border: 0;
-  border-radius: var(--radius-xl, 18px);
-  box-shadow: var(--prototype-shadow);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
 }
 
 /* 모달 배경 오버레이 */
@@ -426,7 +410,7 @@ body {
 
 .record-form__head h2 {
   margin: 0;
-  font-size: var(--font-size-lg, 18px);
+  font-size: var(--font-size-lg);
 }
 
 /* 닫기 버튼 — login.css 의 탭 버튼과 동일한 크기 패턴 */
@@ -435,8 +419,8 @@ body {
   place-items: center;
   width: 32px;
   height: 32px;
-  border: 1px solid var(--prototype-border);
-  border-radius: var(--radius-sm, 8px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   background: white;
 }
 
@@ -465,12 +449,12 @@ body {
 .form-message {
   min-height: 18px;
   margin: 12px 0 0;
-  color: var(--prototype-danger);
-  font-size: var(--font-size-xs, 11px);
+  color: var(--color-danger);
+  font-size: var(--font-size-xs);
 }
 
 .form-message.is-success {
-  color: var(--prototype-accent);
+  color: var(--color-accent);
 }
 
 /* 모달 하단 버튼 그룹 */
@@ -480,5 +464,5 @@ body {
   gap: 8px;
   margin-top: 14px;
   padding-top: 14px;
-  border-top: 1px solid var(--prototype-border);
+  border-top: 1px solid var(--color-border);
 }

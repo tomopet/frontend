@@ -63,6 +63,8 @@
    통합 검색 - 페이지의 유일한 주요 액션
    ------------------------------------------------------------ */
 
+/* 컨테이너가 1200px 이어도 검색바는 좁게 유지
+   가로로 길면 시선이 분산되고 입력값이 왼쪽에 치우쳐 보임 */
 .hero-search {
   display: flex;
   align-items: center;
@@ -134,11 +136,13 @@
   padding-bottom: var(--spacing-3xl);
 }
 
+/* 컨테이너가 1200px 이므로 아이콘이 가운데 몰리지 않도록 폭을 넓힘
+   6개 × 약 110px = 아이콘 사이가 적당히 벌어짐 */
 .quick-nav__list {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: var(--spacing-xs);
-  max-width: 540px;
+  gap: var(--spacing-md);
+  max-width: 680px;
   margin: 0 auto;
 }
 

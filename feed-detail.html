@@ -2,19 +2,29 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <!-- 데스크톱 전용 - 최소 지원 폭 1024px -->
+  <meta name="viewport" content="width=1024">
+  <meta name="description" content="사료 상세 정보">
   <title>TOMOPET - 사료 상세 정보</title>
+
+  <!-- [공통] 파비콘 -->
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+
+  <!-- [공통] 테마 - 반드시 스타일보다 먼저, defer 없이 실행
+       본문이 그려지기 전에 data-theme 을 정해야 화면이 번쩍이지 않음 -->
+  <script src="./scripts/theme.js"></script>
+
+  <!-- [공통] 전역 스타일 - 로드 순서 고정 -->
   <link rel="stylesheet" href="./styles/variables.css">
   <link rel="stylesheet" href="./styles/common.css">
   <link rel="stylesheet" href="./styles/components.css">
-  <link rel="stylesheet" href="./styles/layout.css">
   <link rel="stylesheet" href="./styles/feed-detail.css">
-  <!-- 공통 레이아웃 제어 및 API 통신 스크립트 -->
-  <script src="./scripts/layout.js" defer></script>
-  <script src="./scripts/api.js" defer></script>
-  <script src="./scripts/ui.js" defer></script>
-  <!--<script src="./scripts/feed-detail.js" defer></script>-->
 </head>
 <body>
+
+  <!-- [공통] 본문 바로가기 - 키보드 접근성 -->
+  <a href="#main-content" class="skip-link">본문 바로가기</a>
+
   <div class="app-container">
     <!-- 
       ============================================================
@@ -23,8 +33,9 @@
     -->
     <div id="header-placeholder"></div>
 
-    <main class="feed-detail">
-      <div class="feed-detail__inner">
+    <main class="site-main feed-detail" id="main-content">
+      <!-- [공통] 다른 페이지와 좌우 여백을 맞추기 위한 컨테이너 -->
+      <div class="container feed-detail__inner">
 
         <!-- [추가] API 상세 데이터 조회 실패 시 에러 메시지가 표시될 공간 -->
         <div id="feed-detail-message" style="margin-bottom: 20px;"></div>
@@ -117,5 +128,15 @@
     -->
     <div id="footer-placeholder"></div>
   </div>
+
+  <!-- ============================================================
+       [공통] 스크립트 - 로드 순서 고정
+       layout.js 에는 defer 를 붙이지 않음 (TomopetAuth 를 먼저 정의해야 함)
+       ============================================================ -->
+  <script src="./scripts/layout.js"></script>
+  <script src="./scripts/api.js" defer></script>
+  <script src="./scripts/ui.js" defer></script>
+  <script src="./scripts/feed-detail.js" defer></script>
+
 </body>
 </html>

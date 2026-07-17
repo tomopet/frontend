@@ -20,19 +20,6 @@
    이 블록을 직접 수정하지 말고 variables.css 를 통해 변경할 것.
    login.css / password-reset.css 와 동일한 var() 상속 방식.
    ------------------------------------------------------------ */
-:root {
-  --chat-primary:       var(--color-primary,        #E8845F);
-  --chat-primary-deep:  var(--color-primary-deep,   #B95536);
-  --chat-accent:        var(--color-accent,         #567F63);
-  --chat-deep:          var(--color-deep,           #2E2019);
-  --chat-bg:            var(--color-bg,     #FBF6F0);
-  --chat-surface:       var(--color-surface,        #FFFFFF);
-  --chat-border:        var(--color-border,         #E8D6C8);
-  --chat-muted:         var(--color-text-muted,     #7B665C);
-  --chat-shadow:        0 14px 38px rgba(77, 49, 35, 0.08);
-}
-
-
 /* ------------------------------------------------------------
    기본 레이아웃 및 폰트
    common.css 리셋 위에 페이지 기반 서체를 덮어씀
@@ -42,9 +29,9 @@
 }
 
 body {
-  color: var(--chat-deep);
+  color: var(--color-deep);
   font-family: Pretendard, "Noto Sans KR", Arial, sans-serif;
-  background: var(--chat-bg);
+  background: var(--color-bg);
 }
 
 
@@ -71,22 +58,22 @@ body {
 /* 섹션 레이블 — 협업가이드 카피 톤: 영문 대문자 카테고리 표기 */
 .page-head__eyebrow {
   margin: 0 0 7px;
-  color: var(--chat-accent);
+  color: var(--color-accent);
   font-weight: 800;
-  font-size: var(--font-size-xs, 12px);
+  font-size: var(--font-size-xs);
 }
 
 .page-head h1 {
   margin: 0;
-  font-size: var(--font-size-2xl, 24px);
+  font-size: var(--font-size-2xl);
   line-height: 1.25;
   letter-spacing: -.02em;
 }
 
 .page-head__desc {
   margin: 7px 0 0;
-  color: var(--chat-muted);
-  font-size: var(--font-size-xs, 12px);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
 }
 
 
@@ -100,10 +87,10 @@ body {
   gap: 7px;
   min-height: 30px;
   padding: 0 10px;
-  border-radius: var(--radius-full, 999px);
+  border-radius: var(--radius-full);
   background: var(--color-accent-light);
   color: var(--color-accent-deep);
-  font-size: var(--font-size-xs, 11px);
+  font-size: var(--font-size-xs);
   font-weight: 700;
 }
 
@@ -122,9 +109,9 @@ body {
    login.css / health-record-01.css 와 동일한 패널 구조
    ------------------------------------------------------------ */
 .panel {
-  border: 1px solid var(--chat-border);
-  border-radius: var(--radius-xl, 16px);
-  background: var(--chat-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
 }
 
 
@@ -137,16 +124,16 @@ body {
   place-items: center;
   width: 31px;
   height: 31px;
-  border: 1px solid var(--chat-border);
-  border-radius: var(--radius-md, 9px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   background: white;
-  color: var(--chat-deep);
+  color: var(--color-deep);
   font-weight: 800;
   cursor: pointer;
 }
 
 .icon-button:hover {
-  background: var(--chat-bg);
+  background: var(--color-bg);
 }
 
 
@@ -182,7 +169,7 @@ body {
 
 .conversation-head h2 {
   margin: 0;
-  font-size: var(--font-size-md, 14px);
+  font-size: var(--font-size-md);
 }
 
 /* 대화 항목 목록 영역
@@ -199,9 +186,9 @@ body {
   width: 100%;
   padding: 12px;
   border: 1px solid transparent;
-  border-radius: var(--radius-md, 11px);
+  border-radius: var(--radius-md);
   background: transparent;
-  color: var(--chat-deep);
+  color: var(--color-deep);
   text-align: left;
   cursor: pointer;
 }
@@ -217,15 +204,15 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: var(--font-size-xs, 12px);
+  font-size: var(--font-size-xs);
   font-weight: 800;
 }
 
 .conversation-item__meta {
   display: block;
   margin-top: 5px;
-  color: var(--chat-muted);
-  font-size: var(--font-size-xs, 10px);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
 }
 
 
@@ -247,7 +234,7 @@ body {
   justify-content: space-between;
   gap: 14px;
   padding: 17px 19px;
-  border-bottom: 1px solid var(--chat-border);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .chat-head__profile {
@@ -263,22 +250,22 @@ body {
   place-items: center;
   width: 39px;
   height: 39px;
-  border-radius: var(--radius-md, 12px);
+  border-radius: var(--radius-md);
   background: var(--color-accent-light);
-  color: var(--chat-accent);
+  color: var(--color-accent);
   font-weight: 900;
   flex: 0 0 auto;
 }
 
 .chat-head h2 {
   margin: 0 0 3px;
-  font-size: var(--font-size-md, 14px);
+  font-size: var(--font-size-md);
 }
 
 .chat-head p {
   margin: 0;
-  color: var(--chat-muted);
-  font-size: var(--font-size-xs, 10px);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
 }
 
 
@@ -315,17 +302,17 @@ body {
   width: 30px;
   height: 30px;
   flex: 0 0 auto;
-  border-radius: var(--radius-md, 10px);
+  border-radius: var(--radius-md);
   background: var(--color-accent-light);
-  color: var(--chat-accent);
-  font-size: var(--font-size-xs, 11px);
+  color: var(--color-accent);
+  font-size: var(--font-size-xs);
   font-weight: 800;
 }
 
 /* 사용자 아바타 — primary 계열 */
 .message--user .message__avatar {
   background: var(--color-primary-light);
-  color: var(--chat-primary-deep);
+  color: var(--color-primary-deep);
 }
 
 .message__body {
@@ -338,7 +325,7 @@ body {
   border: 1px solid #E8DCD4;
   border-radius: 4px 14px 14px 14px;
   background: white;
-  font-size: var(--font-size-xs, 12px);
+  font-size: var(--font-size-xs);
   line-height: 1.65;
   white-space: pre-wrap;
   word-break: break-word;
@@ -346,14 +333,14 @@ body {
 
 /* 말풍선 — 사용자 메시지: primary 계열 배경 */
 .message--user .message__bubble {
-  border-color: var(--chat-primary);
+  border-color: var(--color-primary);
   border-radius: 14px 4px 14px 14px;
   background: var(--color-primary-light);
 }
 
 .message__time {
   margin-top: 5px;
-  color: var(--chat-muted);
+  color: var(--color-text-muted);
   font-size: 9px;
 }
 
@@ -368,7 +355,7 @@ body {
   margin-top: 7px;
   padding-top: 7px;
   border-top: 1px dashed #E4D7CE;
-  color: var(--chat-muted);
+  color: var(--color-text-muted);
   font-size: 9px;
   line-height: 1.5;
 }
@@ -385,7 +372,7 @@ body {
   margin-bottom: 8px;
   padding: 9px;
   border: 1px solid #E7DAD1;
-  border-radius: var(--radius-md, 10px);
+  border-radius: var(--radius-md);
   background: var(--color-surface);
 }
 
@@ -394,7 +381,7 @@ body {
   place-items: center;
   width: 42px;
   height: 42px;
-  border-radius: var(--radius-md, 9px);
+  border-radius: var(--radius-md);
   background: var(--color-surface-alt);
   font-size: 18px;
   flex: 0 0 auto;
@@ -405,7 +392,7 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: var(--font-size-xs, 10px);
+  font-size: var(--font-size-xs);
 }
 
 
@@ -416,7 +403,7 @@ body {
    ------------------------------------------------------------ */
 .composer {
   padding: 14px 17px 16px;
-  border-top: 1px solid var(--chat-border);
+  border-top: 1px solid var(--color-border);
   background: white;
 }
 
@@ -428,8 +415,8 @@ body {
   gap: 8px;
   min-height: 24px;
   margin-bottom: 7px;
-  color: var(--chat-muted);
-  font-size: var(--font-size-xs, 10px);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
 }
 
 /* 3열 그리드: 파일레이블 | 텍스트영역 | 전송버튼 */
@@ -447,17 +434,17 @@ body {
   place-items: center;
   width: 40px;
   height: 40px;
-  border: 1px solid var(--chat-border);
-  border-radius: var(--radius-md, 10px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   background: white;
-  color: var(--chat-muted);
+  color: var(--color-text-muted);
   font-size: 16px;
   cursor: pointer;
 }
 
 .file-label:hover {
-  border-color: var(--chat-primary);
-  color: var(--chat-primary-deep);
+  border-color: var(--color-primary);
+  color: var(--color-primary-deep);
 }
 
 /* 파일 인풋 — 시각적으로 숨김, label 로 접근 */
@@ -479,10 +466,10 @@ body {
   max-height: 110px;
   resize: none;
   padding: 10px 12px;
-  border: 1px solid var(--chat-border);
-  border-radius: var(--radius-md, 10px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   background: var(--color-bg);
-  color: var(--chat-deep);
+  color: var(--color-deep);
   font: inherit;
   line-height: 1.5;
   outline: none;
@@ -490,7 +477,7 @@ body {
 
 /* 포커스 시 primary 테두리 — login.css 와 동일한 포커스 패턴 */
 .composer textarea:focus {
-  border-color: var(--chat-primary);
+  border-color: var(--color-primary);
 }
 
 /* 전송 버튼
@@ -499,13 +486,13 @@ body {
 .send-button {
   min-width: 72px;
   height: 40px;
-  border: 1px solid var(--chat-primary);
-  border-radius: var(--radius-md, 10px);
-  background: var(--chat-primary);
-  color: var(--color-text-on-primary, #2E2019);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
   font: inherit;
   font-weight: 800;
-  font-size: var(--font-size-xs, 12px);
+  font-size: var(--font-size-xs);
   cursor: pointer;
 }
 
@@ -527,13 +514,13 @@ body {
   gap: 10px;
   padding: 13px 15px;
   border: 1px solid #D7E4DA;
-  border-radius: var(--radius-md, 12px);
+  border-radius: var(--radius-md);
   background: var(--color-accent-light);
   color: var(--color-accent-deep);
-  font-size: var(--font-size-xs, 10px);
+  font-size: var(--font-size-xs);
   line-height: 1.6;
 }
 
 .disclaimer-bar strong {
-  font-size: var(--font-size-xs, 11px);
+  font-size: var(--font-size-xs);
 }

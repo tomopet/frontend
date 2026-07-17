@@ -1,3 +1,11 @@
+/* 페이지 전체 래퍼 - 헤더/메인/푸터를 세로로 쌓음
+   .container 가 좌우 여백을 담당하므로 여기서는 폭을 제한하지 않음 */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 /* ============================================================
    TOMOPET | styles/feed-recommend.css
    맞춤 사료 추천 페이지 전용 스타일시트
@@ -25,20 +33,20 @@
 .feed-recommend__title {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--color-text-primary, #333333);
+  color: var(--color-text);
   margin-bottom: 12px;
 }
 
 .feed-recommend__subtitle {
   font-size: 1.1rem;
-  color: var(--color-text-secondary, #666666);
+  color: var(--color-text-secondary);
 }
 
 /* 2. 사료 필터 검색 박스 */
 .feed-recommend__filter-section {
-  background-color: #ffffff;
-  border: 1px solid var(--color-border-light, #e0e0e0);
-  border-radius: 12px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   padding: 24px;
   margin-bottom: 40px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
@@ -60,7 +68,7 @@
 .feed-filter__label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--color-text-primary, #333333);
+  color: var(--color-text);
 }
 
 .feed-filter__select,
@@ -68,18 +76,18 @@
   width: 100%;
   height: 48px;
   padding: 0 16px;
-  border: 1px solid var(--color-border, #cccccc);
-  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   font-size: 0.95rem;
-  background-color: #ffffff;
-  color: var(--color-text-primary, #333333);
+  background-color: var(--color-surface);
+  color: var(--color-text);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .feed-filter__select:focus,
 .feed-filter__input:focus {
   outline: none;
-  border-color: var(--color-primary, #ff7a00); /* 브랜드 대표 주황색 */
+  border-color: var(--color-primary); /* 브랜드 대표 주황색 */
   box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.1);
 }
 
@@ -87,7 +95,7 @@
   height: 48px;
   font-size: 1rem;
   font-weight: 600;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   cursor: pointer;
 }
 
@@ -99,15 +107,15 @@
   justify-content: center;
   padding: 80px 20px;
   text-align: center;
-  background-color: #ffffff;
-  border: 1px solid var(--color-border-light, #e2e8f0);
-  border-radius: 12px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   margin-bottom: 40px;
 }
 
 .feed-recommend__status-text {
   font-size: 1.1rem;
-  color: var(--color-text-secondary, #64748b);
+  color: var(--color-text-secondary);
   margin-bottom: 16px;
 }
 
@@ -119,9 +127,9 @@
 }
 
 .feed-card {
-  background-color: #ffffff;
-  border: 1px solid var(--color-border-light, #f1f5f9);
-  border-radius: 12px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   transition: transform 0.2s, box-shadow 0.2s;
@@ -142,7 +150,7 @@
   width: 100%;
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  background-color: #f8fafc;
+  background-color: var(--color-surface-alt);
 }
 
 .feed-card__img {
@@ -163,7 +171,7 @@
 .feed-card__brand {
   font-size: 0.8rem;
   font-weight: 700;
-  color: var(--color-primary, #ff7a00); /* 메인 컬러 포인트 */
+  color: var(--color-primary); /* 메인 컬러 포인트 */
   text-transform: uppercase;
   letter-spacing: 0.5px;
   display: block;
@@ -174,7 +182,7 @@
   font-size: 1.05rem;
   font-weight: 600;
   line-height: 1.4;
-  color: var(--color-text-primary, #1e293b);
+  color: var(--color-text);
   margin: 0 0 12px 0;
   /* 2줄 제한 말줄임 효과 */
   display: -webkit-box;
@@ -187,16 +195,13 @@
 .feed-card__price {
   font-size: 1.15rem;
   font-weight: 700;
-  color: var(--color-text-primary, #0f172a);
+  color: var(--color-text);
 }
 
 /* 반응형 웹 디자인 대응 (모바일 기기 전용 스타일) */
-@media (max-width: 768px) {
-  .feed-filter {
-    grid-template-columns: 1fr;
-  }
-  
-  .feed-recommend__title {
-    font-size: 1.6rem;
-  }
+
+
+/* 검색 결과 영역 */
+.feed-recommend__results {
+  margin-top: var(--spacing-lg);
 }

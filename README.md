@@ -5,10 +5,10 @@
 
 **데스크톱 전용** — 최소 지원 폭 1024px, 미디어 쿼리 미사용
 
-> 협업 규칙 상세는 [CONTRIBUTING.md](./CONTRIBUTING.md)
-> 남은 작업과 페이지별 주의점은 [ROADMAP.md](./ROADMAP.md)
-> 담당 분량은 [분량배분.md](./분량배분.md)
-> 색상·타이포·간격 등 디자인 토큰은 [DESIGN-SYSTEM.md](./DESIGN-SYSTEM.md)
+> 협업 규칙 상세는 [CONTRIBUTING.md](./docs/CONTRIBUTING.md)
+> 남은 작업과 페이지별 주의점은 [ROADMAP.md](./docs/ROADMAP.md)
+> 담당 분량은 [분량배분.md](./docs/분량배분.md)
+> 색상·타이포·간격 등 디자인 토큰은 [DESIGN-SYSTEM.md](./docs/DESIGN-SYSTEM.md)
 
 ---
 
@@ -74,8 +74,15 @@ tomopet/
 ├── privacy.html                  개인정보처리방침 (ㅇ, 법률 검토 필요)
 ├── my-page.html                  마이페이지 + 모달 6종 (ㅇ)
 ├── diet.html                     식단 균형 분석 (ㅇ)
+├── community.html                커뮤니티 목록
+├── post-detail.html              게시글 상세
+├── post-write.html               글 작성 / 수정
+├── health-record.html            건강기록
+├── ai-chat.html                  AI 채팅
+├── feed-recommend.html           사료 추천
+├── feed-detail.html              사료 상세
 │
-├── _example-page.html            협업자용 복사 견본 (ㅇ)
+├── README.md                     이 문서 (저장소 첫 화면)
 ├── favicon.svg                   (ㅇ)
 ├── .gitignore                    Git 전용, 실행에 불필요
 ├── .nojekyll                     GitHub Pages 전용, 실행에 불필요
@@ -91,41 +98,45 @@ tomopet/
 │   ├── variables.css             전역 디자인 토큰 (ㅇ)
 │   ├── common.css                리셋 + 기반 스타일 (ㅇ)
 │   ├── components.css            공통 컴포넌트 (ㅇ)
-│   ├── index.css                 홈 전용 (ㅇ)
-│   ├── login.css                 로그인 전용 (ㅇ)
-│   ├── password-reset.css        재설정 2개 페이지 공용 (ㅇ)
-│   ├── my-page.css               마이페이지 전용 (ㅇ)
-│   ├── diet.css                  식단 분석 전용 (ㅇ)
-│   └── policy.css                terms + privacy 공용 (ㅇ)
+│   └── [페이지].css               페이지 전용
 │
-└── scripts/
-    ├── theme.js                  테마 적용 (head 에서 먼저 실행) (ㅇ)
-    ├── layout.js                 헤더/푸터 로더 + 인증 (필수) (ㅇ)
-    ├── api.js                    HTTP 통신 공통 모듈 (필수) (ㅇ)
-    ├── ui.js                     DOM/포맷 공통 모듈 (필수) (ㅇ)
-    ├── index.js                  홈 전용 (ㅇ)
-    ├── login.js                  로그인 전용 (ㅇ)
-    ├── password-reset.js         1단계 전용 (ㅇ)
-    ├── password-reset-confirm.js 2단계 전용 (ㅇ)
-    ├── my-page.js                마이페이지 전용 (ㅇ)
-    ├── diet.js                   식단 분석 전용 (ㅇ)
-    └── _example-page.js          협업자용 복사 견본 (ㅇ)
+├── scripts/
+│   ├── theme.js                  테마 적용 (head 에서 먼저 실행) (ㅇ)
+│   ├── layout.js                 헤더/푸터 로더 + 인증 (필수) (ㅇ)
+│   ├── api.js                    HTTP 통신 공통 모듈 (필수) (ㅇ)
+│   ├── ui.js                     DOM/포맷 공통 모듈 (필수) (ㅇ)
+│   └── [페이지].js                페이지 전용
+│
+└── docs/                         사이트에서 동작하지 않는 문서·템플릿
+    ├── CONTRIBUTING.md           협업 규칙
+    ├── ROADMAP.md                남은 작업
+    ├── DESIGN-SYSTEM.md          디자인 토큰
+    ├── 분량배분.md                담당 분량
+    └── example/                  새 페이지 복사용 견본
+        ├── _example-page.html
+        ├── _example-page.css
+        └── _example-page.js
 ```
 
-`styles/_example-page.css` 도 함께 있습니다.
-협업자는 `_example-*` 3종을 복사해 새 페이지를 만듭니다. (CONTRIBUTING 섹션 3)
+### docs/ 는 사이트의 일부가 아닙니다
 
-이 저장소는 SG 담당 범위입니다.
-`community` `post-write` `post-detail` `health-record` `feed-recommend`
-`feed-detail` `ai-chat` `my-page` 는 협업자 담당이며 여기 포함되지 않습니다.
-헤더 메뉴에서 해당 링크를 클릭하면 404 가 발생합니다.
+문서와 템플릿만 담습니다. 브라우저가 읽지 않습니다.
 
-**협업자는 시작 전에 [CONTRIBUTING.md 섹션 0](./CONTRIBUTING.md) 을 읽으세요.**
-같은 저장소에서 브랜치를 나눠 작업하고, 각자 페이지 파일 3종
-(`페이지.html` → 루트, `페이지.css` → `styles/`, `페이지.js` → `scripts/`)을 추가한 뒤
-PR 로 `main` 에 합칩니다.
+`docs/example/` 의 견본은 **루트 기준 경로**로 작성돼 있습니다.
+(`./styles/...`, `./scripts/...`) 그대로 열면 스타일이 적용되지 않는 것이 정상입니다.
+복사해서 아래 위치에 두면 동작합니다.
 
----
+```
+docs/example/_example-page.html  →  community.html          (루트)
+docs/example/_example-page.css   →  styles/community.css
+docs/example/_example-page.js    →  scripts/community.js
+```
+
+### HTML 을 폴더로 나누지 않는 이유
+
+`components/header.html` 의 링크(`./community.html`)가 **보는 위치에 따라 달라지기 때문**입니다.
+`index.html` 은 GitHub Pages 진입점이라 루트에 있어야 하고,
+다른 페이지만 하위 폴더로 옮기면 헤더 하나로 두 위치를 모두 맞출 수 없습니다.
 
 ## 4. 프론트엔드 코드 규칙 (Convention)
 
