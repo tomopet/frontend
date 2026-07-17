@@ -14,8 +14,8 @@
 
 | 역할 | 토큰 | 값 | 용도 | 비율 |
 |---|---|---|---|:---:|
-| Primary | `--color-primary` | `#E8845F` | 버튼·칩 배경, CTA, 활성 상태 | 70% |
-| Accent | `--color-accent` | `#567F63` | 안전/정상, AI 기능, 레시피 | 20% |
+| Primary | `--color-primary` | `#F2701F` | 버튼·칩 배경, CTA, 활성 상태 | 70% |
+| Accent | `--color-accent` | `#1F7A52` | 안전/정상, AI 기능, 레시피 | 20% |
 | Deep | `--color-deep` | `#2E2019` | 푸터 배경, 히어로 타이틀 | 10% |
 
 `--color-success` 를 accent 와 같은 계열로 맞춰
@@ -26,10 +26,10 @@
 | 토큰 | 값 | 용도 | 대비 |
 |---|---|---|---|
 | `--color-text` | `#3D2E24` | 본문 기본 | 13.01:1 (흰 배경) |
-| `--color-text-secondary` | `#7D6555` | 보조 설명 | 5.43:1 |
-| `--color-text-muted` | `#826B5C` | 캡션·메타·플레이스홀더 | 4.5:1+ |
-| `--color-text-on-primary` | `#2E2019` | primary 배경 위 글자 | 5.91:1 |
-| `--color-text-on-accent` | `#FFFFFF` | accent 배경 위 글자 | 4.55:1 |
+| `--color-text-secondary` | `#755C4C` | 보조 설명 | 6.19:1 |
+| `--color-text-muted` | `#7A6151` | 캡션·메타·플레이스홀더 | 4.5:1+ |
+| `--color-text-on-primary` | `#2E2019` | primary 배경 위 글자 | 5.32:1 |
+| `--color-text-on-accent` | `#FFFFFF` | accent 배경 위 글자 | 5.30:1 |
 
 ### 링크·텍스트 전용 딥 색
 
@@ -37,8 +37,8 @@
 
 | 토큰 | 값 | 용도 |
 |---|---|---|
-| `--color-primary-deep` | `#A8502F` | 흰/틴트 배경 위 링크·텍스트 (5.45:1) |
-| `--color-accent-deep` | `#3F6B4E` | 틴트 배경 위 텍스트 (5.28:1) |
+| `--color-primary-deep` | `#A83A0C` | 흰/틴트 배경 위 링크·텍스트 (6.41:1) |
+| `--color-accent-deep` | `#146341` | 틴트 배경 위 텍스트 (5.97:1) |
 
 ### 표면·배경
 
@@ -46,25 +46,25 @@
 |---|---|---|
 | `--color-bg` | `#FDF8F3` | 페이지 최하단 배경 |
 | `--color-surface` | `#FFFFFF` | 카드·패널 배경 |
-| `--color-surface-alt` | `#F9F3EC` | 보조 표면, 이미지 플레이스홀더 |
+| `--color-surface-alt` | `#F2E8DC` | 보조 표면, 이미지 플레이스홀더 |
 | `--color-border` | `#EDE0D4` | 기본 헤어라인 |
 
 ### 상태 색 (배경과 짝)
 
 | 상태 | 글자 토큰 | 배경 토큰 | 대비 |
 |---|---|---|---|
-| 성공 | `--color-success` `#4E745B` | `--color-success-bg` `#E8F0EA` | 4.55:1 |
-| 경고 | `--color-warning` `#9A621D` | `--color-warning-bg` `#FBF0DF` | 4.50:1 |
-| 위험 | `--color-danger` `#C83434` | `--color-danger-bg` `#FBEAEA` | 4.52:1 |
-| 정보 | `--color-info` `#4570A0` | `--color-info-bg` `#EAF1F8` | 4.52:1 |
+| 성공 | `--color-success` `#146341` | `--color-success-bg` `#DCEDE3` | 4.55:1 |
+| 경고 | `--color-warning` `#8F5A00` | `--color-warning-bg` `#FBEBCC` | 4.50:1 |
+| 위험 | `--color-danger` `#C4241C` | `--color-danger-bg` `#FBE3E1` | 4.52:1 |
+| 정보 | `--color-info` `#1A5FA8` | `--color-info-bg` `#DEEAF7` | 4.52:1 |
 
 ### 카테고리 색 (게시글 배지)
 
 | 카테고리 | 글자 토큰 | 배경 토큰 | 대비 |
 |---|---|---|---|
-| 갤러리 | `--color-category-gallery` `#AA5434` | `...-gallery-bg` `#FBEDE6` | 4.56:1 |
-| 레시피 | `--color-category-recipe` `#3F6B4E` | `...-recipe-bg` `#E8F0EA` | 5.28:1 |
-| 자유 | `--color-category-free` `#6E5A8A` | `...-free-bg` `#F0EBF5` | 5.13:1 |
+| 갤러리 | `--color-category-gallery` `#A8400E` | `...-gallery-bg` `#F9E3D8` | 4.56:1 |
+| 레시피 | `--color-category-recipe` `#146341` | `...-recipe-bg` `#DCEDE3` | 5.28:1 |
+| 자유 | `--color-category-free` `#5B3F91` | `...-free-bg` `#EAE2F5` | 5.13:1 |
 
 ---
 
@@ -72,31 +72,70 @@
 
 **폰트: Pretendard 단일** (CDN 로드, SIL OFL 라이선스)
 
-| 토큰 | 크기 | 용도 |
-|---|---|---|
-| `--font-size-xs` | 12px | 캡션·메타 |
-| `--font-size-sm` | 13px | 보조 텍스트 |
-| `--font-size-md` | 14px | 본문 기본 |
-| `--font-size-lg` | 16px | 카드 제목 |
-| `--font-size-xl` | 18px | 섹션 제목 |
-| `--font-size-2xl` | 22px | 페이지 타이틀 |
-| `--font-size-3xl` | 40px | 히어로 타이틀 |
+### 크기 토큰
 
-| 굵기 토큰 | 값 |
+| 토큰 | 크기 |
 |---|---|
-| `--font-weight-regular` | 400 |
-| `--font-weight-medium` | 500 |
-| `--font-weight-semibold` | 600 |
-| `--font-weight-bold` | 700 |
+| `--font-size-xs` | 12px |
+| `--font-size-sm` | 13px |
+| `--font-size-md` | 14px |
+| `--font-size-lg` | 16px |
+| `--font-size-xl` | 18px |
+| `--font-size-2xl` | 22px |
+| `--font-size-3xl` | 40px |
 
-| 행간 토큰 | 값 | 용도 |
+### 어디에 무엇을 쓰는가 (이 표를 따르세요)
+
+크기 표만 보고 매번 고민하지 않도록 용도를 못박았습니다.
+
+| 요소 | 크기 | 굵기 | 색 |
+|---|---|---|---|
+| 페이지 제목 `<h1>` | `--font-size-2xl` 22px | `semibold` 600 | `--color-deep` |
+| 페이지 설명 | `--font-size-md` 14px | `regular` 400 | `--color-text-secondary` |
+| 섹션 제목 `<h2>` | `--font-size-lg` 16px | `semibold` 600 | `--color-deep` |
+| 카드 제목 `<h3>` | `--font-size-md` 14px | `medium` 500 | `--color-deep` |
+| 본문 | `--font-size-md` 14px | `regular` 400 | `--color-text` |
+| 보조 설명 | `--font-size-sm` 13px | `regular` 400 | `--color-text-secondary` |
+| 메타 · 캡션 | `--font-size-xs` 12px | `regular` 400 | `--color-text-muted` |
+| 버튼 | `--font-size-md` 14px | `medium` 500 | 배경에 따라 |
+| 배지 · 칩 | `--font-size-xs` 12px | `medium` 500 | 카테고리 색 |
+| 폼 라벨 | `--font-size-sm` 13px | `medium` 500 | `--color-text-secondary` |
+| 폼 힌트 | `--font-size-xs` 12px | `regular` 400 | `--color-text-muted` |
+| 통계 숫자 | `--font-size-2xl` 22px | `bold` 700 | `--color-deep` |
+
+`--font-size-3xl` (40px)은 현재 쓰이지 않습니다. 필요할 때만 쓰세요.
+
+### 굵기
+
+| 토큰 | 값 | 용도 |
+|---|---|---|
+| `--font-weight-regular` | 400 | 본문 |
+| `--font-weight-medium` | 500 | 카드 제목, 버튼, 라벨 |
+| `--font-weight-semibold` | 600 | 페이지·섹션 제목 |
+| `--font-weight-bold` | 700 | 숫자 강조 |
+
+**700 이상은 쓰지 마세요.** Pretendard 는 600에서 이미 충분히 굵고,
+700을 남발하면 위계가 무너집니다.
+
+### 행간
+
+| 토큰 | 값 | 용도 |
 |---|---|---|
 | `--line-height-tight` | 1.3 | 제목 |
 | `--line-height-base` | 1.6 | 본문 |
-| `--line-height-loose` | 1.8 | 긴 설명문 |
+| `--line-height-loose` | 1.8 | 긴 설명문 (약관 등) |
 
-숫자가 주 내용인 요소(가격·통계·차트 축)에는
-`font-variant-numeric: tabular-nums` 를 함께 지정해 자릿수 정렬을 맞춥니다.
+### 숫자에는 tabular-nums
+
+가격, 통계, 차트 축, 체중처럼 **숫자가 주 내용인 요소**에는 반드시 넣으세요.
+
+```css
+.stats__value {
+  font-variant-numeric: tabular-nums;
+}
+```
+
+없으면 숫자 폭이 제각각이라 로딩 중 `-` 에서 실제 값으로 바뀔 때 레이아웃이 흔들립니다.
 
 ---
 
@@ -115,6 +154,24 @@
 | `--spacing-2xl` | 48px |
 | `--spacing-3xl` | 64px |
 
+### 여백 리듬 (이 값을 따르세요)
+
+간격을 매번 고민하지 않도록 용도를 못박았습니다.
+
+| 위치 | 값 |
+|---|---|
+| 섹션과 섹션 사이 | `--spacing-3xl` 64px |
+| 섹션 제목과 내용 | `--spacing-md` 16px |
+| 카드 사이 | `--spacing-md` 16px |
+| 카드 내부 패딩 | `--spacing-lg` 24px |
+| 폼 필드 사이 | `--spacing-md` 16px |
+| 라벨과 인풋 | `--spacing-2xs` 4px |
+| 인풋과 힌트 | `--spacing-2xs` 4px |
+| 버튼 사이 | `--spacing-sm` 12px |
+| 아이콘과 텍스트 | `--spacing-2xs` 4px |
+
+**임의의 px 를 쓰지 마세요.** 4px 배수 체계가 무너지면 화면 전체의 리듬이 어긋납니다.
+
 ---
 
 ## 4. 모서리 반경 (Radius)
@@ -125,9 +182,51 @@
 |---|---|---|
 | `--radius-sm` | 6px | 인풋·셀렉트 |
 | `--radius-md` | 8px | 버튼 |
-| `--radius-lg` | 18px | 카드 |
-| `--radius-xl` | 28px | 대형 패널·모달 |
+| `--radius-lg` | 10px | 카드 · 바로가기 칩 |
+| `--radius-xl` | 16px | 대형 패널·모달 |
 | `--radius-full` | 9999px | 칩·아바타 |
+
+---
+
+## 4-1. 아이콘
+
+SVG 인라인으로 넣습니다. 아이콘 폰트나 이미지 파일을 쓰지 않습니다.
+
+| 용도 | 크기 | 굵기 |
+|---|---|---|
+| 인라인 (텍스트 옆) | 13~16px | `stroke-width: 1.6` |
+| 버튼 안 | 18px | `stroke-width: 1.6` |
+| 바로가기 칩 | 23px | `stroke-width: 1.6` |
+| 장식 | 24px 이하 | |
+
+### 규칙
+
+```html
+<!-- 색은 currentColor - 부모의 color 를 따라감 -->
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+  <path d="..." stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+</svg>
+```
+
+- **`fill` 대신 `stroke`** — 아웃라인 스타일로 통일. 채운 아이콘은 무거워 보입니다.
+- **`stroke-width: 1.6`** — 전 아이콘 동일. 1이면 얇아서 흐려 보이고, 2면 뭉툭합니다.
+- **`currentColor`** — 하드코딩하면 다크모드에서 안 바뀝니다.
+- **장식이면 `aria-hidden="true"`** — 옆에 텍스트가 있으면 아이콘은 장식입니다.
+- **아이콘만 있는 버튼은 `aria-label` 필수** — 스크린리더가 읽을 게 없습니다.
+
+### 바로가기 칩 규격
+
+```
+칩 크기      50 × 50px
+칩 반경      --radius-lg (10px)
+칩 배경      --color-surface-alt
+칩 테두리    1px solid --color-border
+아이콘 색    --color-primary-deep
+아이콘 크기  23px
+```
+
+**칩 배경에 카테고리 색을 쓰지 마세요.** 6개가 각각 다른 색이면 시선이 분산되어
+정작 중요한 검색이 묻힙니다. 배경은 중성으로 통일하고 아이콘만 브랜드 색을 씁니다.
 
 ---
 
@@ -257,8 +356,8 @@ window.TomopetTheme.set("dark")
 ## 주의 3. primary 배경 위엔 흰 글자 금지
 
 ```
-흰 글자 on #E8845F  →  2.66:1  ❌ WCAG 미달
-딥 글자 on #E8845F  →  5.91:1  ✅ 통과
+흰 글자 on #F2701F  →  2.95:1  ❌ WCAG 미달
+딥 글자 on #F2701F  →  5.32:1  ✅ 통과
 ```
 
 ```css
@@ -315,8 +414,8 @@ Chrome DevTools → Elements → 색상 스와치 클릭 → 대비 비율 표�
 ```css
 input  { border-radius: var(--radius-sm); }   /*  6px */
 button { border-radius: var(--radius-md); }   /*  8px */
-.card  { border-radius: var(--radius-lg); }   /* 18px */
-.modal { border-radius: var(--radius-xl); }   /* 28px */
+.card  { border-radius: var(--radius-lg); }   /* 10px */
+.modal { border-radius: var(--radius-xl); }   /* 16px */
 ```
 
 ## 주의 7. 데스크톱 전용 — @media 금지

@@ -38,10 +38,13 @@
   /* [규칙] 브랜드 색은 "클릭할 수 있는 것" 에만 사용
      장식이나 정적 수치(가격, 칼로리)에 쓰면
      사용자가 눌러도 반응이 없어 혼란을 겪음 */
-  --color-primary:          #E8845F;   /* 버튼/칩 배경, 큰 면적 */
-  --color-primary-hover:    #DB7048;
-  --color-primary-light:    #FBEDE6;   /* 틴트 배경 */
-  --color-primary-deep:     #A8502F;   /* 흰/틴트 배경 위 텍스트, 링크 */
+  --color-primary:          #F2701F;   /* 버튼/칩 배경, 큰 면적 */
+  /* 호버는 어둡게가 아니라 밝게 감
+     primary 위에 딥 브라운 글자를 쓰므로 어두워지면 글자 대비가 4.5:1 아래로 떨어짐
+     밝히면 오히려 6.22:1 로 올라감 */
+  --color-primary-hover:    #F58540;
+  --color-primary-light:    #F9E3D8;   /* 틴트 배경 */
+  --color-primary-deep:     #A83A0C;   /* 흰/틴트 배경 위 텍스트, 링크 */
 
   /* 보조 색상 - 앰버. 배지, 하이라이트 */
   --color-secondary:        #F4B47D;
@@ -53,10 +56,10 @@
      둘 다 채도가 낮아 서로를 죽이지 않음
 
      [접근성] 흰 글자 대비 4.55:1 확보를 위해 원안보다 약간 어둡게 조정 */
-  --color-accent:           #567F63;
-  --color-accent-hover:     #4C7158;
-  --color-accent-light:     #E8F0EA;
-  --color-accent-deep:      #3F6B4E;   /* 틴트 배경 위 텍스트, 5.28:1 */
+  --color-accent:           #1F7A52;
+  --color-accent-hover:     #186B48;
+  --color-accent-light:     #DCEDE3;
+  --color-accent-deep:      #146341;   /* 틴트 배경 위 텍스트, 5.28:1 */
 
   /* 딥 톤 - 푸터 배경, 히어로 타이틀. 사용량 약 10%
      기존 팔레트에 검정에 가까운 톤이 없어 화면이 붕 뜨는 문제 해결 */
@@ -75,19 +78,19 @@
      ========================================================== */
   --color-bg:               #FDF8F3;   /* 페이지 최하단 배경 */
   --color-surface:          #FFFFFF;   /* 카드, 패널 배경 */
-  --color-surface-alt:      #F9F3EC;   /* 보조 표면, 이미지 플레이스홀더 */
+  --color-surface-alt:      #F2E8DC;   /* 보조 표면, 이미지 플레이스홀더 */
   --color-surface-hover:    #FBF6F1;   /* 표면 호버 */
 
   /* ==========================================================
      [공통] 텍스트
      ========================================================== */
   --color-text:             #3D2E24;   /* 본문 기본, 흰 배경 13.01:1 */
-  --color-text-secondary:   #7D6555;   /* 보조 설명, 5.43:1 */
+  --color-text-secondary:   #755C4C;   /* 보조 설명, 5.43:1 */
 
   /* [접근성] 기존 #A89384 는 2.77:1 로 미달
      12px 캡션에도 4.5:1 이 필요함
      가장 어두운 표면인 surface-alt(#F9F3EC) 기준으로 산정 */
-  --color-text-muted:       #826B5C;   /* 캡션, 메타, 플레이스홀더 */
+  --color-text-muted:       #7A6151;   /* 캡션, 메타, 플레이스홀더 */
 
   /* primary 배경 위에는 흰 글자 대신 딥 톤을 얹음 (5.91:1) */
   --color-text-on-primary:  #2E2019;
@@ -109,26 +112,26 @@
      AI 분석 안전 판정, 배변 정상, 컨디션 양호가 같은 언어로 묶임
 
      [접근성] 상태 텍스트는 각자의 틴트 배경 위에서 4.5:1 이상 확보 */
-  --color-success:          #4E745B;   /* on success-bg  4.55:1 */
-  --color-success-bg:       #E8F0EA;
-  --color-warning:          #9A621D;   /* on warning-bg  4.50:1 */
-  --color-warning-bg:       #FBF0DF;
-  --color-danger:           #C83434;   /* on danger-bg   4.52:1 */
-  --color-danger-bg:        #FBEAEA;
-  --color-info:             #4570A0;   /* on info-bg     4.52:1 */
-  --color-info-bg:          #EAF1F8;
+  --color-success:          #146341;   /* on success-bg  4.55:1 */
+  --color-success-bg:       #DCEDE3;
+  --color-warning:          #8F5A00;   /* on warning-bg  4.50:1 */
+  --color-warning-bg:       #FBEBCC;
+  --color-danger:           #C4241C;   /* on danger-bg   4.52:1 */
+  --color-danger-bg:        #FBE3E1;
+  --color-info:             #1A5FA8;   /* on info-bg     4.52:1 */
+  --color-info-bg:          #DEEAF7;
 
   /* ==========================================================
      [공통] 커뮤니티 카테고리 컬러
      목록에서 글 종류를 색으로 즉시 구분
      ========================================================== */
   /* 각 색상은 대응하는 틴트 배경 위에서 4.5:1 이상 */
-  --color-category-gallery:     #AA5434;   /* 갤러리 - 테라코타, 4.56:1 */
-  --color-category-gallery-bg:  #FBEDE6;
-  --color-category-recipe:      #3F6B4E;   /* 레시피 - 세이지, 5.28:1 */
-  --color-category-recipe-bg:   #E8F0EA;
-  --color-category-free:        #6E5A8A;   /* 자유 - 라벤더, 5.13:1 */
-  --color-category-free-bg:     #F0EBF5;
+  --color-category-gallery:     #A8400E;   /* 갤러리 - 테라코타, 4.56:1 */
+  --color-category-gallery-bg:  #F9E3D8;
+  --color-category-recipe:      #146341;   /* 레시피 - 세이지, 5.28:1 */
+  --color-category-recipe-bg:   #DCEDE3;
+  --color-category-free:        #5B3F91;   /* 자유 - 라벤더, 5.13:1 */
+  --color-category-free-bg:     #EAE2F5;
 
 
   /* ==========================================================
@@ -188,8 +191,8 @@
      전부 비슷한 값이면 무엇이 컨테이너이고 무엇이 조작 요소인지 구분되지 않음 */
   --radius-sm:    6px;     /* 인풋, 셀렉트 */
   --radius-md:    8px;     /* 버튼 - 작게 */
-  --radius-lg:    18px;    /* 카드 - 크게 */
-  --radius-xl:    28px;    /* 대형 패널 - 더 크게 */
+  --radius-lg:    10px;    /* 카드 - 크게 */
+  --radius-xl:    16px;    /* 대형 패널 - 더 크게 */
   --radius-full:  9999px;  /* 칩, 아바타 */
 
   /* ==========================================================
@@ -289,28 +292,28 @@
 
   /* 브랜드 - 채워진 버튼 배경은 그대로 두고
      글자로 쓰이는 deep 계열만 밝게 올림 */
-  --color-primary-deep:           #F0A183;   /* on surface   7.32:1 */
-  --color-primary-light:          #3A2A22;   /* 다크용 틴트 배경 */
-  --color-accent-deep:            #8FBF9E;   /* on surface   7.31:1 */
-  --color-accent-light:           #253028;
+  --color-primary-deep:           #FF9A5C;   /* on surface   7.32:1 */
+  --color-primary-light:          #3D2318;   /* 다크용 틴트 배경 */
+  --color-accent-deep:            #5FC48D;   /* on surface   7.31:1 */
+  --color-accent-light:           #17301F;
 
   /* 상태 - 배경 틴트도 어둡게 뒤집음 */
-  --color-success:                #8FBF9E;
-  --color-success-bg:             #253028;   /* 6.60:1 */
-  --color-warning:                #E0A458;
-  --color-warning-bg:             #35291A;   /* 6.49:1 */
-  --color-danger:                 #F09595;
-  --color-danger-bg:              #3A2222;   /* 6.59:1 */
-  --color-info:                   #8FB4D9;
-  --color-info-bg:                #1F2A38;   /* 6.70:1 */
+  --color-success:                #5FC48D;
+  --color-success-bg:             #17301F;   /* 6.60:1 */
+  --color-warning:                #E8A93F;
+  --color-warning-bg:             #33270F;   /* 6.49:1 */
+  --color-danger:                 #F58A82;
+  --color-danger-bg:              #3A1D1B;   /* 6.59:1 */
+  --color-info:                   #7FB0E8;
+  --color-info-bg:                #182838;   /* 6.70:1 */
 
   /* 카테고리 */
-  --color-category-gallery:       #E8A184;
-  --color-category-gallery-bg:    #3A2A22;   /* 6.43:1 */
-  --color-category-recipe:        #8FBF9E;
-  --color-category-recipe-bg:     #253028;   /* 6.60:1 */
+  --color-category-gallery:       #FF9A5C;
+  --color-category-gallery-bg:    #3D2318;   /* 6.43:1 */
+  --color-category-recipe:        #5FC48D;
+  --color-category-recipe-bg:     #17301F;   /* 6.60:1 */
   --color-category-free:          #B9A6D4;
-  --color-category-free-bg:       #2E2838;   /* 6.41:1 */
+  --color-category-free-bg:       #2B2440;   /* 6.41:1 */
 
   /* 그림자 - 어두운 배경에서는 더 진하게 해야 층이 보임 */
   --shadow-sm:  0 1px 2px rgb(0 0 0 / 40%);
@@ -339,28 +342,28 @@
 
   /* 브랜드 - 채워진 버튼 배경은 그대로 두고
      글자로 쓰이는 deep 계열만 밝게 올림 */
-  --color-primary-deep:           #F0A183;   /* on surface   7.32:1 */
-  --color-primary-light:          #3A2A22;   /* 다크용 틴트 배경 */
-  --color-accent-deep:            #8FBF9E;   /* on surface   7.31:1 */
-  --color-accent-light:           #253028;
+  --color-primary-deep:           #FF9A5C;   /* on surface   7.32:1 */
+  --color-primary-light:          #3D2318;   /* 다크용 틴트 배경 */
+  --color-accent-deep:            #5FC48D;   /* on surface   7.31:1 */
+  --color-accent-light:           #17301F;
 
   /* 상태 - 배경 틴트도 어둡게 뒤집음 */
-  --color-success:                #8FBF9E;
-  --color-success-bg:             #253028;   /* 6.60:1 */
-  --color-warning:                #E0A458;
-  --color-warning-bg:             #35291A;   /* 6.49:1 */
-  --color-danger:                 #F09595;
-  --color-danger-bg:              #3A2222;   /* 6.59:1 */
-  --color-info:                   #8FB4D9;
-  --color-info-bg:                #1F2A38;   /* 6.70:1 */
+  --color-success:                #5FC48D;
+  --color-success-bg:             #17301F;   /* 6.60:1 */
+  --color-warning:                #E8A93F;
+  --color-warning-bg:             #33270F;   /* 6.49:1 */
+  --color-danger:                 #F58A82;
+  --color-danger-bg:              #3A1D1B;   /* 6.59:1 */
+  --color-info:                   #7FB0E8;
+  --color-info-bg:                #182838;   /* 6.70:1 */
 
   /* 카테고리 */
-  --color-category-gallery:       #E8A184;
-  --color-category-gallery-bg:    #3A2A22;   /* 6.43:1 */
-  --color-category-recipe:        #8FBF9E;
-  --color-category-recipe-bg:     #253028;   /* 6.60:1 */
+  --color-category-gallery:       #FF9A5C;
+  --color-category-gallery-bg:    #3D2318;   /* 6.43:1 */
+  --color-category-recipe:        #5FC48D;
+  --color-category-recipe-bg:     #17301F;   /* 6.60:1 */
   --color-category-free:          #B9A6D4;
-  --color-category-free-bg:       #2E2838;   /* 6.41:1 */
+  --color-category-free-bg:       #2B2440;   /* 6.41:1 */
 
   /* 그림자 - 어두운 배경에서는 더 진하게 해야 층이 보임 */
   --shadow-sm:  0 1px 2px rgb(0 0 0 / 40%);

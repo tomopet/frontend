@@ -465,8 +465,8 @@ Api.post("/api/auth/login", body, { skipAuthRedirect: true });
 
 | 색 | 용도 | 비율 |
 |---|---|---|
-| Primary 테라코타 `#E8845F` | CTA, 활성 상태, 링크 | 70% |
-| Accent 세이지 `#567F63` | 안전/정상, AI 기능, 레시피 | 20% |
+| Primary 테라코타 `#F2701F` | CTA, 활성 상태, 링크 | 70% |
+| Accent 세이지 `#1F7A52` | 안전/정상, AI 기능, 레시피 | 20% |
 | Deep `#2E2019` | 푸터, 큰 제목 | 10% |
 
 ### 브랜드 색은 클릭 가능한 것에만
@@ -482,8 +482,8 @@ Api.post("/api/auth/login", body, { skipAuthRedirect: true });
 ### primary 배경 위에는 흰 글자를 쓰지 마세요
 
 ```
-흰 글자 on #E8845F   2.66:1   WCAG 미달
-딥 글자 on #E8845F   5.91:1   통과
+흰 글자 on #F2701F   2.66:1   WCAG 미달
+딥 글자 on #F2701F   5.91:1   통과
 ```
 
 ```css

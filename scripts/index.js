@@ -12,6 +12,9 @@
      GET /api/posts?sort=popular&limit=3
      GET /api/feeds?limit=3
 
+   [추후 적용] 통합 검색은 마크업만 있고 동작하지 않음
+     백엔드에 /api/search 가 없어 제출을 막기만 함
+
    세 요청은 서로 독립적이므로 병렬로 보내고
    각 로더가 자체적으로 catch 하므로
    하나가 실패해도 나머지 섹션은 정상 렌더링됨
@@ -150,18 +153,32 @@
 
 
   /* ==========================================================
-     로그인 상태에 따른 히어로 CTA 조정
+     통합 검색
+
+     [추후 적용] 백엔드에 /api/search 가 없어 아직 동작하지 않음
+     지금은 제출을 막아 페이지가 새로고침되는 것만 방지함
+
+     연결할 때는 아래처럼 쓰면 됨
+       var keyword = $("global-search").value.trim();
+       if (keyword) window.location.href = "./search.html?q=" + encodeURIComponent(keyword);
+
+     검색 페이지 없이 재료만 찾게 하려면 /api/food-items?keyword= 로 연결
      ========================================================== */
 
-  function adjustHeroCta() {
-    if (!window.TomopetAuth || !window.TomopetAuth.isLoggedIn()) return;
+  function initSearch() {
+    var form = $("global-search-form");
+    if (!form) return;
 
-    var startBtn = document.querySelector('.hero__cta a[href="./login.html"]');
-    if (!startBtn) return;
+    form.addEventListener("submit", function (event) {
+      /* 없으면 페이지가 새로고침되며 입력값이 사라짐 */
+      event.preventDefault();
 
-    /* 이미 로그인했다면 "밥상 자랑하러 가기" 대신 글쓰기로 바로 유도 */
-    startBtn.href = "./post-write.html";
-    startBtn.textContent = "레시피 공유하기";
+      var keyword = $("global-search").value.trim();
+      if (!keyword) return;
+
+      /* [추후 적용] 검색 결과 페이지로 이동 */
+      console.error("검색 미구현:", keyword);
+    });
   }
 
 
@@ -170,8 +187,11 @@
      ========================================================== */
 
   document.addEventListener("DOMContentLoaded", function () {
-    adjustHeroCta();
+    initSearch();
 
+    /* 세 요청은 서로 독립적이므로 병렬로 보냄
+       각 로더가 자체적으로 try / catch 하므로
+       하나가 실패해도 나머지 섹션은 정상 렌더링됨 */
     Promise.all([loadStats(), loadPopularPosts(), loadFeedRecommend()]);
   });
 })();
