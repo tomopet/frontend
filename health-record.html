@@ -53,149 +53,155 @@
   <!-- 메인 컨텐츠 영역 -->
   <main class="site-main" id="main-content" role="main">
 
-    <!-- 페이지 헤더: 제목 + 반려견 선택 + 새 기록 추가 버튼 -->
-    <header class="page-head">
-      <div>
-        <p class="page-head__eyebrow">HEALTH RECORD</p>
-        <h1>건강기록</h1>
-        <p class="page-head__desc">체중 변화와 최근 건강 기록을 한 화면에서 확인합니다.</p>
-      </div>
-      <div class="page-head__actions">
-        <!-- 반려견 전환 — health-record-01.js 의 pet-select change 이벤트와 연결 -->
-        <label class="sr-only" for="pet-select">반려견 선택</label>
-        <select class="pet-select" id="pet-select">
-          <option value="1">토모 · 5살</option>
-          <option value="2">보리 · 3살</option>
-        </select>
-        <button class="btn btn--primary" id="open-record-dialog" type="button">새 기록 추가</button>
-      </div>
-    </header>
+    <!-- [공통] 다른 페이지와 좌우 여백을 맞추기 위한 컨테이너
+         .container 가 max-width 1200px + 좌우 패딩을 담당함 -->
+    <div class="container">
 
-    <!-- ============================================================
-         대시보드 요약 섹션
-         ─ 체중 변화 차트 (chart-panel)
-         ─ 최근 단일 기록 요약 (summary-panel)
-         ─ 이상 징후 알림 (alert-panel, 기본 hidden)
-         ============================================================ -->
-    <section class="health-overview health-overview--classic" aria-label="건강 현황 요약">
+      <!-- 페이지 헤더: 제목 + 반려견 선택 + 새 기록 추가 버튼 -->
+      <header class="page-head">
+        <div>
+          <p class="page-head__eyebrow">HEALTH RECORD</p>
+          <h1>건강기록</h1>
+          <p class="page-head__desc">체중 변화와 최근 건강 기록을 한 화면에서 확인합니다.</p>
+        </div>
+        <div class="page-head__actions">
+          <!-- 반려견 전환 — health-record-01.js 의 pet-select change 이벤트와 연결 -->
+          <label class="sr-only" for="pet-select">반려견 선택</label>
+          <select class="pet-select" id="pet-select">
+            <option value="1">토모 · 5살</option>
+            <option value="2">보리 · 3살</option>
+          </select>
+          <button class="btn btn--primary" id="open-record-dialog" type="button">새 기록 추가</button>
+        </div>
+      </header>
 
-      <!-- 체중 변화 차트 패널 -->
-      <article class="panel chart-panel">
+      <!-- ============================================================
+           대시보드 요약 섹션
+           ─ 체중 변화 차트 (chart-panel)
+           ─ 최근 단일 기록 요약 (summary-panel)
+           ─ 이상 징후 알림 (alert-panel, 기본 hidden)
+           ============================================================ -->
+      <section class="health-overview health-overview--classic" aria-label="건강 현황 요약">
+
+        <!-- 체중 변화 차트 패널 -->
+        <article class="panel chart-panel">
+          <div class="panel__head">
+            <div>
+              <h2 class="panel__title">최근 8주 체중 변화</h2>
+              <span class="panel__meta">kg · 측정일 기준</span>
+            </div>
+            <!-- 기간 탭 — health-record-01.js 의 period-tab click 이벤트와 연결 -->
+            <div class="period-tabs" role="group" aria-label="차트 기간 선택">
+              <button class="period-tab" data-period="4" type="button">4주</button>
+              <button class="period-tab is-active" data-period="8" type="button">8주</button>
+              <button class="period-tab" data-period="12" type="button">12주</button>
+            </div>
+          </div>
+          <!-- [접근성] canvas 에 aria-label 부여 -->
+          <div class="chart-wrap">
+            <canvas id="weight-chart" aria-label="체중 변화 차트" role="img"></canvas>
+          </div>
+        </article>
+
+        <!-- 최근 단일 기록 요약 패널
+             health-record-01.js 의 renderLatestSummary() 가 값을 채움 -->
+        <article class="panel summary-panel" aria-labelledby="latest-title">
+          <div class="pet-profile">
+            <div class="pet-profile__avatar" aria-hidden="true">🐶</div>
+            <div>
+              <h2 class="pet-profile__name" id="latest-title">최근 기록</h2>
+              <p class="pet-profile__info" id="latest-date">-</p>
+            </div>
+          </div>
+          <div class="metric-list">
+            <div class="metric-row">
+              <span class="metric-row__label">체중</span>
+              <span class="metric-row__value" id="latest-weight">-</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-row__label">식사량</span>
+              <!-- [접근성] status-chip 이 색 + 도형 + 텍스트 조합으로 상태 전달 -->
+              <div id="latest-meal-container"></div>
+            </div>
+            <div class="metric-row">
+              <span class="metric-row__label">배변</span>
+              <div id="latest-poop-container"></div>
+            </div>
+            <div class="metric-row">
+              <span class="metric-row__label">컨디션</span>
+              <div id="latest-condition-container"></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 이상 징후 알림 패널
+             [API 연동] GET /api/pets/:petId/health/alerts 응답이 있을 때만 노출
+             응답이 없으면 hidden 유지 -->
+        <article class="panel alert-panel" aria-labelledby="alert-title"
+                 id="health-alert-box">
+          <div class="alert-panel__icon" aria-hidden="true">!</div>
+          <div class="alert-panel__body">
+            <h2 class="alert-panel__title" id="alert-title">확인할 변화</h2>
+            <!-- 사용자 데이터이므로 JS 에서 textContent 로만 삽입 -->
+            <p class="alert-panel__text" id="health-alert-text">-</p>
+          </div>
+          <span class="status-chip status-chip--caution">주의</span>
+        </article>
+      </section>
+
+      <!-- ============================================================
+           전체 건강 기록 목록 테이블 섹션
+           ─ 필터 셀렉트로 전체 / 주의 / 정상 기록 전환
+           ─ 기록이 없으면 .empty-state 노출
+           ============================================================ -->
+      <section class="panel records-panel records-panel--table"
+               aria-labelledby="records-title">
         <div class="panel__head">
           <div>
-            <h2 class="panel__title">최근 8주 체중 변화</h2>
-            <span class="panel__meta">kg · 측정일 기준</span>
+            <h2 class="panel__title" id="records-title">건강 기록</h2>
+            <span class="panel__meta">체중 · 식사량 · 배변 · 컨디션</span>
           </div>
-          <!-- 기간 탭 — health-record-01.js 의 period-tab click 이벤트와 연결 -->
-          <div class="period-tabs" role="group" aria-label="차트 기간 선택">
-            <button class="period-tab" data-period="4" type="button">4주</button>
-            <button class="period-tab is-active" data-period="8" type="button">8주</button>
-            <button class="period-tab" data-period="12" type="button">12주</button>
+          <div class="records-toolbar">
+            <!-- [접근성] 셀렉트에 sr-only label 연결 -->
+            <label class="sr-only" for="record-filter">기록 상태 필터</label>
+            <select class="filter-select" id="record-filter">
+              <option value="all">전체 기록</option>
+              <option value="caution">주의 기록</option>
+              <option value="normal">정상 기록</option>
+            </select>
           </div>
         </div>
-        <!-- [접근성] canvas 에 aria-label 부여 -->
-        <div class="chart-wrap">
-          <canvas id="weight-chart" aria-label="체중 변화 차트" role="img"></canvas>
-        </div>
-      </article>
 
-      <!-- 최근 단일 기록 요약 패널
-           health-record-01.js 의 renderLatestSummary() 가 값을 채움 -->
-      <article class="panel summary-panel" aria-labelledby="latest-title">
-        <div class="pet-profile">
-          <div class="pet-profile__avatar" aria-hidden="true">🐶</div>
+        <!-- 테이블 뷰 — renderTableRecords() 가 tbody 를 채움 -->
+        <table class="records-table">
+          <thead>
+            <tr>
+              <th>측정일</th>
+              <th>체중</th>
+              <th>식사량</th>
+              <th>배변</th>
+              <th>컨디션</th>
+            </tr>
+          </thead>
+          <tbody id="health-record-list"></tbody>
+        </table>
+
+        <!-- [추후 적용] 모바일 등 대체용 타임라인 리스트 -->
+        <div class="timeline-list" id="health-record-timeline" hidden></div>
+
+        <!-- 기록이 비어 있을 때 표시 — 행동 버튼 반드시 포함 -->
+        <div class="empty-state" id="health-record-empty" hidden>
           <div>
-            <h2 class="pet-profile__name" id="latest-title">최근 기록</h2>
-            <p class="pet-profile__info" id="latest-date">-</p>
+            <p class="empty-state__title">기록이 없습니다</p>
+            <p class="empty-state__desc">첫 건강 기록을 추가하세요.</p>
+            <button class="btn btn--primary" id="empty-add-record" type="button">
+              새 기록 추가
+            </button>
           </div>
         </div>
-        <div class="metric-list">
-          <div class="metric-row">
-            <span class="metric-row__label">체중</span>
-            <span class="metric-row__value" id="latest-weight">-</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-row__label">식사량</span>
-            <!-- [접근성] status-chip 이 색 + 도형 + 텍스트 조합으로 상태 전달 -->
-            <div id="latest-meal-container"></div>
-          </div>
-          <div class="metric-row">
-            <span class="metric-row__label">배변</span>
-            <div id="latest-poop-container"></div>
-          </div>
-          <div class="metric-row">
-            <span class="metric-row__label">컨디션</span>
-            <div id="latest-condition-container"></div>
-          </div>
-        </div>
-      </article>
+      </section>
+  </div>
 
-      <!-- 이상 징후 알림 패널
-           [API 연동] GET /api/pets/:petId/health/alerts 응답이 있을 때만 노출
-           응답이 없으면 hidden 유지 -->
-      <article class="panel alert-panel" aria-labelledby="alert-title"
-               id="health-alert-box">
-        <div class="alert-panel__icon" aria-hidden="true">!</div>
-        <div class="alert-panel__body">
-          <h2 class="alert-panel__title" id="alert-title">확인할 변화</h2>
-          <!-- 사용자 데이터이므로 JS 에서 textContent 로만 삽입 -->
-          <p class="alert-panel__text" id="health-alert-text">-</p>
-        </div>
-        <span class="status-chip status-chip--caution">주의</span>
-      </article>
-    </section>
-
-    <!-- ============================================================
-         전체 건강 기록 목록 테이블 섹션
-         ─ 필터 셀렉트로 전체 / 주의 / 정상 기록 전환
-         ─ 기록이 없으면 .empty-state 노출
-         ============================================================ -->
-    <section class="panel records-panel records-panel--table"
-             aria-labelledby="records-title">
-      <div class="panel__head">
-        <div>
-          <h2 class="panel__title" id="records-title">건강 기록</h2>
-          <span class="panel__meta">체중 · 식사량 · 배변 · 컨디션</span>
-        </div>
-        <div class="records-toolbar">
-          <!-- [접근성] 셀렉트에 sr-only label 연결 -->
-          <label class="sr-only" for="record-filter">기록 상태 필터</label>
-          <select class="filter-select" id="record-filter">
-            <option value="all">전체 기록</option>
-            <option value="caution">주의 기록</option>
-            <option value="normal">정상 기록</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- 테이블 뷰 — renderTableRecords() 가 tbody 를 채움 -->
-      <table class="records-table">
-        <thead>
-          <tr>
-            <th>측정일</th>
-            <th>체중</th>
-            <th>식사량</th>
-            <th>배변</th>
-            <th>컨디션</th>
-          </tr>
-        </thead>
-        <tbody id="health-record-list"></tbody>
-      </table>
-
-      <!-- [추후 적용] 모바일 등 대체용 타임라인 리스트 -->
-      <div class="timeline-list" id="health-record-timeline" hidden></div>
-
-      <!-- 기록이 비어 있을 때 표시 — 행동 버튼 반드시 포함 -->
-      <div class="empty-state" id="health-record-empty" hidden>
-        <div>
-          <p class="empty-state__title">기록이 없습니다</p>
-          <p class="empty-state__desc">첫 건강 기록을 추가하세요.</p>
-          <button class="btn btn--primary" id="empty-add-record" type="button">
-            새 기록 추가
-          </button>
-        </div>
-      </div>
-    </section>
   </main>
 
   <!-- ============================================================

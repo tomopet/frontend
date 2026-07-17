@@ -19,9 +19,13 @@
    히어로 - 슬로건 + 캐릭터 + 검색
    ------------------------------------------------------------ */
 
+/* 검색 섹션 - 틴트 밴드
+   본문이 순백이라 검색 영역에 색을 깔아 시선을 모음
+   헤더(진한 브랜드 색) → 히어로(연한 틴트) → 본문(흰색) 순으로 옅어짐 */
 .hero {
   padding-top: var(--spacing-3xl);
   padding-bottom: var(--spacing-2xl);
+  background-color: var(--color-primary-light);
 }
 
 .hero__inner {
@@ -33,16 +37,19 @@
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-regular);
   line-height: var(--line-height-tight);
-  color: var(--color-text-secondary);
+  /* 틴트 배경 위이므로 secondary 대신 deep 계열을 씀 */
+  color: var(--color-primary-deep);
 }
 
+/* 히어로가 틴트 밴드이므로 캐릭터 원은 흰색으로 반전
+   같은 틴트로 두면 원의 경계가 보이지 않음 */
 .hero__character {
   display: grid;
   place-items: center;
   width: 128px;
   height: 128px;
   margin: 0 auto var(--spacing-xl);
-  background-color: var(--color-primary-light);
+  background-color: var(--color-surface);
   border-radius: var(--radius-full);
 }
 
@@ -73,6 +80,11 @@
 
 .hero-search:focus-within {
   box-shadow: var(--shadow-focus);
+}
+
+/* 아이콘 바로가기는 흰 본문 영역에 위치 */
+.quick-nav {
+  padding-top: var(--spacing-3xl);
 }
 
 .hero-search__icon {

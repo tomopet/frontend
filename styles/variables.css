@@ -68,6 +68,12 @@
   /* 푸터 배경과 모달 백드롭 - 다크 모드에서도 어두워야 하므로
      글자용 --color-deep 과 분리함 */
   --color-backdrop:         #2E2019;
+
+  /* 헤더 밴드 - 브랜드 색을 강조하는 영역
+     이 배경 위에서 대비 4.5:1 을 넘는 글자색은 --color-text-on-primary 하나뿐임
+     (흰 글자 2.95:1, 흐린 딥 3.46:1 모두 미달)
+     따라서 활성/비활성 메뉴는 색이 아니라 굵기와 밑줄로 구분함 */
+  --color-header-bg:        #F2701F;
   --color-deep-surface:     #3B2A21;   /* 딥 배경 위 카드 */
   --color-deep-border:      #4A362B;
   --color-deep-text:        #EFE4DA;   /* 딥 배경 위 본문 */
@@ -76,7 +82,9 @@
   /* ==========================================================
      [공통] 배경 & 표면
      ========================================================== */
-  --color-bg:               #FDF8F3;   /* 페이지 최하단 배경 */
+  --color-bg:               #FFFFFF;   /* 페이지 배경 - 순백
+                                          카드도 흰색이므로 카드에 테두리가 필수
+                                          (테두리 없으면 카드가 배경에 묻힘) */
   --color-surface:          #FFFFFF;   /* 카드, 패널 배경 */
   --color-surface-alt:      #F2E8DC;   /* 보조 표면, 이미지 플레이스홀더 */
   --color-surface-hover:    #FBF6F1;   /* 표면 호버 */
@@ -315,6 +323,9 @@
   --color-category-free:          #B9A6D4;
   --color-category-free-bg:       #2B2440;   /* 6.41:1 */
 
+  /* 헤더 밴드 - 다크에서는 채도 높은 오렌지가 눈부시므로 어두운 틴트로 */
+  --color-header-bg:              #3D2318;
+
   /* 그림자 - 어두운 배경에서는 더 진하게 해야 층이 보임 */
   --shadow-sm:  0 1px 2px rgb(0 0 0 / 40%);
   --shadow-md:  0 4px 12px rgb(0 0 0 / 45%);
@@ -364,6 +375,9 @@
   --color-category-recipe-bg:     #17301F;   /* 6.60:1 */
   --color-category-free:          #B9A6D4;
   --color-category-free-bg:       #2B2440;   /* 6.41:1 */
+
+  /* 헤더 밴드 - 다크에서는 채도 높은 오렌지가 눈부시므로 어두운 틴트로 */
+  --color-header-bg:              #3D2318;
 
   /* 그림자 - 어두운 배경에서는 더 진하게 해야 층이 보임 */
   --shadow-sm:  0 1px 2px rgb(0 0 0 / 40%);

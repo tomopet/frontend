@@ -44,9 +44,11 @@
 
 | 토큰 | 값 | 용도 |
 |---|---|---|
-| `--color-bg` | `#FDF8F3` | 페이지 최하단 배경 |
+| `--color-bg` | `#FFFFFF` | 페이지 배경 (순백) |
 | `--color-surface` | `#FFFFFF` | 카드·패널 배경 |
-| `--color-surface-alt` | `#F2E8DC` | 보조 표면, 이미지 플레이스홀더 |
+| `--color-surface-alt` | `#F2E8DC` | 보조 표면, 아이콘 칩, 이미지 플레이스홀더 |
+| `--color-header-bg` | `#F2701F` | 헤더 밴드 (다크에서는 `#3D2318`) |
+| `--color-backdrop` | `#2E2019` | 푸터 배경, 모달 백드롭 (다크에서도 어두움) |
 | `--color-border` | `#EDE0D4` | 기본 헤어라인 |
 
 ### 상태 색 (배경과 짝)
@@ -65,6 +67,60 @@
 | 갤러리 | `--color-category-gallery` `#A8400E` | `...-gallery-bg` `#F9E3D8` | 4.56:1 |
 | 레시피 | `--color-category-recipe` `#146341` | `...-recipe-bg` `#DCEDE3` | 5.28:1 |
 | 자유 | `--color-category-free` `#5B3F91` | `...-free-bg` `#EAE2F5` | 5.13:1 |
+
+---
+
+## 1-1. 색 배치 구조
+
+위에서 아래로 **색이 옅어집니다.**
+
+```
+헤더      --color-header-bg   #F2701F   진한 브랜드 색
+검색 밴드  --color-primary-light #F9E3D8  연한 틴트
+본문      --color-bg          #FFFFFF   순백
+푸터      --color-backdrop    #2E2019   딥 (아래를 닫음)
+```
+
+### 배경이 순백이라 카드에 테두리가 필수입니다
+
+```css
+/* 카드도 흰색이므로 테두리가 없으면 배경에 묻힘 */
+.card {
+  background-color: var(--color-surface);   /* #FFFFFF */
+  border: 1px solid var(--color-border);    /* 이게 없으면 경계가 사라짐 */
+}
+```
+
+**그림자만으로는 부족합니다.** 순백 위 흰 카드는 그림자가 거의 안 보입니다.
+
+### 헤더 밴드 위에서는 글자 색이 하나뿐입니다
+
+`#F2701F` 위에서 대비 4.5:1 을 넘는 색은 **`--color-text-on-primary` 하나뿐**입니다.
+
+```
+#2E2019 (딥)      5.32:1  ✅  ← 이것만 가능
+#5A3A1E (흐리게)   3.46:1  ❌
+#FFFFFF (흰색)     2.95:1  ❌
+```
+
+그래서 **활성 메뉴를 색으로 구분할 수 없습니다.** 굵기와 밑줄로 표시합니다.
+
+```css
+.nav-list__link          { color: var(--color-text-on-primary); font-weight: 400; }
+.nav-list__link--active  { font-weight: 700; }      /* 색이 아니라 굵기 */
+.nav-list__link--active::after { background-color: var(--color-text-on-primary); }
+```
+
+### 헤더 위 요소는 반전시킵니다
+
+헤더가 primary 색이므로 **primary 를 쓰는 요소는 오렌지 위 오렌지**가 되어 보이지 않습니다.
+
+| 요소 | 일반 | 헤더 위 |
+|---|---|---|
+| 로고 마크 | primary 배경 | **딥 배경 + 오렌지 글자** |
+| 버튼 | `.btn--primary` | **`.btn--on-header`** |
+| 아이콘 버튼 | secondary 색 | **`text-on-primary`** |
+| 아바타 | 테두리 없음 | **딥 테두리** |
 
 ---
 
@@ -369,6 +425,18 @@ window.TomopetTheme.set("dark")
 ```
 
 accent(초록) 배경에는 반대로 **흰 글자**를 씁니다. (`--color-text-on-accent`)
+
+## 주의 3-1. 헤더 밴드 위에는 primary 를 쓰지 마세요
+
+헤더 자체가 primary 색입니다. 그 위에 `.btn--primary` 를 놓으면 **오렌지 위 오렌지**라 안 보입니다.
+
+```html
+<!-- 잘못됨 -->
+<a class="btn btn--primary btn--sm">로그인</a>
+
+<!-- 올바름 - 반전 -->
+<a class="btn btn--on-header btn--sm">로그인</a>
+```
 
 ## 주의 4. 상태는 색 + 도형 + 텍스트 3중으로
 
