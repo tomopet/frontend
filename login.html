@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!-- ============================================================
      TOMOPET | login.html
+     검색 키워드: 로그인, 회원가입, 이메일 인증, 인증번호, 약관 동의
      로그인 및 회원가입 페이지
      ============================================================ -->
 <html lang="ko">
@@ -13,11 +14,6 @@
 
   <!-- [공통] 파비콘 - 없으면 favicon.ico 404 발생 -->
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-
-  <!-- [공통] 테마 - 반드시 스타일보다 먼저, defer 없이 실행
-       본문이 그려지기 전에 data-theme 을 정해야 화면이 번쩍이지 않음 -->
-  <script src="./scripts/theme.js"></script>
-
   <!-- [공통] 전역 스타일 - 로드 순서 고정 -->
   <link rel="stylesheet" href="./styles/variables.css">
   <link rel="stylesheet" href="./styles/common.css">
@@ -85,10 +81,10 @@
           <form class="auth-form" id="login-form" novalidate>
 
             <div class="form-field">
-              <label class="form-field__label" for="login-email">이메일</label>
-              <input type="email" class="form-field__input" id="login-email" name="email"
-                     placeholder="name@example.com" autocomplete="email" required>
-              <span class="form-field__error" id="login-email-error" role="alert" hidden></span>
+              <label class="form-field__label" for="login-username">아이디</label>
+              <input type="text" class="form-field__input" id="login-username" name="username"
+                     placeholder="아이디를 입력하세요" autocomplete="username" required>
+              <span class="form-field__error" id="login-username-error" role="alert" hidden></span>
             </div>
 
             <div class="form-field">
@@ -169,10 +165,49 @@
             </div>
 
             <div class="form-field">
+              <label class="form-field__label" for="signup-username">아이디</label>
+              <input type="text" class="form-field__input" id="signup-username" name="username"
+                     placeholder="영문 소문자와 숫자 4~20자" autocomplete="username"
+                     minlength="4" maxlength="20" required
+                     aria-describedby="signup-username-hint">
+              <p class="form-field__hint" id="signup-username-hint">
+                로그인할 때 쓰는 아이디예요. 나중에 바꿀 수 없어요.
+              </p>
+              <span class="form-field__error" id="signup-username-error" role="alert" hidden></span>
+            </div>
+
+            <div class="form-field">
               <label class="form-field__label" for="signup-email">이메일</label>
-              <input type="email" class="form-field__input" id="signup-email" name="email"
-                     placeholder="name@example.com" autocomplete="email" required>
+              <div class="form-field__row">
+                <input type="email" class="form-field__input" id="signup-email" name="email"
+                       placeholder="name@example.com" autocomplete="email" required
+                       aria-describedby="signup-email-hint">
+                <button type="button" class="btn btn--secondary form-field__row-btn" id="email-send-btn">
+                  인증번호 발송
+                </button>
+              </div>
+              <p class="form-field__hint" id="signup-email-hint">
+                비밀번호를 잊었을 때 이 주소로 재설정 링크를 보내드려요.
+              </p>
               <span class="form-field__error" id="signup-email-error" role="alert" hidden></span>
+            </div>
+
+            <!-- 인증번호 입력
+                 발송 전에는 숨김 - 발송해야 의미가 생기는 필드
+                 유효시간은 EMAIL_CODE_TTL_SECONDS (login.js) 로 관리
+                 화면의 타이머는 안내용이고 실제 만료 판정은 서버가 함 -->
+            <div class="form-field" id="email-code-field" hidden>
+              <label class="form-field__label" for="signup-email-code">인증번호</label>
+              <div class="form-field__row">
+                <input type="text" class="form-field__input" id="signup-email-code" name="emailCode"
+                       placeholder="6자리 숫자" inputmode="numeric" autocomplete="one-time-code"
+                       maxlength="6">
+                <span class="form-field__timer" id="email-code-timer" aria-live="polite"></span>
+                <button type="button" class="btn btn--secondary form-field__row-btn" id="email-verify-btn">
+                  확인
+                </button>
+              </div>
+              <span class="form-field__error" id="signup-email-code-error" role="alert" hidden></span>
             </div>
 
             <div class="form-field">

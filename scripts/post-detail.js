@@ -1,5 +1,6 @@
 /* ============================================================
    TOMOPET | scripts/post-detail.js  (견본 복사본 - 담당자 작업 대기)
+   검색 키워드: 게시글 상세, 댓글, 좋아요
    협업자용 견본 스크립트 (복사해서 쓰세요)
 
    이 파일은 새 페이지를 만들 때 복사용 뼈대입니다.
@@ -36,7 +37,7 @@
 
     var link = Ui.createEl("a", "card__link");
     /* 상세 페이지로 갈 때 쿼리 파라미터 이름을 팀 약속대로 쓸 것
-       예: post-detail 은 ?postId=, feed-detail 은 ?feedId= */
+       예: post-detail 은 ?postId= */
     link.href = "./index.html?exampleId=" + encodeURIComponent(item.id);
 
     /* 이미지 - URL 이 없으면 img 를 만들지 않음 (빈 src 금지) */

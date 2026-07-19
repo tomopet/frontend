@@ -1,10 +1,10 @@
 /* ============================================================
    TOMOPET | scripts/my-page.js
+   검색 키워드: 마이페이지, 반려견 등록, 아이 관리, 프로필, 회원 정보
    마이페이지 - 반려견 관리 + 내 정보 관리
 
    나이는 저장하지 않고 생일(birthDate)로 계산합니다.
    활동량(activityLevel)은 백엔드의 DER 계산에 쓰입니다.
-   테마 적용은 scripts/theme.js 가 담당합니다.
 
    README 4번 REST API 표준 문법을 따릅니다.
      async 함수 + try / catch + console.error("...실패:", error)
@@ -45,7 +45,6 @@
 
   var SEX_LABEL = { MALE: "남아", FEMALE: "여아" };
   var ACTIVITY_LABEL = { LOW: "활동량 낮음", MEDIUM: "활동량 보통", HIGH: "활동량 높음" };
-  var THEME_LABEL = { system: "시스템 설정", light: "라이트", dark: "다크" };
 
   /* 화면 상태 - 서버가 준 값을 그대로 보관 */
   var state = {
@@ -893,41 +892,6 @@
 
 
   /* ==========================================================
-     테마 설정
-
-     실제 적용은 theme.js 가 담당함 (head 에서 먼저 실행되어야
-     화면이 번쩍이지 않으므로 이 파일에 두지 않음)
-     ========================================================== */
-
-  function renderThemeLabel() {
-    var current = window.TomopetTheme.get();
-    $("theme-current").textContent = THEME_LABEL[current] || THEME_LABEL.system;
-  }
-
-  function initThemeModal() {
-    var modal = $("theme-modal");
-    bindModalClose(modal);
-
-    $("theme-btn").addEventListener("click", function () {
-      var current = window.TomopetTheme.get();
-      var input = $("theme-" + current);
-      if (input) input.checked = true;
-
-      openModal(modal);
-      if (input) input.focus();
-    });
-
-    /* 고르는 즉시 적용 - 미리보기가 되므로 저장 버튼이 필요 없음 */
-    Ui.$$("input[name='theme']", modal).forEach(function (input) {
-      input.addEventListener("change", function () {
-        window.TomopetTheme.set(input.value);
-        renderThemeLabel();
-      });
-    });
-  }
-
-
-  /* ==========================================================
      로그아웃
      ========================================================== */
 
@@ -948,7 +912,6 @@
 
     initPetModal();
     initDeleteModal();
-    initThemeModal();
     initProfileModal();
     initPasswordModal();
     initWithdrawModal();
@@ -957,8 +920,6 @@
     /* 세 요청은 서로 독립적이므로 병렬로 보냄
        각 로더가 자체적으로 try / catch 하므로
        하나가 실패해도 나머지는 정상 렌더링됨 */
-    renderThemeLabel();
-
     loadProfile();
     loadPets();
     loadBreeds();

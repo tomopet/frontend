@@ -1,5 +1,6 @@
 /* ============================================================
    TOMOPET | scripts/api.js
+   검색 키워드: API, 통신, 요청, 응답, 에러 처리, 토큰, 인증 헤더, 401, 목록 정규화
    HTTP 통신 공통 모듈
 
    적용 범위: 전체 페이지 공통
@@ -80,7 +81,8 @@
   function handleUnauthorized() {
     if (!window.TomopetAuth) return;
     window.TomopetAuth.clearSession();
-    window.location.replace("./login.html");
+    /* 재로그인 후 하던 페이지로 되돌아오도록 현재 위치를 실어 보냄 */
+    window.location.replace(window.TomopetAuth.loginUrl());
   }
 
 

@@ -1,5 +1,6 @@
 /* ============================================================
    TOMOPET | styles/my-page.css
+   검색 키워드: 마이페이지, 프로필, 반려견 카드
    마이페이지 전용
 
    로드 순서: variables -> common -> components -> my-page
@@ -270,27 +271,4 @@
 .photo-field__input:focus-visible ~ .btn {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
-}
-
-
-/* ------------------------------------------------------------
-   테마 선택 - 세로 배치
-
-   choice-group 은 가로 배치라 3개가 들어가면 글자가 좁아짐
-   테마는 항목당 설명이 필요하므로 세로로 쌓음
-   ------------------------------------------------------------ */
-
-.theme-choice {
-  display: grid;
-  gap: var(--spacing-xs);
-}
-
-.theme-choice__item {
-  position: relative;
-}
-
-/* choice-group__label 을 그대로 재사용하되 왼쪽 정렬로 바꿈 */
-.theme-choice .choice-group__label {
-  padding: var(--spacing-sm) var(--spacing-md);
-  text-align: left;
 }

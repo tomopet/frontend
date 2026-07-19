@@ -1,5 +1,6 @@
 /* ============================================================
    TOMOPET | scripts/diet.js
+   검색 키워드: 식단, 음식 검색, 급여, 칼로리, 기록 저장, 분석, 모달, 키워드 자동 검색
    식단 균형 분석
 
    README 4번 REST API 표준 문법을 따릅니다.
@@ -16,8 +17,8 @@
    엔드포인트
      GET   /api/users/me/pets                      아이 목록
      GET   /api/pets/:petId/diet/target            DER + 영양소 목표치
-     GET   /api/diet/logs?petId=&date=             하루 기록 조회
-     POST  /api/diet/logs                          하루 기록 저장 + 분석
+     GET   /api/diet/log?petId=&date=             하루 기록 조회
+     POST  /api/diet/log                          하루 기록 저장 + 분석
      GET   /api/food-items?keyword=                음식 검색 (사료+간식+사람음식)
    ============================================================ */
 
@@ -294,7 +295,7 @@
 
     try {
       var data = await Api.get(
-        "/api/diet/logs?petId=" + encodeURIComponent(state.petId) +
+        "/api/diet/log?petId=" + encodeURIComponent(state.petId) +
         "&date=" + encodeURIComponent(state.date)
       );
 
@@ -327,7 +328,7 @@
     if (!state.petId || !state.date) return;
 
     try {
-      var data = await Api.post("/api/diet/logs", {
+      var data = await Api.post("/api/diet/log", {
         petId: state.petId,
         date: state.date,
         items: state.items.map(function (item) {
@@ -342,6 +343,8 @@
       }
       renderAnalysis(data.analysis);
       Ui.setFormMessage($("page-message"), "");
+      /* 저장이 조용히 끝나면 사용자가 성공 여부를 알 수 없음 */
+      Ui.toast("식단이 기록됐어요");
     } catch (error) {
       console.error("식단 분석 실패:", error);
       Ui.setFormMessage(
@@ -434,6 +437,31 @@
     $("food-search").focus();
   }
 
+  /* ==========================================================
+     홈 통합 검색 연결
+
+     index.html 검색바가 diet.html?keyword= 로 넘어옵니다.
+     모달을 열고 키워드를 채운 뒤 바로 조회합니다.
+
+     처리 후 URL 에서 keyword 를 지웁니다.
+       남겨두면 새로고침할 때마다 모달이 다시 열림
+     ========================================================== */
+
+  function applyKeywordFromUrl() {
+    var params = new URLSearchParams(window.location.search);
+    var keyword = (params.get("keyword") || "").trim();
+    if (!keyword) return;
+
+    /* 새로고침 시 재실행 방지 - 주소만 바꾸고 이동은 하지 않음 */
+    window.history.replaceState(null, "", window.location.pathname);
+
+    if (keyword.length < MIN_KEYWORD_LENGTH) return;
+
+    openFoodModal();
+    $("food-search").value = keyword;
+    searchFood(keyword);
+  }
+
   function initFoodModal() {
     var modal = $("food-modal");
     var form = $("food-form");
@@ -524,6 +552,11 @@
     });
 
     var hasPet = await loadPets();
-    if (hasPet) loadLog();
+    if (hasPet) {
+      loadLog();
+      /* 아이가 없으면 기록 자체가 성립하지 않으므로
+         빈 상태("아이 등록하기")를 가리지 않도록 모달을 열지 않음 */
+      applyKeywordFromUrl();
+    }
   });
 })();

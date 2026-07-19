@@ -2,7 +2,7 @@
 
 모든 값은 `styles/variables.css` 에 CSS 변수(토큰)로 정의되어 있습니다.
 **직접 `#hex` 나 `px` 를 쓰지 말고 반드시 토큰(`var(--...)`)을 사용하세요.**
-토큰을 쓰면 다크모드가 자동으로 대응되고, 값이 바뀌어도 전 페이지에 일괄 적용됩니다.
+토큰을 쓰면 값이 바뀌어도 전 페이지에 일괄 적용됩니다. 색을 한 곳에서 관리할 수 있습니다.
 
 이 문서는 기준표(무엇이 있는지)와 사용법(어떻게 쓰는지)으로 나뉩니다.
 
@@ -47,8 +47,8 @@
 | `--color-bg` | `#FFFFFF` | 페이지 배경 (순백) |
 | `--color-surface` | `#FFFFFF` | 카드·패널 배경 |
 | `--color-surface-alt` | `#F2E8DC` | 보조 표면, 아이콘 칩, 이미지 플레이스홀더 |
-| `--color-header-bg` | `#F2701F` | 헤더 밴드 (다크에서는 `#3D2318`) |
-| `--color-backdrop` | `#2E2019` | 푸터 배경, 모달 백드롭 (다크에서도 어두움) |
+| `--color-header-bg` | `#F2701F` | 헤더 밴드 |
+| `--color-backdrop` | `#2E2019` | 푸터 배경, 모달 백드롭 |
 | `--color-border` | `#EDE0D4` | 기본 헤어라인 |
 
 ### 상태 색 (배경과 짝)
@@ -266,7 +266,7 @@ SVG 인라인으로 넣습니다. 아이콘 폰트나 이미지 파일을 쓰지
 
 - **`fill` 대신 `stroke`** — 아웃라인 스타일로 통일. 채운 아이콘은 무거워 보입니다.
 - **`stroke-width: 1.6`** — 전 아이콘 동일. 1이면 얇아서 흐려 보이고, 2면 뭉툭합니다.
-- **`currentColor`** — 하드코딩하면 다크모드에서 안 바뀝니다.
+- **`currentColor`** — 부모의 `color` 를 따라가므로 상태별로 색을 따로 쓰지 않아도 됩니다.
 - **장식이면 `aria-hidden="true"`** — 옆에 텍스트가 있으면 아이콘은 장식입니다.
 - **아이콘만 있는 버튼은 `aria-label` 필수** — 스크린리더가 읽을 게 없습니다.
 
@@ -324,62 +324,14 @@ SVG 인라인으로 넣습니다. 아이콘 폰트나 이미지 파일을 쓰지
 
 ---
 
-## 6. 다크모드
-
-기본값은 **사용자의 OS 설정**을 따르고, 마이페이지에서 직접 바꿀 수 있습니다.
-
-| `<html>` 상태 | 결과 |
-|---|---|
-| 속성 없음 | OS 설정을 따름 |
-| `data-theme="light"` | 라이트 강제 |
-| `data-theme="dark"` | 다크 강제 |
-
-```css
-/* OS 가 다크 + 사용자가 라이트로 강제하지 않았을 때 */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { ... }
-}
-
-/* 사용자가 직접 고른 값이 항상 우선 */
-[data-theme="dark"] { ... }
-```
-
-`scripts/theme.js` 가 `<head>` 에서 저장값(`tomopet_theme`)을 읽어 적용합니다.
-**`<body>` 뒤나 `defer` 로 두면 흰 화면이 한 번 그려진 뒤 어두워져 눈에 띄게 번쩍입니다.**
-
-```js
-window.TomopetTheme.get()           // "system" | "light" | "dark"
-window.TomopetTheme.getEffective()  // 실제 적용된 "light" | "dark"
-window.TomopetTheme.set("dark")
-```
-
-### 토큰만 쓰면 다크모드는 자동입니다
-
-`var(--color-text)` 로 쓴 글자는 다크에서 알아서 밝아집니다.
-`#3D2E24` 를 직접 쓰면 안 바뀌어 배경에 묻힙니다. **이것이 토큰을 써야 하는 핵심 이유입니다.**
-
-### `--color-deep` 과 `--color-backdrop` 은 다릅니다
-
-`--color-deep` 은 **글자용**이라 다크에서 밝은 톤(`#F0EAE4`)이 됩니다.
-푸터 배경과 모달 백드롭처럼 **다크에서도 어두워야 하는 곳**은 `--color-backdrop` 을 쓰세요.
-
-```css
-.site-footer { background-color: var(--color-backdrop); }   /* 항상 어두움 */
-.card__title { color: var(--color-deep); }                  /* 다크에선 밝아짐 */
-```
-
-다크 팔레트의 모든 조합도 대비 4.5:1 이상으로 검증돼 있습니다.
-
----
-
-## 7. 사용 주의사항
+## 6. 사용 주의사항
 
 자주 나오는 실수와 그 이유입니다.
 
 ## 주의 1. 토큰만 쓰기 — 하드코딩 금지
 
 ```css
-/* 잘못됨 - 다크모드 대응 안 됨, 값 바뀌면 일일이 수정 */
+/* 잘못됨 - 값이 바뀌면 일일이 찾아 고쳐야 함 */
 .my-card { color: #3D2E24; padding: 16px; border-radius: 18px; }
 
 /* 올바름 */

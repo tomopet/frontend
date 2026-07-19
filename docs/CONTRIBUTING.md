@@ -5,7 +5,7 @@
 | 담당 | 범위 |
 |---|---|
 | SG | `index.html` `login.html` `password-reset*.html` `terms.html` `privacy.html` + 공통 모듈 + 헤더/푸터 |
-| 협업자 | `community` `post-write` `post-detail` `health-record` `feed-recommend` `feed-detail` `ai-chat` `my-page` |
+| 협업자 | `community` `post-write` `post-detail` `health-record` `` `` `ai-chat` `my-page` |
 
 남은 작업의 상세 순서와 페이지별 주의점은 [ROADMAP.md](./ROADMAP.md) 에 있습니다.
 
@@ -265,7 +265,6 @@ README 의 REST API 표준 문법(`async / await` + `try / catch`)을 그대로 
 
 ```js
 ./post-detail.html?postId=123
-./feed-detail.html?feedId=7
 ```
 
 `?id=` 나 `?no=` 로 바꾸면 홈에서 넘어온 사용자가 빈 화면을 봅니다.
@@ -283,7 +282,7 @@ var postId = params.get("postId");   // "id" 아님
 ```
 community.html      -> data-nav="community"
 health-record.html  -> data-nav="health-record"
-feed-recommend.html -> data-nav="feed-recommend"
+.html -> data-nav=""
 ai-chat.html        -> data-nav="ai-chat"
 ```
 
@@ -293,7 +292,7 @@ ai-chat.html        -> data-nav="ai-chat"
 var NAV_PARENT_MAP = {
   "post-detail": "community",
   "post-write": "community",
-  "feed-detail": "feed-recommend"
+  "": ""
 };
 ```
 
@@ -314,12 +313,6 @@ postId, title, thumbnailUrl, authorNickname, likeCount, category
 
 `category` 는 `"gallery" | "recipe" | "free"` 셋 중 하나입니다.
 다른 값이 오면 배지가 그냥 표시되지 않습니다. (오류는 안 남)
-
-### 사료
-
-```
-feedId, name, brand, price, imageUrl
-```
 
 ### 통계
 

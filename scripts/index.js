@@ -1,5 +1,6 @@
 /* ============================================================
    TOMOPET | scripts/index.js
+   검색 키워드: 홈, 메인, 통계, 인기 밥상, 통합 검색, 최근 검색어, 추천 검색어, 스켈레톤
    메인(홈) 페이지 - 진입점
 
    의존
@@ -10,10 +11,8 @@
    연동 엔드포인트
      GET /api/stats                        { recipeCount, memberCount, petCount }
      GET /api/posts?sort=popular&limit=3
-     GET /api/feeds?limit=3
 
-   [추후 적용] 통합 검색은 마크업만 있고 동작하지 않음
-     백엔드에 /api/search 가 없어 제출을 막기만 함
+   통합 검색은 diet.html?keyword= 로 연결됨 (음식 검색 모달 재사용)
 
    세 요청은 서로 독립적이므로 병렬로 보내고
    각 로더가 자체적으로 catch 하므로
@@ -51,7 +50,11 @@
       renderStats(stats);
     } catch (error) {
       console.error("통계 로딩 실패:", error);
-      /* 실패 시 마크업의 초기값 "-" 를 그대로 유지 */
+      /* 실패 시 스켈레톤이 무한히 깜빡이지 않도록 "-" 로 교체 */
+      ["stat-recipe-count", "stat-member-count", "stat-pet-count"].forEach(function (id) {
+        var el = $(id);
+        if (el) el.textContent = "-";
+      });
     }
   }
 
@@ -114,55 +117,136 @@
 
 
   /* ==========================================================
-     맞춤 사료 추천
+     최근 / 추천 검색어
+
+     최근 검색어는 localStorage 에만 저장됨 (서버 전송 없음)
+       시크릿 모드 등에서 localStorage 접근이 막힐 수 있어
+       읽기/쓰기를 전부 try 로 감쌈 - 실패해도 검색은 동작해야 함
      ========================================================== */
 
-  function createFeedCard(feed) {
-    var item = Ui.createEl("li", "card card--clickable");
+  var RECENT_KEY = "tomopet.recentSearches";
+  var RECENT_MAX = 5;
 
-    var link = Ui.createEl("a", "card__link");
-    link.href = "./feed-detail.html?feedId=" + encodeURIComponent(feed.feedId);
+  /* 첫 방문자에게 검색 사용법을 보여주는 예시 재료
+     급여 가능(닭가슴살·고구마)과 주의(포도·양파)를 섞어
+     "안 되는 것도 알려주는 서비스"임이 드러나게 함 */
+  var SUGGESTED_KEYWORDS = ["닭가슴살", "고구마", "포도", "양파"];
 
-    link.appendChild(Ui.createThumb(feed.imageUrl, feed.name, "thumb--square"));
+  function readRecent() {
+    try {
+      var raw = window.localStorage.getItem(RECENT_KEY);
+      var list = raw ? JSON.parse(raw) : [];
+      return Array.isArray(list) ? list : [];
+    } catch (error) {
+      return [];
+    }
+  }
 
-    var body = Ui.createEl("div", "card__body");
-    body.appendChild(Ui.createEl("p", "card__desc", feed.brand || "-"));
-    body.appendChild(Ui.createEl("h3", "card__title", feed.name || "이름 없음"));
+  function writeRecent(list) {
+    try {
+      window.localStorage.setItem(RECENT_KEY, JSON.stringify(list));
+    } catch (error) {
+      /* 저장 실패는 치명적이지 않음 */
+    }
+  }
 
-    var meta = Ui.createEl("div", "card__meta");
-    meta.appendChild(Ui.createEl("strong", null, Ui.formatPrice(feed.price)));
-    body.appendChild(meta);
+  function saveRecent(keyword) {
+    var list = readRecent().filter(function (item) { return item !== keyword; });
+    list.unshift(keyword);
+    writeRecent(list.slice(0, RECENT_MAX));
+  }
 
-    link.appendChild(body);
-    item.appendChild(link);
+  function goSearch(keyword) {
+    saveRecent(keyword);
+    window.location.href = "./diet.html?keyword=" + encodeURIComponent(keyword);
+  }
+
+  function createChip(keyword, options) {
+    var chip = Ui.createEl("button", "search-chip" + (options.suggest ? " search-chip--suggest" : ""));
+    chip.type = "button";
+    chip.appendChild(document.createTextNode(keyword));
+    chip.addEventListener("click", function () { goSearch(keyword); });
+
+    if (options.removable) {
+      var remove = Ui.createEl("span", "search-chip__remove", "✕");
+      remove.setAttribute("role", "button");
+      remove.setAttribute("aria-label", keyword + " 검색 기록 삭제");
+      remove.addEventListener("click", function (event) {
+        /* 칩 클릭(검색 이동)과 분리 */
+        event.stopPropagation();
+        writeRecent(readRecent().filter(function (item) { return item !== keyword; }));
+        renderSearchPanel();
+      });
+      chip.appendChild(remove);
+    }
+
+    var item = Ui.createEl("li");
+    item.appendChild(chip);
     return item;
   }
 
-  async function loadFeedRecommend() {
-    var list = $("feed-recommend-list");
-    var empty = $("feed-recommend-empty");
+  function renderSearchPanel() {
+    var recentSection = $("recent-search-section");
+    var recentList = $("recent-search-list");
+    var suggestList = $("suggest-search-list");
+    if (!recentList || !suggestList) return;
 
-    try {
-      var data = await Api.get("/api/feeds?limit=3");
-      Ui.renderList(list, Api.toList(data), createFeedCard, empty);
-    } catch (error) {
-      console.error("사료 추천 로딩 실패:", error);
-      Ui.renderList(list, [], createFeedCard, empty);
-    }
+    var recent = readRecent();
+    recentSection.hidden = recent.length === 0;
+
+    recentList.textContent = "";
+    recent.forEach(function (keyword) {
+      recentList.appendChild(createChip(keyword, { removable: true }));
+    });
+
+    suggestList.textContent = "";
+    SUGGESTED_KEYWORDS.forEach(function (keyword) {
+      suggestList.appendChild(createChip(keyword, { suggest: true }));
+    });
+  }
+
+  function initSearchPanel() {
+    var panel = $("search-panel");
+    var input = $("global-search");
+    var clearBtn = $("recent-clear-btn");
+    if (!panel || !input) return;
+
+    input.addEventListener("focus", function () {
+      renderSearchPanel();
+      panel.hidden = false;
+    });
+
+    /* blur 대신 바깥 클릭으로 닫음
+       blur 로 닫으면 패널 안의 칩을 누르기 전에 패널이 사라짐 */
+    document.addEventListener("click", function (event) {
+      if (!event.target.closest(".hero-search")) panel.hidden = true;
+    });
+
+    input.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") panel.hidden = true;
+    });
+
+    clearBtn.addEventListener("click", function () {
+      writeRecent([]);
+      renderSearchPanel();
+    });
   }
 
 
   /* ==========================================================
      통합 검색
 
-     [추후 적용] 백엔드에 /api/search 가 없어 아직 동작하지 않음
-     지금은 제출을 막아 페이지가 새로고침되는 것만 방지함
+     별도 검색 페이지 대신 식단의 음식 검색 모달을 재사용합니다.
+     diet.html?keyword= 로 이동하면 diet.js 가 모달을 열고
+     /api/food-items?keyword= 를 바로 조회합니다.
 
-     연결할 때는 아래처럼 쓰면 됨
-       var keyword = $("global-search").value.trim();
-       if (keyword) window.location.href = "./search.html?q=" + encodeURIComponent(keyword);
+     이유
+       1. "이거 먹여도 될까요?" 가 서비스 핵심 질문이고
+          그 답(금지 식품 여부 + 칼로리)이 이미 음식 검색에 있음
+       2. 백엔드에 /api/search 를 새로 만들 필요가 없음
 
-     검색 페이지 없이 재료만 찾게 하려면 /api/food-items?keyword= 로 연결
+     식단은 로그인 필수 페이지라 비로그인 사용자는
+     로그인 화면으로 이동함 (keyword 는 유실 - ROADMAP 참고)
      ========================================================== */
 
   function initSearch() {
@@ -176,9 +260,17 @@
       var keyword = $("global-search").value.trim();
       if (!keyword) return;
 
-      /* [추후 적용] 검색 결과 페이지로 이동 */
-      console.error("검색 미구현:", keyword);
+      /* 최근 검색어 저장을 거쳐 이동 */
+      goSearch(keyword);
     });
+
+    /* 헤더 검색 아이콘으로 진입 - 검색창에 바로 포커스
+       주소는 정리해 새로고침 시 반복 실행을 막음 */
+    var params = new URLSearchParams(window.location.search);
+    if (params.get("focus") === "search") {
+      window.history.replaceState(null, "", window.location.pathname);
+      $("global-search").focus();
+    }
   }
 
 
@@ -192,6 +284,7 @@
     /* 세 요청은 서로 독립적이므로 병렬로 보냄
        각 로더가 자체적으로 try / catch 하므로
        하나가 실패해도 나머지 섹션은 정상 렌더링됨 */
-    Promise.all([loadStats(), loadPopularPosts(), loadFeedRecommend()]);
+    initSearchPanel();
+    Promise.all([loadStats(), loadPopularPosts()]);
   });
 })();

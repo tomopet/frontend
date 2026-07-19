@@ -27,7 +27,7 @@
 | 담당 | 파일 |
 |---|---|
 | SG | `index` `login` `password-reset` `password-reset-confirm` `terms` `privacy` + 공통 모듈 3개 + `header` `footer` |
-| 협업자 | `community` `post-write` `post-detail` `health-record` `feed-recommend` `feed-detail` `ai-chat` `my-page` |
+| 협업자 | `community` `post-write` `post-detail` `health-record` `` `` `ai-chat` `my-page` |
 | 백엔드 | Spring Boot + MySQL + JWT |
 
 ---
@@ -42,8 +42,8 @@
 2. post-detail.js
 3. post-write.js
 4. my-page.js             ← 완료 (SG)
-5. feed-recommend.js
-6. feed-detail.js
+5. .js
+6. .js
 7. health-record.js       ← Chart.js 필요
 8. ai-chat.js             ← 백엔드 AI 필요
 9. 소셜 로그인             ← 백엔드 OAuth 필요
@@ -60,7 +60,6 @@
 #add-pet-btn                 반려견 등록 / 수정
 #change-password-btn         비밀번호 변경
 #notification-setting-btn    알림 설정
-#change-theme-btn            테마 변경
 ```
 
 ### `<dialog>` 를 쓰세요
@@ -295,43 +294,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 ---
 
-## 5·6. feed-recommend.js / feed-detail.js — 4건 · 3건
-
-**만들 파일** — `feed-recommend.html` / `feed-detail.html`(루트) · 각 `styles/*.css` · `scripts/*.js`
-브랜치 `feat/feed-recommend`, `feat/feed-detail` 에서 작업 후 PR
-
-| 기능 | 엔드포인트 |
-|---|---|
-| 사료 목록 | `GET /api/feeds?breed=&age=&weight=` |
-| 품종 목록 | `GET /api/breeds` |
-| 사료 상세 | `GET /api/feeds/:feedId` |
-
-### 반드시 지킬 것
-
-```js
-var feedId = params.get("feedId");   // 홈이 이 이름으로 링크를 만듦
-```
-
-### 가격과 칼로리는 브랜드 색을 쓰지 마세요
-
-클릭할 수 없는 정적 수치입니다. 브랜드 색을 쓰면 링크로 오인합니다.
-
-```css
-color: var(--color-deep);   /* --color-primary-deep 아님 */
-```
-
-### 영양 정보 파싱
-
-`nutrition_info` 가 JSON 문자열로 올 경우 반드시 `try/catch` 로 감싸세요.
-
-```js
-var nutrition = {};
-try { nutrition = JSON.parse(feed.nutritionInfo); } catch (e) { /* 빈 상태 노출 */ }
-```
-
----
-
-## 7. health-record.js — 9건
+## 5. health-record.js — 9건
 
 **만들 파일** — `health-record.html`(루트) · `styles/health-record.css` · `scripts/health-record.js`
 브랜치 `feat/health-record` 에서 작업 후 PR (CONTRIBUTING 섹션 0)
@@ -341,7 +304,33 @@ try { nutrition = JSON.parse(feed.nutritionInfo); } catch (e) { /* 빈 상태 �
 | 최근 기록 | `GET /api/pets/:petId/health/latest` |
 | 기록 목록 | `GET /api/pets/:petId/health/records` |
 | 기록 추가 | `POST /api/pets/:petId/health/records` |
+| 오늘 섭취 (읽기) | `GET /api/diet/log?petId=&date=` |
 | 이상 징후 | `GET /api/pets/:petId/health/alerts` |
+
+### 먹은 것은 여기서 기록하지 않습니다
+
+건강기록은 **몸 상태**만 다룹니다. 체중 · 배변 · 컨디션 · 메모.
+
+**섭취량은 식단분석(`diet.html`)에서 기록합니다.**
+사료뿐 아니라 간식·사람음식까지 합산해야 정확하기 때문입니다.
+
+```
+건강기록  =  몸 상태     체중 · 배변 · 컨디션
+식단분석  =  먹은 것     사료 + 간식 + 사람음식
+```
+
+요약 패널의 `latest-calories` 는 **읽기 전용**입니다.
+`GET /api/diet/log?petId=&date=` 로 받아서 표시만 하세요.
+
+```js
+/* 예: "340 / 450 kcal" */
+$("latest-calories").textContent =
+  Ui.formatNumber(data.analysis.calories.actual) + " / " +
+  Ui.formatNumber(data.analysis.calories.target) + " kcal";
+```
+
+여기서 또 입력받으면 사용자가 하루에 두 번 기록하게 되고,
+값이 어긋났을 때 어느 게 맞는지 알 수 없습니다.
 
 ### Chart.js 를 추가해야 합니다
 
@@ -403,7 +392,7 @@ el.textContent = label;
 
 ---
 
-## 8. ai-chat.js — 7건
+## 6. ai-chat.js — 7건
 
 **만들 파일** — `ai-chat.html`(루트) · `styles/ai-chat.css` · `scripts/ai-chat.js`
 브랜치 `feat/ai-chat` 에서 작업 후 PR (CONTRIBUTING 섹션 0)
@@ -435,7 +424,7 @@ bubble.textContent = message.content;   // innerHTML 금지
 
 ---
 
-## 9. 소셜 로그인 (가장 마지막)
+## 7. 소셜 로그인 (가장 마지막)
 
 `login.html` 에 34줄이 주석 처리되어 있습니다.
 
@@ -449,12 +438,7 @@ window.location.href = "/api/auth/oauth/kakao";
 
 ### 백엔드에서 할 일
 
-1. 카카오 / 구글 / 네이버 개발자 콘솔에 앱 등록
-2. Redirect URI 등록
-3. `GET /api/auth/oauth/:provider` 로 인가 페이지 리다이렉트
-4. `GET /api/auth/oauth/:provider/callback` 에서 토큰 교환
-5. 최초 로그인 시 계정 생성, 기존 이메일과 동일하면 연결 처리
-6. `accessToken` 을 프론트로 전달
+`docs/INTEGRATION-CHECKLIST.md` 부록(소셜 로그인) 참고.
 
 ### 백엔드가 준비되기 전에 주석을 풀지 마세요
 
@@ -464,63 +448,9 @@ window.location.href = "/api/auth/oauth/kakao";
 
 ## 백엔드 체크리스트
 
-### 이미 프론트가 호출 중 (없으면 홈·로그인이 빈 상태로 보임)
-
-```
-POST  /api/auth/login                    { email, password } -> { accessToken, user }
-POST  /api/auth/signup                   -> 201 / 409 { field: "email" | "nickname" }
-POST  /api/auth/password/reset-request   { email } -> 200
-GET   /api/auth/password/verify-token?token=xxx  -> 200 / 400 / 410
-POST  /api/auth/password/reset           { token, newPassword } -> 200 / 410
-GET   /api/stats                         -> { recipeCount, memberCount, petCount }
-GET   /api/posts?sort=popular&limit=3
-GET   /api/feeds?limit=3
-```
-
-### 아직 아무도 호출하지 않음
-
-```
-게시글    GET/POST/PUT/DELETE /api/posts
-          POST /api/posts/:postId/like
-댓글      GET/POST/DELETE /api/posts/:postId/comments
-반려견    GET/POST/PUT/DELETE /api/pets
-건강기록  GET/POST /api/pets/:petId/health/records
-          GET /api/pets/:petId/health/alerts
-사료      GET /api/feeds/:feedId, GET /api/breeds
-AI 채팅   GET/POST /api/chats, /api/chats/:chatId/messages
-사용자    GET /api/users/me
-          PUT /api/users/me/password
-          DELETE /api/users/me
-```
-
-### 응답 필드 이름은 프론트와 맞춰야 합니다
-
-```
-게시글  postId, title, thumbnailUrl, authorNickname, likeCount, category
-사료    feedId, name, brand, price, imageUrl
-통계    recipeCount, memberCount, petCount
-```
-
-`category` 는 `"gallery" | "recipe" | "free"` 셋 중 하나입니다.
-
-목록은 배열 또는 `{ items: [...] }` 어느 쪽이든 됩니다.
-`Api.toList(data)` 가 정규화합니다.
-
-### 비밀번호 재설정 보안 요구사항
-
-1. **계정 열거 방지** — 미가입 이메일에도 항상 `200` 을 반환할 것
-   `"가입되지 않은 이메일입니다"` 를 노출하면
-   공격자가 어떤 이메일이 가입되어 있는지 알아낼 수 있습니다.
-2. **토큰은 30분 1회용** — 사용 후 즉시 폐기, 재사용 시 `410`
-3. **변경 후 기존 세션 전부 무효화**
-4. **재발송 쿨다운** — 프론트의 60초 제한을 서버에서도 강제할 것
-
-### 파일 업로드
-
-1. 크기 제한 5MB
-2. 형식 제한 `image/jpeg` `image/png` `image/webp`
-3. 확장자가 아니라 실제 매직 넘버로 검증할 것
-4. 원본 파일명을 그대로 저장하지 말 것 (경로 조작 위험)
+백엔드 관련 규약·요구사항은 전부 한 파일로 옮겼습니다.
+**`docs/INTEGRATION-CHECKLIST.md`** 를 백엔드 담당자에게 전달하세요.
+(엔드포인트 목록, 응답 필드, 이메일 인증 60초, CORS, 연동 시나리오 포함)
 
 ---
 
@@ -534,7 +464,7 @@ AI 채팅   GET/POST /api/chats, /api/chats/:chatId/messages
 | 고객센터 메일 주소 | 전체 | `components/footer.html`, `terms.html` |
 | 히어로 실사진 | SG | 현재 임시 일러스트 |
 | `og:url` `og:image` 절대 경로 | SG | 배포 주소 확정 후 |
-| 통합 검색 | 미정 | 헤더 버튼이 `hidden` 상태 |
+| 통합 검색 | 완료 | 홈 검색바 → `diet.html?keyword=`, 헤더 아이콘 → `index.html?focus=search`. 로그인 redirect 지원 (오픈 리다이렉트 검증 포함) |
 
 ---
 

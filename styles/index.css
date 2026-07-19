@@ -1,5 +1,6 @@
 /* ============================================================
    TOMOPET | styles/index.css
+   검색 키워드: 홈, 히어로, 검색바, 검색 패널, 검색어 칩, 바로가기, 통계, 캐릭터 비주얼
    홈 전용
 
    로드 순서: variables -> common -> components -> index
@@ -34,26 +35,47 @@
 
 .hero__title {
   margin-bottom: var(--spacing-lg);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-regular);
+  /* 18px regular 은 페이지의 첫 문장치고 존재감이 없었음
+     32px bold 로 "어디를 봐야 하는지"를 명확히 함 */
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
   /* 틴트 배경 위이므로 secondary 대신 deep 계열을 씀 */
   color: var(--color-primary-deep);
 }
 
-/* 히어로가 틴트 밴드이므로 캐릭터 원은 흰색으로 반전
-   같은 틴트로 두면 원의 경계가 보이지 않음 */
-.hero__character {
+/* 캐릭터 비주얼 - 핏펫 아이콘처럼 작고 귀엽게
+   타이틀과 검색 사이에서 숨 고르는 역할이라 크지 않아도 됨
+   실사/일러스트는 hero__visual-img 로 넣으면 원을 꽉 채움 */
+.hero__visual {
+  position: relative;
   display: grid;
   place-items: center;
-  width: 128px;
-  height: 128px;
+  width: 160px;
+  height: 160px;
   margin: 0 auto var(--spacing-xl);
+  overflow: hidden;
   background-color: var(--color-surface);
   border-radius: var(--radius-full);
 }
 
-.hero__character img {
+.hero__visual-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 이미지가 들어오기 전까지의 임시 캐릭터 */
+.hero__visual-placeholder {
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 112px;
+}
+
+.hero__visual-placeholder img {
   width: 100%;
   height: 100%;
 }
@@ -70,8 +92,11 @@
   align-items: center;
   gap: var(--spacing-xs);
   width: 100%;
-  max-width: 440px;
-  margin: 0 auto;
+  /* 서비스의 핵심 진입점이므로 화면에서 가장 당당해야 함
+     440px/34px 는 히어로 문구보다도 왜소했음 */
+  max-width: 560px;
+  margin-inline: auto;
+  box-shadow: var(--shadow-md);
   padding: var(--spacing-2xs) var(--spacing-2xs) var(--spacing-2xs) var(--spacing-sm);
   background-color: var(--color-surface);
   /* 브랜드 색 테두리로 시선을 모음 - 페이지에서 유일하게 강조된 요소 */
@@ -99,9 +124,9 @@
 .hero-search__input {
   flex: 1;
   min-width: 0;
-  height: 34px;
+  height: 44px;
   font-family: inherit;
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-lg);
   color: var(--color-text);
   background: none;
   border: none;
@@ -122,14 +147,21 @@
 
 .hero-search__submit {
   flex-shrink: 0;
+  /* 44px 입력창 옆에서 btn--sm(34px) 그대로면 왜소함 */
+  min-height: 2.375rem;
+  padding-inline: var(--spacing-md);
+  font-size: var(--font-size-md);
 }
 
 
 /* ------------------------------------------------------------
    아이콘 바로가기
 
-   칩 배경을 중성으로 통일하고 아이콘만 브랜드 색을 씀
-   6개가 각각 다른 색이면 시선이 분산되어 검색이 묻힘
+   칩 배경을 중성으로 통일하고 아이콘에만 색을 씀
+   6개가 제각각이면 시선이 분산되므로 두 계열로만 나눔
+     식사 관련(식단·밥상)  = 테라코타
+     건강 관련(기록·AI)    = 세이지
+   기능의 성격이 색으로 구분되고 화면 단조로움도 줄어듦
    ------------------------------------------------------------ */
 
 .quick-nav {
@@ -163,8 +195,8 @@
 .quick-item__icon {
   display: grid;
   place-items: center;
-  width: 50px;
-  height: 50px;
+  width: 56px;
+  height: 56px;
   color: var(--color-primary-deep);
   background-color: var(--color-surface-alt);
   border: 1px solid var(--color-border);
@@ -176,8 +208,17 @@
   border-color: var(--color-primary);
 }
 
+/* 건강 계열 아이콘 - 세이지 */
+.quick-item__icon--accent {
+  color: var(--color-accent-deep);
+}
+
+.quick-item:hover .quick-item__icon--accent {
+  border-color: var(--color-accent);
+}
+
 .quick-item__label {
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   text-align: center;
 }
 
@@ -188,6 +229,15 @@
 
 .home-section {
   margin-bottom: var(--spacing-3xl);
+}
+
+/* 배경 밴드 - 페이지에 리듬을 만듦
+   히어로(테라코타 틴트) -> 바로가기(흰색) -> 밴드(중성 틴트) 순으로
+   섹션이 바뀔 때마다 배경이 교차해 단조로움을 깸 */
+.home-section--band {
+  padding-block: var(--spacing-2xl);
+  margin-bottom: var(--spacing-2xl);
+  background-color: var(--color-surface-alt);
 }
 
 .home-section__head {
@@ -210,14 +260,20 @@
   gap: var(--spacing-2xs);
   flex-shrink: 0;
   font-size: var(--font-size-sm);
-  color: var(--color-primary-deep);
+  /* 보조 동선은 세이지 - 주 동선(테라코타)과 위계를 나눔 */
+  color: var(--color-accent-deep);
+}
+
+.home-section__more:hover {
+  color: var(--color-accent-hover);
 }
 
 
 /* ------------------------------------------------------------
    서비스 통계 - 푸터 바로 위 보조 정보
 
-   숫자 자체는 클릭할 수 없으므로 브랜드 색을 쓰지 않음
+   숫자는 클릭 요소가 아니므로 주 색(테라코타)은 피하되
+   중성색만 쓰면 죽어 보여서 세이지 딥 톤을 줌
    ------------------------------------------------------------ */
 
 .stats {
@@ -228,8 +284,10 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   padding: var(--spacing-lg);
-  background-color: var(--color-surface-alt);
-  border-radius: var(--radius-lg);
+  /* 세이지 틴트 - 숫자(accent-deep)와 한 계열로 묶어
+     페이지 하단을 건강/신뢰 톤으로 마무리 */
+  background-color: var(--color-accent-light);
+  border-radius: var(--radius-xl);
 }
 
 .stats__item {
@@ -240,14 +298,15 @@
 
 /* 가운데 항목만 구분선 - 요소를 늘리지 않고 세 칸을 나눔 */
 .stats__item:nth-child(2) {
-  border-right: 1px solid var(--color-border);
-  border-left: 1px solid var(--color-border);
+  /* 세이지 틴트 위에서 중성 보더는 탁해 보이므로 같은 계열로 */
+  border-right: 1px solid var(--color-accent);
+  border-left: 1px solid var(--color-accent);
 }
 
 .stats__value {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
-  color: var(--color-deep);
+  color: var(--color-accent-deep);
   /* 로딩 중 "-" 에서 실제 숫자로 바뀔 때 폭이 흔들리지 않게 함 */
   font-variant-numeric: tabular-nums;
 }
@@ -255,4 +314,105 @@
 .stats__label {
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
+}
+
+/* ------------------------------------------------------------
+   최근/추천 검색어 패널
+
+   컬리·무신사처럼 검색창 포커스 시 아래로 펼쳐짐
+   패널이 문서 흐름을 밀지 않도록 절대 배치
+   ------------------------------------------------------------ */
+
+.hero-search {
+  position: relative;
+}
+
+.search-panel {
+  position: absolute;
+  top: calc(100% + var(--spacing-2xs));
+  right: 0;
+  left: 0;
+  z-index: var(--z-dropdown);
+  padding: var(--spacing-sm);
+  text-align: left;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.search-panel__section + .search-panel__section {
+  margin-top: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+.search-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-xs);
+}
+
+.search-panel__label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.search-panel__clear {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.search-panel__clear:hover {
+  color: var(--color-danger);
+}
+
+.search-panel__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+/* 검색어 칩 - 본문(칩 클릭)과 삭제(x)를 분리 */
+.search-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  padding: var(--spacing-2xs) var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-full);
+  transition: background-color var(--transition-fast);
+}
+
+.search-chip:hover {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-deep);
+}
+
+.search-chip__remove {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  border-radius: var(--radius-full);
+}
+
+.search-chip__remove:hover {
+  color: var(--color-danger);
+}
+
+/* 추천 검색어 칩은 삭제 버튼이 없어 여백이 살짝 다름 */
+.search-chip--suggest {
+  background-color: var(--color-accent-light);
+  color: var(--color-accent-deep);
+}
+
+.search-chip--suggest:hover {
+  background-color: var(--color-accent);
+  color: var(--color-surface);
 }

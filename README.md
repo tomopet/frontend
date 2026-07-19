@@ -7,7 +7,6 @@
 
 > 협업 규칙 상세는 [CONTRIBUTING.md](./docs/CONTRIBUTING.md)
 > 남은 작업과 페이지별 주의점은 [ROADMAP.md](./docs/ROADMAP.md)
-> 담당 분량은 [분량배분.md](./docs/분량배분.md)
 > 색상·타이포·간격 등 디자인 토큰은 [DESIGN-SYSTEM.md](./docs/DESIGN-SYSTEM.md)
 
 ---
@@ -79,8 +78,6 @@ tomopet/
 ├── post-write.html               글 작성 / 수정
 ├── health-record.html            건강기록
 ├── ai-chat.html                  AI 채팅
-├── feed-recommend.html           사료 추천
-├── feed-detail.html              사료 상세
 │
 ├── README.md                     이 문서 (저장소 첫 화면)
 ├── favicon.svg                   (ㅇ)
@@ -101,7 +98,6 @@ tomopet/
 │   └── [페이지].css               페이지 전용
 │
 ├── scripts/
-│   ├── theme.js                  테마 적용 (head 에서 먼저 실행) (ㅇ)
 │   ├── layout.js                 헤더/푸터 로더 + 인증 (필수) (ㅇ)
 │   ├── api.js                    HTTP 통신 공통 모듈 (필수) (ㅇ)
 │   ├── ui.js                     DOM/포맷 공통 모듈 (필수) (ㅇ)
@@ -111,7 +107,6 @@ tomopet/
     ├── CONTRIBUTING.md           협업 규칙
     ├── ROADMAP.md                남은 작업
     ├── DESIGN-SYSTEM.md          디자인 토큰
-    ├── 분량배분.md                담당 분량
     └── example/                  새 페이지 복사용 견본
         ├── _example-page.html
         ├── _example-page.css
@@ -122,14 +117,14 @@ tomopet/
 
 문서와 템플릿만 담습니다. 브라우저가 읽지 않습니다.
 
-`docs/example/` 의 견본은 **루트 기준 경로**로 작성돼 있습니다.
+`_examples/` 의 견본은 **루트 기준 경로**로 작성돼 있습니다.
 (`./styles/...`, `./scripts/...`) 그대로 열면 스타일이 적용되지 않는 것이 정상입니다.
 복사해서 아래 위치에 두면 동작합니다.
 
 ```
-docs/example/_example-page.html  →  community.html          (루트)
-docs/example/_example-page.css   →  styles/community.css
-docs/example/_example-page.js    →  scripts/community.js
+_examples/_example-page.html  →  community.html          (루트)
+_examples/_example-page.css   →  styles/community.css
+_examples/_example-page.js    →  scripts/community.js
 ```
 
 ### HTML 을 폴더로 나누지 않는 이유
@@ -255,19 +250,14 @@ variables.css   →  common.css   →  components.css   →  [페이지].css
 
 `variables.css` 가 먼저 와야 나머지가 `var(--color-primary)` 를 읽을 수 있습니다.
 
-### JS
-
-`theme.js` 만 `<head>` 에서 `defer` 없이 실행합니다.
-본문이 그려지기 전에 `data-theme` 을 정해야 화면이 번쩍이지 않기 때문입니다.
+### JS (`</body>` 직전)
 
 ```
-<head>          theme.js
-</body> 직전     layout.js  →  api.js  →  ui.js  →  [페이지].js
+layout.js  →  api.js  →  ui.js  →  [페이지].js
 ```
 
 | 파일 | defer | 정의 | 의존 |
 |---|---|---|---|
-| `theme.js` | 없음 (head 에서 즉시) | `window.TomopetTheme` | - |
 | `layout.js` | 없음 (즉시 실행) | `window.TomopetAuth` | - |
 | `api.js` | 있음 | `window.TomopetApi` | TomopetAuth |
 | `ui.js` | 있음 | `window.TomopetUi` | - |
@@ -358,70 +348,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 ## 7. 사용 중인 API 엔드포인트
 
-### 프론트가 이미 호출 중 (없으면 빈 상태로 렌더링됨)
+전체 엔드포인트 명세·응답 필드·상태코드 규약은
+**`docs/INTEGRATION-CHECKLIST.md`** 한 곳에서만 관리합니다.
+(여기와 ROADMAP 에 사본을 두면 셋이 서로 어긋나는 사고가 납니다)
 
-```
-POST  /api/auth/login                    { email, password }
-                                         -> { accessToken, user }
-POST  /api/auth/signup                   { nickname, email, password, agreeMarketing }
-                                         -> 201
-                                            409 { field: "email" | "nickname" }
+프론트 코드에서 기억할 것 두 가지:
 
-POST  /api/auth/password/reset-request   { email } -> 200 (미가입 이메일도 200)
-GET   /api/auth/password/verify-token?token=xxx   -> 200 / 400 / 410
-POST  /api/auth/password/reset           { token, newPassword } -> 200 / 410
-
-GET   /api/users/me                      -> { nickname, email, profileImageUrl }
-PUT   /api/users/me                      FormData (nickname, image) -> 갱신된 user
-                                                                       409 닉네임 중복
-PUT   /api/users/me/password             { currentPassword, newPassword }
-                                         -> 200 / 401 현재 비밀번호 불일치
-DELETE /api/users/me                     -> 204
-
-GET   /api/users/me/pets                 -> [{ petId, name, breed, birthDate, sex,
-                                               weight, neutered, activityLevel,
-                                               allergies[], imageUrl }]
-POST  /api/pets                          FormData -> 201
-PUT   /api/pets/:petId                   FormData -> 200
-DELETE /api/pets/:petId                  -> 204
-GET   /api/breeds                        -> ["말티즈", ...] 또는 [{ name }]
-
-GET   /api/stats                         -> { recipeCount, memberCount, petCount }
-
-식단 분석
-GET   /api/pets/:petId/diet/target       -> { der, targets: { protein, fat, fiber } }
-GET   /api/diet/logs?petId=&date=        -> { items: [...], analysis: {...} }
-                                            404 = 그날 기록 없음 (오류 아님)
-POST  /api/diet/logs                     { petId, date, items: [{ foodItemId, amountG }] }
-                                         -> { items: [...], analysis: {
-                                              calories: { actual, target },
-                                              nutrients: [{ label, ratio }],
-                                              score: 0~100,
-                                              toxicWarnings: [{ name, reason }] } }
-GET   /api/food-items?keyword=           -> [{ foodItemId, name, type, caloriesPer100g,
-                                               isToxic, toxicReason }]
-                                            type = FEED | TREAT | HUMAN
-GET   /api/posts?sort=popular&limit=3
-GET   /api/feeds?limit=3
-```
-
-### 응답 필드 이름
-
-```
-게시글  postId, title, thumbnailUrl, authorNickname, likeCount, category
-사료    feedId, name, brand, price, imageUrl
-통계    recipeCount, memberCount, petCount
-```
-
-`category` 는 `"gallery" | "recipe" | "free"` 셋 중 하나입니다.
-목록은 배열 또는 `{ items: [...] }` 어느 쪽이든 `Api.toList(data)` 가 정규화합니다.
-
-### 비밀번호 재설정 보안 요구사항
-
-1. **계정 열거 방지** — 가입되지 않은 이메일이어도 항상 `200` 을 반환할 것
-2. **토큰은 30분 1회용** — 재사용 시 `410`
-3. **변경 후 기존 세션 전부 무효화**
-4. **재발송 쿨다운** — 프론트의 60초 제한을 서버에서도 강제할 것
+- 인증 헤더는 `api.js` 가 자동으로 붙임 (`Authorization: Bearer`)
+- 목록 응답은 배열/`{ items: [...] }` 어느 쪽이든 `Api.toList(data)` 로 정규화해서 쓸 것
 
 ---
 
@@ -530,7 +464,7 @@ SIL Open Font License 라 상업적 이용과 웹 배포 모두 자유롭습니�
 
 ---
 
-## 12. 백엔드 연동 시 지켜야 할 3가지
+## 12. API 연동 시 프론트가 지켜야 할 3가지
 
 ### 1. 폼은 반드시 submit 이벤트에 바인딩
 
@@ -600,6 +534,11 @@ Ui.setLoading(submitBtn, true, "저장 중...");
 
 ## 14. 주석 표기 규칙
 
+모든 파일 머리에 `검색 키워드:` 줄이 있습니다.
+찾고 싶은 기능이 있으면 에디터 전체 검색(Ctrl+Shift+F)에
+**한글 기능명**(예: "이메일 인증", "최근 검색어", "토스트")을 치면 해당 파일이 나옵니다.
+
+
 | 표기 | 의미 |
 |---|---|
 | `[공통]` | 모든 페이지에 적용되는 항목 |
@@ -632,7 +571,6 @@ Pages 는 정적 호스팅이라 Spring Boot 를 구동할 수 없습니다.
 |---|---|
 | 홈 통계 | `-` 유지 |
 | 인기 밥상 | 빈 상태 + "글 쓰러 가기" 버튼 |
-| 사료 추천 | 빈 상태 + "아이 등록하기" 버튼 |
 | 로그인 시도 | "서버에 연결할 수 없습니다" 배너 |
 
 ---

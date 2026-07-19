@@ -10,9 +10,9 @@
      새 페이지를 만들 때 아래 위치로 복사한 뒤
      파일 안의 example 을 본인 담당 이름으로 바꾸면 됩니다.
 
-       docs/example/_example-page.html  ->  community.html          (루트)
-       docs/example/_example-page.css   ->  styles/community.css
-       docs/example/_example-page.js    ->  scripts/community.js
+       _examples/_example-page.html  ->  community.html          (루트)
+       _examples/_example-page.css   ->  styles/community.css
+       _examples/_example-page.js    ->  scripts/community.js
 
      예) 커뮤니티 담당이라면
        _example-page.html   -> community.html
@@ -33,11 +33,6 @@
 
   <!-- [공통] 파비콘 -->
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-
-  <!-- [공통] 테마 - 반드시 스타일보다 먼저, defer 없이 실행
-       본문이 그려지기 전에 data-theme 을 정해야 화면이 번쩍이지 않음 -->
-  <script src="./scripts/theme.js"></script>
-
   <!-- ============================================================
        [공통] 스타일 - 로드 순서 고정 (바꾸면 디자인이 깨짐)
          variables -> common -> components -> [내 페이지]

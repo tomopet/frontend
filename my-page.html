@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!-- ============================================================
      TOMOPET | my-page.html
+     검색 키워드: 마이페이지, 반려견 등록, 회원 정보
      마이페이지 - 반려견 관리 + 내 정보 관리
 
      로그인이 필요한 페이지입니다.
@@ -23,11 +24,6 @@
 
   <!-- [공통] 파비콘 -->
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-
-  <!-- [공통] 테마 - 반드시 스타일보다 먼저, defer 없이 실행
-       본문이 그려지기 전에 data-theme 을 정해야 화면이 번쩍이지 않음 -->
-  <script src="./scripts/theme.js"></script>
-
   <!-- [공통] 전역 스타일 - 로드 순서 고정 -->
   <link rel="stylesheet" href="./styles/variables.css">
   <link rel="stylesheet" href="./styles/common.css">
@@ -99,12 +95,6 @@
 
           <!-- 관리 항목 -->
           <ul class="account-menu">
-            <li>
-              <button type="button" class="account-menu__item" id="theme-btn">
-                <span class="account-menu__label">화면 테마</span>
-                <span class="account-menu__meta" id="theme-current">시스템 설정</span>
-              </button>
-            </li>
             <li>
               <button type="button" class="account-menu__item" id="edit-profile-btn">
                 <span class="account-menu__label">프로필 수정</span>
@@ -293,53 +283,7 @@
 
 
   <!-- ============================================================
-       모달 3 - 화면 테마
-
-       기본은 OS 설정을 따르고, 원하면 직접 고정할 수 있음
-       선택 즉시 적용되며 localStorage(tomopet_theme)에 저장됨
-       ============================================================ -->
-  <dialog class="modal" id="theme-modal" aria-labelledby="theme-modal-title">
-    <div class="modal__header">
-      <h2 class="modal__title" id="theme-modal-title">화면 테마</h2>
-      <button type="button" class="modal__close" data-modal-close aria-label="닫기">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-          <path d="M4 4l10 10M14 4L4 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-        </svg>
-      </button>
-    </div>
-
-    <div class="modal__body">
-      <p class="modal__desc">
-        시스템 설정을 따르면 기기의 다크 모드에 맞춰 자동으로 바뀝니다.
-      </p>
-
-      <fieldset class="form-field">
-        <legend class="sr-only">테마 선택</legend>
-        <div class="theme-choice">
-          <div class="theme-choice__item">
-            <input type="radio" class="choice-group__input" id="theme-system" name="theme" value="system">
-            <label class="choice-group__label" for="theme-system">시스템 설정</label>
-          </div>
-          <div class="theme-choice__item">
-            <input type="radio" class="choice-group__input" id="theme-light" name="theme" value="light">
-            <label class="choice-group__label" for="theme-light">라이트</label>
-          </div>
-          <div class="theme-choice__item">
-            <input type="radio" class="choice-group__input" id="theme-dark" name="theme" value="dark">
-            <label class="choice-group__label" for="theme-dark">다크</label>
-          </div>
-        </div>
-      </fieldset>
-    </div>
-
-    <div class="modal__actions">
-      <button type="button" class="btn btn--primary" data-modal-close>확인</button>
-    </div>
-  </dialog>
-
-
-  <!-- ============================================================
-       모달 4 - 프로필 수정 (닉네임 + 사진)
+       모달 3 - 프로필 수정 (닉네임 + 사진)
        ============================================================ -->
   <dialog class="modal" id="profile-modal" aria-labelledby="profile-modal-title">
     <div class="modal__header">
@@ -389,7 +333,7 @@
 
 
   <!-- ============================================================
-       모달 5 - 비밀번호 변경
+       모달 4 - 비밀번호 변경
 
        비밀번호 찾기(로그아웃 상태 + 메일 토큰)와 다릅니다.
        로그인 상태이므로 현재 비밀번호 확인이 반드시 필요합니다.
@@ -440,7 +384,7 @@
 
 
   <!-- ============================================================
-       모달 6 - 회원 탈퇴 확인
+       모달 5 - 회원 탈퇴 확인
 
        되돌릴 수 없는 작업이므로 confirm() 대신
        닉네임을 직접 입력하게 해 실수를 방지합니다.

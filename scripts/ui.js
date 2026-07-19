@@ -1,5 +1,6 @@
 /* ============================================================
    TOMOPET | scripts/ui.js
+   검색 키워드: 화면 헬퍼, 렌더링, 목록, 빈 상태, 로딩 버튼, 폼 오류, 토스트, 알림, 날짜 포맷, 숫자 포맷
    DOM 조작 및 표시 형식 공통 모듈
 
    적용 범위: 전체 페이지 공통
@@ -262,7 +263,37 @@
   }
 
 
+  /* ==========================================================
+     토스트 알림
+
+     "동작이 끝났다"는 짧은 확인용 - 3초 뒤 스스로 사라짐
+     결과를 그 자리에서 봐야 하는 오류는 setFormMessage 를 쓸 것
+
+     aria-live 영역이므로 스크린리더도 내용을 읽어줌
+     ========================================================== */
+
+  var TOAST_DURATION = 3000;
+
+  function toast(message, type) {
+    var root = document.getElementById("toast-root");
+    if (!root) {
+      root = createEl("div", "toast-root");
+      root.id = "toast-root";
+      root.setAttribute("aria-live", "polite");
+      document.body.appendChild(root);
+    }
+
+    var item = createEl("p", "toast" + (type === "danger" ? " toast--danger" : ""), message);
+    root.appendChild(item);
+
+    window.setTimeout(function () {
+      item.remove();
+    }, TOAST_DURATION);
+  }
+
+
   window.TomopetUi = {
+    toast: toast,
     $: $,
     $$: $$,
     createEl: createEl,

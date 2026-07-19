@@ -1,5 +1,6 @@
 /* ============================================================
    TOMOPET | login.css
+   검색 키워드: 로그인, 회원가입, 탭, 이메일 인증, 소셜 로그인
    로그인 / 회원가입 페이지 전용 스타일
    적용 범위: login.html
    ============================================================ */
@@ -209,3 +210,44 @@
 }
 
 
+/* ==========================================================
+   이메일 인증 - 입력과 버튼 가로 배치
+   ========================================================== */
+
+.form-field__row {
+  display: flex;
+  gap: var(--spacing-xs);
+  align-items: center;
+}
+
+.form-field__row .form-field__input {
+  flex: 1;
+  min-width: 0; /* flex 안에서 input 이 부모를 밀어내지 않도록 */
+}
+
+/* 발송/확인 버튼 - 입력 높이에 맞추고 줄바꿈 방지 */
+.form-field__row-btn {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* 남은 시간 - 숫자가 줄어드는 동안 폭이 흔들리지 않게 고정폭 숫자 */
+.form-field__timer {
+  flex-shrink: 0;
+  min-width: 40px;
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-primary-deep);
+  text-align: center;
+}
+
+/* 만료 시 - 위험색으로 전환 */
+.form-field__timer.is-expired {
+  color: var(--color-danger);
+}
+
+/* 인증 완료 시 입력을 잠갔다는 것이 보이도록 */
+.form-field__input[readonly] {
+  color: var(--color-text-muted);
+  background-color: var(--color-surface-hover);
+}

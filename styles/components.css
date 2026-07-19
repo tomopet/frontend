@@ -1,5 +1,6 @@
 /* ============================================================
    TOMOPET | components.css
+   검색 키워드: 버튼, 카드, 폼 필드, 헤더, 푸터, 모달, 배지, 스켈레톤, 토스트, 빈 상태, 썸네일
    전 페이지 공통 컴포넌트 스타일
 
    로드 순서: variables.css -> common.css -> [components.css] -> [page].css
@@ -216,6 +217,9 @@
   align-items: center;
   justify-content: center;
   gap: var(--spacing-2xs);
+  /* 최소 높이 40px - 30px 안팎이던 이전 크기는
+     클릭 타깃 권장(40px+)에 못 미치고 왜소해 보였음 */
+  min-height: 2.5rem;
   padding: var(--spacing-xs) var(--spacing-md);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
@@ -312,11 +316,15 @@
 
 /* 크기 변형 */
 .btn--sm {
+  min-height: 2.125rem; /* 34px - 카드 안 보조 동작용 */
   padding: var(--spacing-2xs) var(--spacing-sm);
   font-size: var(--font-size-sm);
 }
 
 .btn--lg {
+  /* 48px - 로그인·가입 등 주요 CTA
+     토스·컬리 등 주요 서비스의 CTA 표준 높이 */
+  min-height: 3rem;
   padding: var(--spacing-sm) var(--spacing-lg);
   font-size: var(--font-size-lg);
 }
@@ -1124,4 +1132,114 @@
 .tag-chip__remove:hover {
   opacity: 1;
   background-color: rgb(255 255 255 / 40%);
+}
+
+/* ============================================================
+   13. [공통] 스켈레톤 로딩
+
+   로딩 중 콘텐츠 자리에 콘텐츠 모양의 블록을 깜빡여
+   "비어 있음"이 아니라 "오는 중"으로 읽히게 함
+   렌더가 끝나면 JS(renderList 등)가 통째로 교체하므로
+   별도 제거 코드가 필요 없음
+   ============================================================ */
+
+.skeleton {
+  display: block;
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-sm);
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.45; }
+}
+
+/* 움직임에 민감한 사용자 - 깜빡임 없이 정지 상태로 */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
+}
+
+.skeleton--thumb { aspect-ratio: 16 / 10; border-radius: 0; }
+.skeleton--badge { width: 64px; height: 20px; border-radius: var(--radius-full); }
+.skeleton--line  { width: 80%;  height: 1em; }
+.skeleton--line-short { width: 50%; height: 0.875em; }
+.skeleton--stat  { width: 72px; height: 1.2em; margin: 0 auto; }
+
+
+/* ============================================================
+   14. [공통] 토스트 알림
+
+   폼 배너는 "그 자리의 결과"용이고
+   토스트는 "동작이 끝났다"는 짧은 확인용
+   3초 뒤 스스로 사라지므로 닫기 버튼이 없음
+   ============================================================ */
+
+.toast-root {
+  position: fixed;
+  bottom: var(--spacing-xl);
+  left: 50%;
+  z-index: var(--z-modal);
+  display: grid;
+  gap: var(--spacing-xs);
+  transform: translateX(-50%);
+  /* 알림이 클릭을 가로막지 않도록 함 */
+  pointer-events: none;
+}
+
+.toast {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--font-size-md);
+  color: var(--color-surface);
+  text-align: center;
+  background-color: var(--color-deep);
+  border-radius: var(--radius-full);
+  animation: toast-in var(--transition-base) ease-out;
+}
+
+.toast--danger {
+  background-color: var(--color-danger);
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast { animation: none; }
+}
+
+
+/* ============================================================
+   15. [공통] 빈 상태 일러스트 자리
+
+   비어있음 = 실패가 아니라 시작 안내로 읽히도록
+   글자 위에 그림 한 점을 둠
+   기본은 발자국 아이콘이며 자체 일러스트로 교체 예정
+   ============================================================ */
+
+.empty-state__figure {
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  margin-bottom: var(--spacing-xs);
+  overflow: hidden;
+  color: var(--color-primary);
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-full);
+}
+
+.empty-state__figure img,
+.empty-state__figure svg {
+  width: 48px;
+  height: 48px;
+}
+
+/* 실사/일러스트 이미지로 교체 시 원을 꽉 채움 */
+.empty-state__figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
