@@ -169,12 +169,14 @@
 }
 
 /* 컨테이너가 1200px 이므로 아이콘이 가운데 몰리지 않도록 폭을 넓힘
-   6개 × 약 110px = 아이콘 사이가 적당히 벌어짐 */
+   5개 × 약 110px = 아이콘 사이가 적당히 벌어짐
+   (사료추천 제거로 6개 -> 5개가 되었는데 그리드가 6칸으로 남아
+    빈 칸 때문에 왼쪽으로 쏠려 보이던 문제를 함께 정정) */
 .quick-nav__list {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: var(--spacing-md);
-  max-width: 680px;
+  max-width: 570px;
   margin: 0 auto;
 }
 
