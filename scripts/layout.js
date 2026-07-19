@@ -98,12 +98,21 @@
       return "./login.html?redirect=" + encodeURIComponent(target);
     },
 
-    /* 로그인 필수 페이지에서 호출
-       replace 를 쓰면 뒤로가기로 되돌아오지 않음 */
+    /* ========================================================
+       인증 가드 - 사용하지 않기로 결정 (백엔드 주도 방식)
+
+       프론트에서 선제적으로 로그인 페이지로 막지 않습니다.
+       비로그인 접근 여부는 백엔드가 401 로 판정하고,
+       401 을 받으면 api.js 의 handleUnauthorized 가
+       로그인 페이지로 보냅니다 (loginUrl 로 복귀 경로 포함).
+
+       각 페이지의 requireAuth() 호출은 남겨둠
+         나중에 프론트 가드가 다시 필요해지면
+         이 함수만 고치면 전 페이지에 적용되기 때문
+       검색 키워드: 인증 가드, 로그인 막기
+       ======================================================== */
     requireAuth: function () {
-      if (this.isLoggedIn()) return true;
-      window.location.replace(this.loginUrl());
-      return false;
+      return true;
     },
 
     logout: function () {

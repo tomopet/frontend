@@ -85,73 +85,11 @@
    통합 검색 - 페이지의 유일한 주요 액션
    ------------------------------------------------------------ */
 
-/* 컨테이너가 1200px 이어도 검색바는 좁게 유지
-   가로로 길면 시선이 분산되고 입력값이 왼쪽에 치우쳐 보임 */
-.hero-search {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  width: 100%;
-  /* 서비스의 핵심 진입점이므로 화면에서 가장 당당해야 함
-     440px/34px 는 히어로 문구보다도 왜소했음 */
-  max-width: 560px;
-  margin-inline: auto;
-  box-shadow: var(--shadow-md);
-  padding: var(--spacing-2xs) var(--spacing-2xs) var(--spacing-2xs) var(--spacing-sm);
-  background-color: var(--color-surface);
-  /* 브랜드 색 테두리로 시선을 모음 - 페이지에서 유일하게 강조된 요소 */
-  border: 1.5px solid var(--color-primary);
-  border-radius: var(--radius-md);
-  transition: box-shadow var(--transition-fast);
-}
 
-.hero-search:focus-within {
-  box-shadow: var(--shadow-focus);
-}
 
 /* 아이콘 바로가기는 흰 본문 영역에 위치 */
-.quick-nav {
-  padding-top: var(--spacing-3xl);
-}
 
-.hero-search__icon {
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  color: var(--color-primary-deep);
-}
 
-.hero-search__input {
-  flex: 1;
-  min-width: 0;
-  height: 44px;
-  font-family: inherit;
-  font-size: var(--font-size-lg);
-  color: var(--color-text);
-  background: none;
-  border: none;
-}
-
-.hero-search__input::placeholder {
-  color: var(--color-text-muted);
-}
-
-.hero-search__input:focus {
-  outline: none;
-}
-
-/* 검색창의 기본 x 버튼 제거 - 디자인이 브라우저마다 다름 */
-.hero-search__input::-webkit-search-cancel-button {
-  appearance: none;
-}
-
-.hero-search__submit {
-  flex-shrink: 0;
-  /* 44px 입력창 옆에서 btn--sm(34px) 그대로면 왜소함 */
-  min-height: 2.375rem;
-  padding-inline: var(--spacing-md);
-  font-size: var(--font-size-md);
-}
 
 
 /* ------------------------------------------------------------
@@ -165,7 +103,9 @@
    ------------------------------------------------------------ */
 
 .quick-nav {
-  padding-bottom: var(--spacing-3xl);
+  /* 검색바 제거 후 히어로의 주 동선이 됨
+     캐릭터의 margin-bottom 이 이미 간격을 주므로 추가 여백 없음 */
+  margin-top: 0;
 }
 
 /* 컨테이너가 1200px 이므로 아이콘이 가운데 몰리지 않도록 폭을 넓힘
@@ -200,7 +140,8 @@
   width: 56px;
   height: 56px;
   color: var(--color-primary-deep);
-  background-color: var(--color-surface-alt);
+  /* 히어로 틴트 위이므로 흰색으로 반전 - 중성 틴트는 배경과 묻힘 */
+  background-color: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   transition: border-color var(--transition-fast);
@@ -318,103 +259,3 @@
   color: var(--color-text-secondary);
 }
 
-/* ------------------------------------------------------------
-   최근/추천 검색어 패널
-
-   컬리·무신사처럼 검색창 포커스 시 아래로 펼쳐짐
-   패널이 문서 흐름을 밀지 않도록 절대 배치
-   ------------------------------------------------------------ */
-
-.hero-search {
-  position: relative;
-}
-
-.search-panel {
-  position: absolute;
-  top: calc(100% + var(--spacing-2xs));
-  right: 0;
-  left: 0;
-  z-index: var(--z-dropdown);
-  padding: var(--spacing-sm);
-  text-align: left;
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-}
-
-.search-panel__section + .search-panel__section {
-  margin-top: var(--spacing-sm);
-  padding-top: var(--spacing-sm);
-  border-top: 1px solid var(--color-border);
-}
-
-.search-panel__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: var(--spacing-xs);
-}
-
-.search-panel__label {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-}
-
-.search-panel__clear {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-secondary);
-}
-
-.search-panel__clear:hover {
-  color: var(--color-danger);
-}
-
-.search-panel__list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-xs);
-}
-
-/* 검색어 칩 - 본문(칩 클릭)과 삭제(x)를 분리 */
-.search-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-2xs);
-  padding: var(--spacing-2xs) var(--spacing-sm);
-  font-size: var(--font-size-sm);
-  color: var(--color-text);
-  background-color: var(--color-surface-alt);
-  border-radius: var(--radius-full);
-  transition: background-color var(--transition-fast);
-}
-
-.search-chip:hover {
-  background-color: var(--color-primary-light);
-  color: var(--color-primary-deep);
-}
-
-.search-chip__remove {
-  display: grid;
-  place-items: center;
-  width: 16px;
-  height: 16px;
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-  border-radius: var(--radius-full);
-}
-
-.search-chip__remove:hover {
-  color: var(--color-danger);
-}
-
-/* 추천 검색어 칩은 삭제 버튼이 없어 여백이 살짝 다름 */
-.search-chip--suggest {
-  background-color: var(--color-accent-light);
-  color: var(--color-accent-deep);
-}
-
-.search-chip--suggest:hover {
-  background-color: var(--color-accent);
-  color: var(--color-surface);
-}

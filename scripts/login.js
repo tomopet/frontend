@@ -557,7 +557,7 @@
        ?redirect=https://피싱사이트.com 처럼 외부 주소를 심어
        로그인 직후 가짜 사이트로 보내는 공격이 있으므로
        "우리 페이지 파일명 + 쿼리" 형태만 허용합니다.
-         허용  diet.html?keyword=%EB%8B%AD
+         허용  my-page.html, diet.html
          거부  https://evil.com, //evil.com, javascript:, login.html(순환)
      ========================================================== */
 

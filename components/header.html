@@ -42,16 +42,6 @@
 
     <!-- 우측 액션 -->
     <div class="site-header__actions">
-      <!-- 통합 검색
-           검색 UI 는 홈 히어로에 하나만 둡니다 (페이지마다 만들면 유지보수 2배)
-           헤더 아이콘은 어느 페이지에서든 그 검색바로 데려다주는 지름길
-           ?focus=search 를 받으면 index.js 가 검색창에 포커스를 줌 -->
-      <a class="icon-btn" id="header-search-btn" href="./index.html?focus=search" aria-label="검색">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
-        </svg>
-      </a>
-
       <!-- layout.js 의 renderAuthState() 가 로그인 상태에 따라 둘 중 하나만 노출 -->
       <!-- 헤더 밴드가 primary 색이므로 btn--primary 대신 반전 버튼을 씀 -->
       <a href="./login.html" class="btn btn--on-header btn--sm" id="header-login-btn">로그인</a>

@@ -42,13 +42,27 @@
   "use strict";
 
   /* ==========================================================
-     설정
+     설정 - API 서버 주소 (환경 자동 감지)
 
-     API 서버가 같은 오리진이면 BASE_URL 을 빈 문자열로 둠
-     별도 도메인에 배포했다면 여기만 바꾸면 전 페이지에 적용됨
-       예: "https://api.tomopet.com"
+     로컬(localhost)에서 열면 -> 로컬 백엔드(스프링부트 :8080)로 요청
+     배포 주소에서 열면      -> 아래 DEPLOY_API_URL 로 요청
+
+     [확인 필요] Railway 배포가 끝나면 DEPLOY_API_URL 에
+     실제 주소를 넣을 것 (예: "https://tomopet.up.railway.app")
+     비어 있는 동안 배포본은 같은 오리진(/api -> 404)으로 동작하며
+     각 화면이 빈 상태로 처리하므로 깨지지는 않음
+
+     백엔드 포트가 8080 이 아니면 LOCAL_API_URL 만 바꾸면 됨
+     검색 키워드: API 주소, 백엔드 연결, 서버 주소, 포트
      ========================================================== */
-  var BASE_URL = "";
+  var LOCAL_API_URL = "http://localhost:8080";
+  var DEPLOY_API_URL = "";
+
+  var BASE_URL =
+    ["localhost", "127.0.0.1"].includes(window.location.hostname)
+      ? LOCAL_API_URL
+      : DEPLOY_API_URL;
+
   var DEFAULT_TIMEOUT = 10000;
 
 

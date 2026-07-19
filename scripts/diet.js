@@ -1,6 +1,6 @@
 /* ============================================================
    TOMOPET | scripts/diet.js
-   검색 키워드: 식단, 음식 검색, 급여, 칼로리, 기록 저장, 분석, 모달, 키워드 자동 검색
+   검색 키워드: 식단, 음식 검색, 급여, 칼로리, 기록 저장, 분석, 모달
    식단 균형 분석
 
    README 4번 REST API 표준 문법을 따릅니다.
@@ -437,31 +437,6 @@
     $("food-search").focus();
   }
 
-  /* ==========================================================
-     홈 통합 검색 연결
-
-     index.html 검색바가 diet.html?keyword= 로 넘어옵니다.
-     모달을 열고 키워드를 채운 뒤 바로 조회합니다.
-
-     처리 후 URL 에서 keyword 를 지웁니다.
-       남겨두면 새로고침할 때마다 모달이 다시 열림
-     ========================================================== */
-
-  function applyKeywordFromUrl() {
-    var params = new URLSearchParams(window.location.search);
-    var keyword = (params.get("keyword") || "").trim();
-    if (!keyword) return;
-
-    /* 새로고침 시 재실행 방지 - 주소만 바꾸고 이동은 하지 않음 */
-    window.history.replaceState(null, "", window.location.pathname);
-
-    if (keyword.length < MIN_KEYWORD_LENGTH) return;
-
-    openFoodModal();
-    $("food-search").value = keyword;
-    searchFood(keyword);
-  }
-
   function initFoodModal() {
     var modal = $("food-modal");
     var form = $("food-form");
@@ -552,11 +527,6 @@
     });
 
     var hasPet = await loadPets();
-    if (hasPet) {
-      loadLog();
-      /* 아이가 없으면 기록 자체가 성립하지 않으므로
-         빈 상태("아이 등록하기")를 가리지 않도록 모달을 열지 않음 */
-      applyKeywordFromUrl();
-    }
+    if (hasPet) loadLog();
   });
 })();
