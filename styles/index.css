@@ -176,7 +176,10 @@
 
 .home-section__head {
   display: flex;
-  align-items: baseline;
+  /* baseline 은 링크 안의 화살표 svg 때문에 기준선이 틀어져
+     제목과 "전체보기"가 어긋나 보였음 - 크기가 다른 두 요소는
+     세로 중앙으로 맞추는 것이 시각적으로 안정적 */
+  align-items: center;
   justify-content: space-between;
   gap: var(--spacing-md);
   margin-bottom: var(--spacing-md);
@@ -186,6 +189,11 @@
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   color: var(--color-deep);
+}
+
+/* 제목 없이 링크만 있을 때 - 우측 정렬 유지 */
+.home-section__head--more-only {
+  justify-content: flex-end;
 }
 
 .home-section__more {

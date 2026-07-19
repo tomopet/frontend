@@ -160,8 +160,10 @@
          ======================================================== -->
     <section class="home-section" aria-labelledby="popular-posts-title">
       <div class="container">
-        <div class="home-section__head">
-          <h2 class="home-section__title" id="popular-posts-title">인기 밥상</h2>
+        <div class="home-section__head home-section__head--more-only">
+          <!-- 제목은 화면에서 숨김 - 카드만으로 충분하다는 판단
+               스크린리더용으로는 유지 (섹션 aria-labelledby 가 참조) -->
+          <h2 class="sr-only" id="popular-posts-title">인기 밥상</h2>
           <a class="home-section__more" href="./community.html">
             전체보기
             <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
