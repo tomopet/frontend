@@ -137,28 +137,26 @@
   place-items: center;
   width: 56px;
   height: 56px;
+  /* 테라코타 히어로 안이므로 아이콘도 테라코타로 통일
+     (세이지 계열 구분은 각 페이지 내부에서만 사용) */
   color: var(--color-primary-deep);
   /* 히어로 틴트 위이므로 흰색으로 반전 - 중성 틴트는 배경과 묻힘 */
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  transition: border-color var(--transition-fast);
+  transition: background-color var(--transition-fast);
 }
 
-/* 눌림 표현은 테두리 색 대신 배경 어둡게
-   틴트 배경(#FBEDE6) 위라 밝은 색 변화는 "라이트"처럼 떠 보였음
-   호버 -> 배경보다 한 단계 어둡게, 클릭 중 -> 한 단계 더 */
+/* 눌림 표현 - 어두운 테라코타 계열로 확실하게
+   호버: 히어로 배경(#FBEDE6)보다 뚜렷이 어두운 틴트
+   클릭 중: 한 단계 더 (누르고 있다는 감각) */
 .quick-item:hover .quick-item__icon {
-  background-color: var(--color-surface-alt);
+  background-color: #F3D8C5;
+  border-color: transparent;
 }
 
 .quick-item:active .quick-item__icon {
-  background-color: #E9D8C6;
-}
-
-/* 건강 계열 아이콘 - 세이지 (아이콘 색만 구분, 눌림 표현은 동일) */
-.quick-item__icon--accent {
-  color: var(--color-accent-deep);
+  background-color: #EAC3A8;
 }
 
 .quick-item__label {
