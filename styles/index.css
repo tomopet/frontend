@@ -174,15 +174,6 @@
   margin-bottom: var(--spacing-3xl);
 }
 
-/* 배경 밴드 - 페이지에 리듬을 만듦
-   히어로(테라코타 틴트) -> 바로가기(흰색) -> 밴드(중성 틴트) 순으로
-   섹션이 바뀔 때마다 배경이 교차해 단조로움을 깸 */
-.home-section--band {
-  padding-block: var(--spacing-2xl);
-  margin-bottom: var(--spacing-2xl);
-  background-color: var(--color-surface-alt);
-}
-
 .home-section__head {
   display: flex;
   align-items: baseline;
