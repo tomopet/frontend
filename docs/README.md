@@ -3,27 +3,16 @@
 > 토모펫 서비스 프론트엔드 저장소입니다. 
 > 본 저장소는 **HTML5, CSS3, Vanilla JavaScript**를 사용하여 개발을 진행합니다.
 
+**데스크톱 전용** — 최소 지원 폭 1024px, 미디어 쿼리 미사용
+
+> 협업 규칙 상세는 [CONTRIBUTING.md](./docs/CONTRIBUTING.md)
+> 남은 작업과 페이지별 주의점은 [ROADMAP.md](./docs/ROADMAP.md)
+> 색상·타이포·간격 등 디자인 토큰은 [DESIGN-SYSTEM.md](./docs/DESIGN-SYSTEM.md)
+
 ---
 
 ## 1. 프론트엔드 핵심 개발 일정표 (2026.07.09 ~ 2026.09.30)
 
-<<<<<<< HEAD
-> **지속 가능한 개발을 위해 기능별 퍼블리싱 직후 백엔드 API 연동을 주차별로 즉시 진행합니다.**
-
-| 주차 | 기간 (날짜) | 목표 작업 | 프론트엔드(FE) 세부 액션 플랜 |
-| :--- | :--- | :--- | :--- |
-| **기획** | **~ 07.09 (목)** | **디자인 확정** | 와이어프레임 및 디자인 시안 최종 확정 🏁 |
-| **1~2주차** | **07.10 (금) ~ 07.23 (목)** | **UI 레이아웃 기초** | 공통 UI 레이아웃(헤더, 푸터, 사이드바 등) 마크업 및 CSS 퍼블리싱 |
-| **3~4주차** | **07.24 (금) ~ 08.06 (목)** | **인증 및 회원** | 로그인 및 회원가입 화면 퍼블리싱 완료 ➡️ **백엔드 JWT 로그인 API 연동** |
-| **5~6주차** | **08.07 (금) ~ 08.20 (목)** | **반려견 관리** | 마이페이지 및 반려견 등록/수정 화면 퍼블리싱 ➡️ **반려견 CRUD API 연동** |
-| **7~8주차** | **08.21 (금) ~ 09.03 (목)** | **커뮤니티** | 커뮤니티(목록, 상세, 글쓰기) 화면 퍼블리싱 ➡️ **게시글/댓글/사진 업로드 API 연동** |
-| **9~10주차**| **09.04 (금) ~ 09.17 (목)** | **건강기록 & AI** | 대시보드(차트 라이브러리) 및 AI 채팅창 퍼블리싱 ➡️ **통계 및 챗봇 API 연동** |
-| **11~12주차**| **09.18 (금) ~ 09.30 (수)** | **종합 테스트** | 전체 UI/UX 디테일 수정, 프론트-백엔드 간 통합 에러 핸들링 및 **최종 마감** |
-
----
-
-## 2. 프론트엔드 코드 규칙 (Convention)
-=======
 지속 가능한 개발을 위해 기능별 퍼블리싱 직후 백엔드 API 연동을 주차별로 즉시 진행합니다.
 
 | 주차 | 기간 (날짜) | 목표 작업 | 프론트엔드(FE) 세부 액션 플랜 |
@@ -82,13 +71,21 @@ tomopet/
 ├── password-reset-confirm.html   비밀번호 재설정 2단계 (ㅇ)
 ├── terms.html                    이용약관 (ㅇ, 법률 검토 필요)
 ├── privacy.html                  개인정보처리방침 (ㅇ, 법률 검토 필요)
+├── my-page.html                  마이페이지 + 모달 6종 (ㅇ)
+├── diet.html                     식단 균형 분석 (ㅇ)
+├── community.html                커뮤니티 목록
+├── post-detail.html              게시글 상세
+├── post-write.html               글 작성 / 수정
+├── health-record.html            건강기록
+├── ai-chat.html                  AI 채팅
 │
+├── README.md                     이 문서 (저장소 첫 화면)
 ├── favicon.svg                   (ㅇ)
 ├── .gitignore                    Git 전용, 실행에 불필요
 ├── .nojekyll                     GitHub Pages 전용, 실행에 불필요
 │
 ├── assets/
-│   └── hero-bowl.svg             홈 히어로 임시 일러스트 (ㅇ)
+│   └── hero-dog.svg              홈 캐릭터 임시 일러스트 (ㅇ)
 │
 ├── components/                   전 페이지 공통 UI (ㅇ)
 │   ├── header.html
@@ -98,54 +95,49 @@ tomopet/
 │   ├── variables.css             전역 디자인 토큰 (ㅇ)
 │   ├── common.css                리셋 + 기반 스타일 (ㅇ)
 │   ├── components.css            공통 컴포넌트 (ㅇ)
-│   ├── index.css                 홈 전용 (ㅇ)
-│   ├── login.css                 로그인 전용 (ㅇ)
-│   ├── password-reset.css        재설정 2개 페이지 공용 (ㅇ)
-│   └── policy.css                terms + privacy 공용 (ㅇ)
+│   └── [페이지].css               페이지 전용
 │
-└── scripts/
-    ├── layout.js                 헤더/푸터 로더 + 인증 (필수) (ㅇ)
-    ├── api.js                    HTTP 통신 공통 모듈 (필수) (ㅇ)
-    ├── ui.js                     DOM/포맷 공통 모듈 (필수) (ㅇ)
-    ├── index.js                  홈 전용 (ㅇ)
-    ├── login.js                  로그인 전용 (ㅇ)
-    ├── password-reset.js         1단계 전용 (ㅇ)
-    └── password-reset-confirm.js 2단계 전용 (ㅇ)
+├── scripts/
+│   ├── layout.js                 헤더/푸터 로더 + 인증 (필수) (ㅇ)
+│   ├── api.js                    HTTP 통신 공통 모듈 (필수) (ㅇ)
+│   ├── ui.js                     DOM/포맷 공통 모듈 (필수) (ㅇ)
+│   └── [페이지].js                페이지 전용
+│
+└── docs/                         사이트에서 동작하지 않는 문서·템플릿
+    ├── CONTRIBUTING.md           협업 규칙
+    ├── ROADMAP.md                남은 작업
+    ├── DESIGN-SYSTEM.md          디자인 토큰
+    └── example/                  새 페이지 복사용 견본
+        ├── _example-page.html
+        ├── _example-page.css
+        └── _example-page.js
 ```
 
-이 저장소는 SG 담당 범위입니다.
-`community` `post-write` `post-detail` `health-record` `food-recommend`
-`food-detail` `ai-chat` `my-page` 는 협업자 담당이며 여기 포함되지 않습니다.
-헤더 메뉴에서 해당 링크를 클릭하면 404 가 발생합니다.
+### docs/ 는 사이트의 일부가 아닙니다
 
-**협업자는 시작 전에 [CONTRIBUTING.md 섹션 0](./CONTRIBUTING.md) 을 읽으세요.**
-같은 저장소에서 브랜치를 나눠 작업하고, 각자 페이지 파일 3종
-(`페이지.html` → 루트, `페이지.css` → `styles/`, `페이지.js` → `scripts/`)을 추가한 뒤
-PR 로 `main` 에 합칩니다.
+문서와 템플릿만 담습니다. 브라우저가 읽지 않습니다.
 
----
+`_examples/` 의 견본은 **루트 기준 경로**로 작성돼 있습니다.
+(`./styles/...`, `./scripts/...`) 그대로 열면 스타일이 적용되지 않는 것이 정상입니다.
+복사해서 아래 위치에 두면 동작합니다.
+
+```
+_examples/_example-page.html  →  community.html          (루트)
+_examples/_example-page.css   →  styles/community.css
+_examples/_example-page.js    →  scripts/community.js
+```
+
+### HTML 을 폴더로 나누지 않는 이유
+
+`components/header.html` 의 링크(`./community.html`)가 **보는 위치에 따라 달라지기 때문**입니다.
+`index.html` 은 GitHub Pages 진입점이라 루트에 있어야 하고,
+다른 페이지만 하위 폴더로 옮기면 헤더 하나로 두 위치를 모두 맞출 수 없습니다.
 
 ## 4. 프론트엔드 코드 규칙 (Convention)
->>>>>>> 1d3024b (feat: TOMOPET 프론트엔드 초기 구조)
 
 코드가 꼬이거나 스타일이 깨지는 것을 방지하기 위해 반드시 아래 규칙을 준수해 주세요.
 
 ### 파일 및 함수 네이밍 규칙
-<<<<<<< HEAD
-- **HTML/CSS/JS 파일명:** 전체 소문자와 하이픈(`-`)을 사용하는 **케밥 케이스(kebab-case)**
-  - *예시: `login.html`, `main-page.html`, `main.css`, `community.js`*
-- **자바스크립트 변수 및 함수명:** 소문자로 시작하는 **카멜 케이스(camelCase)**
-  - *예시: `const dogList = [];`, `function fetchDogData() {}`*
-- **CSS 클래스명:** 구조 파악이 쉬운 **BEM 방법론** 지향
-  - *예시: `.auth-container`, `.form-field__input`, `.btn--primary`*
-
-### REST API 통신 표준 문법 (3주차부터 필수 사용)
-리액트 없이 순수 자바스크립트로 백엔드와 안전하게 통신하기 위한 약속입니다.
-
-#### 1. 백엔드 데이터 요청 (`fetch` + `async/await`)
-```javascript
-// 예시: 서버로부터 반려견 목록을 받아오는 표준 구조
-=======
 
 **HTML/CSS/JS 파일명**: 전체 소문자와 하이픈(`-`)을 사용하는 **케밥 케이스(kebab-case)**
 
@@ -159,8 +151,8 @@ login.html, index.html, index.css, community.js, password-reset-confirm.js
 **자바스크립트 변수 및 함수명**: 소문자로 시작하는 **카멜 케이스(camelCase)**
 
 ```js
-const dogList = [];
-function fetchDogData() {}
+const petList = [];
+function fetchPetData() {}
 ```
 
 **CSS 클래스명**: 구조 파악이 쉬운 **BEM 방법론** 지향
@@ -182,24 +174,17 @@ function fetchDogData() {}
 
 ```js
 // 서버로부터 반려견 목록을 받아오는 표준 구조
->>>>>>> 1d3024b (feat: TOMOPET 프론트엔드 초기 구조)
-async function fetchDogs() {
+async function fetchPets() {
     try {
-        const response = await fetch('/api/dogs'); // 백엔드 API 주소
+        const response = await fetch('/api/pets'); // 백엔드 API 주소
         if (!response.ok) throw new Error('네트워크 응답 플래그 에러');
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> 1d3024b (feat: TOMOPET 프론트엔드 초기 구조)
         const data = await response.json(); // JSON 데이터 변환
-        displayDogs(data); // 화면 렌더링 함수 호출
+        displayPets(data); // 화면 렌더링 함수 호출
     } catch (error) {
         console.error("데이터 로딩 실패:", error);
     }
 }
-<<<<<<< HEAD
-=======
 ```
 
 #### `scripts/api.js` 가 위 구조를 구현합니다
@@ -212,10 +197,10 @@ async function fetchDogs() {
 
 ```js
 // 표준 구조 그대로. fetch 자리에 Api.get 이 들어갈 뿐입니다.
-async function loadDogs() {
+async function loadPets() {
     try {
-        const data = await Api.get('/api/dogs');
-        displayDogs(data);
+        const data = await Api.get('/api/pets');
+        displayPets(data);
     } catch (error) {
         console.error("데이터 로딩 실패:", error);
     }
@@ -363,41 +348,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 ## 7. 사용 중인 API 엔드포인트
 
-### 프론트가 이미 호출 중 (없으면 빈 상태로 렌더링됨)
+전체 엔드포인트 명세·응답 필드·상태코드 규약은
+**`docs/INTEGRATION-CHECKLIST.md`** 한 곳에서만 관리합니다.
+(여기와 ROADMAP 에 사본을 두면 셋이 서로 어긋나는 사고가 납니다)
 
-```
-POST  /api/auth/login                    { email, password }
-                                         -> { accessToken, user }
-POST  /api/auth/signup                   { nickname, email, password, agreeMarketing }
-                                         -> 201
-                                            409 { field: "email" | "nickname" }
+프론트 코드에서 기억할 것 두 가지:
 
-POST  /api/auth/password/reset-request   { email } -> 200 (미가입 이메일도 200)
-GET   /api/auth/password/verify-token?token=xxx   -> 200 / 400 / 410
-POST  /api/auth/password/reset           { token, newPassword } -> 200 / 410
-
-GET   /api/stats                         -> { recipeCount, memberCount, dogCount }
-GET   /api/posts?sort=popular&limit=3
-GET   /api/food?limit=3
-```
-
-### 응답 필드 이름
-
-```
-게시글  postId, title, thumbnailUrl, authorNickname, likeCount, category
-사료    foodId, name, brand, price, imageUrl
-통계    recipeCount, memberCount, dogCount
-```
-
-`category` 는 `"gallery" | "recipe" | "free"` 셋 중 하나입니다.
-목록은 배열 또는 `{ items: [...] }` 어느 쪽이든 `Api.toList(data)` 가 정규화합니다.
-
-### 비밀번호 재설정 보안 요구사항
-
-1. **계정 열거 방지** — 가입되지 않은 이메일이어도 항상 `200` 을 반환할 것
-2. **토큰은 30분 1회용** — 재사용 시 `410`
-3. **변경 후 기존 세션 전부 무효화**
-4. **재발송 쿨다운** — 프론트의 60초 제한을 서버에서도 강제할 것
+- 인증 헤더는 `api.js` 가 자동으로 붙임 (`Authorization: Bearer`)
+- 목록 응답은 배열/`{ items: [...] }` 어느 쪽이든 `Api.toList(data)` 로 정규화해서 쓸 것
 
 ---
 
@@ -434,8 +392,8 @@ GET   /api/food?limit=3
 
 | 색 | 용도 | 비율 |
 |---|---|---|
-| Primary 테라코타 `#E8845F` | 메인 CTA, 활성 상태, 링크 | 70% |
-| Accent 세이지 `#567F63` | 안전/정상 상태, AI 기능, 레시피 | 20% |
+| Primary 테라코타 `#F2701F` | 메인 CTA, 활성 상태, 링크 | 70% |
+| Accent 세이지 `#1F7A52` | 안전/정상 상태, AI 기능, 레시피 | 20% |
 | Deep `#2E2019` | 푸터 배경, 히어로 타이틀 | 10% |
 
 `--color-success` 를 액센트와 같은 계열로 맞춰
@@ -454,8 +412,8 @@ GET   /api/food?limit=3
 ### primary 배경 위에는 흰 글자를 쓰지 마세요
 
 ```
-흰 글자 on #E8845F   2.66:1   WCAG 미달
-딥 글자 on #E8845F   5.91:1   통과
+흰 글자 on #F2701F   2.66:1   WCAG 미달
+딥 글자 on #F2701F   5.91:1   통과
 ```
 
 ```css
@@ -506,7 +464,7 @@ SIL Open Font License 라 상업적 이용과 웹 배포 모두 자유롭습니�
 
 ---
 
-## 12. 백엔드 연동 시 지켜야 할 3가지
+## 12. API 연동 시 프론트가 지켜야 할 3가지
 
 ### 1. 폼은 반드시 submit 이벤트에 바인딩
 
@@ -576,6 +534,11 @@ Ui.setLoading(submitBtn, true, "저장 중...");
 
 ## 14. 주석 표기 규칙
 
+모든 파일 머리에 `검색 키워드:` 줄이 있습니다.
+찾고 싶은 기능이 있으면 에디터 전체 검색(Ctrl+Shift+F)에
+**한글 기능명**(예: "이메일 인증", "스켈레톤", "토스트")을 치면 해당 파일이 나옵니다.
+
+
 | 표기 | 의미 |
 |---|---|
 | `[공통]` | 모든 페이지에 적용되는 항목 |
@@ -608,7 +571,6 @@ Pages 는 정적 호스팅이라 Spring Boot 를 구동할 수 없습니다.
 |---|---|
 | 홈 통계 | `-` 유지 |
 | 인기 밥상 | 빈 상태 + "글 쓰러 가기" 버튼 |
-| 사료 추천 | 빈 상태 + "아이 등록하기" 버튼 |
 | 로그인 시도 | "서버에 연결할 수 없습니다" 배너 |
 
 ---
@@ -628,13 +590,15 @@ JS 가 꺼지면 네비게이션과 가입 폼에 접근할 수 없습니다.
 - 위탁 업체명 (클라우드 · 메일 · AI)
 - 고객센터 실제 메일 주소
 
-### 히어로 이미지는 임시 일러스트입니다
+### 홈 캐릭터는 임시 일러스트입니다
 
-`assets/hero-bowl.svg` 를 실제 사진으로 교체하는 것을 권장합니다.
-`.thumb` 이 4:5 세로 비율입니다.
+`assets/hero-dog.svg` 는 직접 그린 임시 캐릭터입니다.
+자체 캐릭터로 교체를 권장합니다.
+
+**다른 서비스의 캐릭터를 가져다 쓰면 저작권 침해가 됩니다.**
+직접 그리거나 라이선스가 확인된 소재를 쓰세요.
 
 ### 배포 후 OG 메타 수정 필요
 
 `index.html` 의 `og:url` 과 `og:image` 를 실제 배포 주소로 바꿔야
 링크 공유 시 미리보기 카드가 표시됩니다.
->>>>>>> 1d3024b (feat: TOMOPET 프론트엔드 초기 구조)

@@ -1,0 +1,427 @@
+/* ============================================================
+   TOMOPET | styles/diet.css
+   검색 키워드: 식단, 음식 검색 모달, 칼로리, 기록 목록
+   식단 균형 분석 전용
+
+   로드 순서: variables -> common -> components -> diet
+
+   모달, 폼 필드, 버튼, 빈 상태는 components.css 의
+   공통 클래스를 그대로 사용하므로 여기서 다시 정의하지 않음
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   선택 바 - 아이 + 날짜
+   ------------------------------------------------------------ */
+
+.diet-bar {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.diet-bar__field {
+  min-width: 180px;
+}
+
+
+/* ------------------------------------------------------------
+   2열 레이아웃 - 기록 | 분석
+   ------------------------------------------------------------ */
+
+.diet-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: var(--spacing-lg);
+  align-items: start;
+}
+
+.diet-panel {
+  padding: var(--spacing-lg);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.diet-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.diet-panel__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-deep);
+}
+
+.diet-panel__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+}
+
+.diet-total__label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* 합계는 정적 수치이므로 브랜드 색을 쓰지 않음 (클릭 오인 방지) */
+.diet-total__value {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* ------------------------------------------------------------
+   급여 기록 목록
+   ------------------------------------------------------------ */
+
+.food-log {
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+.food-log__item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-md);
+}
+
+/* 금지 식품이 섞인 항목 - 색 + 테두리 + 아이콘 3중 표시 */
+.food-log__item--toxic {
+  background-color: var(--color-danger-bg);
+  box-shadow: inset 0 0 0 1px var(--color-danger);
+}
+
+.food-log__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.food-log__name {
+  display: block;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.food-log__meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.food-log__calories {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+.food-log__remove {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.food-log__remove:hover {
+  color: var(--color-danger);
+  background-color: var(--color-danger-bg);
+}
+
+
+/* ------------------------------------------------------------
+   금지 식품 경고
+
+   양과 무관하게 위험하므로 균형 점수보다 위에 배치함
+   ------------------------------------------------------------ */
+
+.toxic-warning {
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background-color: var(--color-danger-bg);
+  border-radius: var(--radius-md);
+  box-shadow: inset 0 0 0 1.5px var(--color-danger);
+}
+
+.toxic-warning__title {
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-danger);
+}
+
+.toxic-warning__list {
+  display: grid;
+  gap: var(--spacing-2xs);
+  margin-bottom: var(--spacing-xs);
+}
+
+.toxic-warning__item {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-base);
+  color: var(--color-text);
+}
+
+.toxic-warning__name {
+  font-weight: var(--font-weight-semibold);
+}
+
+.toxic-warning__note {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+
+/* ------------------------------------------------------------
+   칼로리 / 영양소 지표
+   ------------------------------------------------------------ */
+
+.metric {
+  margin-bottom: var(--spacing-lg);
+}
+
+.metric__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-xs);
+}
+
+.metric__label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.metric__value {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+.metric__hint {
+  margin-top: var(--spacing-2xs);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+
+/* 게이지 */
+.gauge {
+  height: 8px;
+  overflow: hidden;
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-full);
+}
+
+.gauge__fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  background-color: var(--color-accent);
+  border-radius: var(--radius-full);
+  transition: width var(--transition-base);
+}
+
+/* 부족/과다 - 색만으로 구분하지 않도록 metric__hint 에 텍스트를 함께 표시함 */
+.gauge__fill--low {
+  background-color: var(--color-warning);
+}
+
+.gauge__fill--over {
+  background-color: var(--color-danger);
+}
+
+
+/* ------------------------------------------------------------
+   영양소 목록
+   ------------------------------------------------------------ */
+
+.nutrient-list {
+  display: grid;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.nutrient-item__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-2xs);
+}
+
+.nutrient-item__label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.nutrient-item__value {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* ------------------------------------------------------------
+   종합 점수
+   ------------------------------------------------------------ */
+
+.score {
+  padding: var(--spacing-md);
+  text-align: center;
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-md);
+}
+
+.score__label {
+  display: block;
+  margin-bottom: var(--spacing-2xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.score__value {
+  display: block;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+.score__hint {
+  margin-top: var(--spacing-2xs);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+
+/* ------------------------------------------------------------
+   음식 검색 결과 - 모달 안
+   ------------------------------------------------------------ */
+
+.food-result {
+  display: grid;
+  gap: var(--spacing-2xs);
+  max-height: 220px;
+  margin-bottom: var(--spacing-md);
+  overflow-y: auto;
+}
+
+.food-result__button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  width: 100%;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  text-align: left;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.food-result__button:hover {
+  background-color: var(--color-surface-alt);
+  border-color: var(--color-border-strong);
+}
+
+.food-result__button.is-selected {
+  color: var(--color-primary-deep);
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary);
+}
+
+.food-result__meta {
+  flex-shrink: 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 금지 식품 - 검색 단계에서 미리 알림 */
+.food-result__toxic {
+  flex-shrink: 0;
+  padding: 0 var(--spacing-2xs);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-danger);
+  background-color: var(--color-danger-bg);
+  border-radius: var(--radius-full);
+}
+
+.food-result__empty {
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+
+/* 선택한 음식 */
+.food-picked {
+  padding: var(--spacing-md);
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-md);
+}
+
+.food-picked__info {
+  margin-bottom: var(--spacing-sm);
+}
+
+.food-picked__name {
+  display: block;
+  font-size: var(--font-size-md);
+  color: var(--color-deep);
+}
+
+.food-picked__meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* ------------------------------------------------------------
+   하단 안내
+   ------------------------------------------------------------ */
+
+.diet-disclaimer {
+  margin-top: var(--spacing-xl);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-base);
+  color: var(--color-text-muted);
+  text-align: center;
+}

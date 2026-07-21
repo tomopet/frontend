@@ -1,0 +1,295 @@
+
+<!DOCTYPE html>
+<!-- ============================================================
+     TOMOPET | health-record.html
+     검색 키워드: 건강기록, 차트, 대시보드
+     반려견 건강 기록 및 체중 변화 대시보드 페이지 (협업자 담당)
+
+     담당: 협업자
+     의존 스크립트
+       layout.js   즉시 실행 — window.TomopetAuth 정의
+       Chart.js    CDN — layout.js 뒤, 페이지 스크립트 앞
+       api.js      defer — window.TomopetApi 정의
+       ui.js       defer — window.TomopetUi 정의
+       health-record-01.js  defer — 페이지 전용
+
+     연동 엔드포인트
+       GET  /api/pets/:petId/health/latest    최근 건강 기록
+       GET  /api/pets/:petId/health/records   기록 목록
+       POST /api/pets/:petId/health/records   새 기록 추가
+       GET  /api/pets/:petId/health/alerts    이상 징후 알림
+     ============================================================ -->
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <!-- 데스크톱 전용 - 최소 지원 폭 1024px -->
+  <meta name="viewport" content="width=1024">
+  <meta name="description" content="TOMOPET 강아지 건강 기록 대시보드">
+  <title>건강기록 | TOMOPET</title>
+
+  <!-- [공통] 파비콘 - 없으면 favicon.ico 404 발생 -->
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+
+  <!-- [공통] 전역 스타일 - 로드 순서 고정
+       variables.css 가 먼저 와야 var(--color-primary) 등이 해석됨 -->
+  <link rel="stylesheet" href="./styles/variables.css">
+  <link rel="stylesheet" href="./styles/common.css">
+  <link rel="stylesheet" href="./styles/components.css">
+  <!-- 페이지 전용 스타일 -->
+  <link rel="stylesheet" href="./styles/health-record.css">
+</head>
+<body>
+
+  <!-- [공통] 본문 바로가기 - 키보드 접근성 (Tab 첫 포커스) -->
+  <a href="#main-content" class="skip-link">본문 바로가기</a>
+
+  <!-- [공통] 헤더 - layout.js 가 components/header.html 을 삽입 -->
+  <div id="header-placeholder"></div>
+
+  
+  <!-- 메인 컨텐츠 영역 -->
+  <main class="site-main" id="main-content" role="main">
+
+    <!-- [공통] 다른 페이지와 좌우 여백을 맞추기 위한 컨테이너
+         .container 가 max-width 1200px + 좌우 패딩을 담당함 -->
+    <div class="container">
+
+      <!-- 페이지 헤더: 제목 + 반려견 선택 + 새 기록 추가 버튼 -->
+      <header class="page-head">
+        <div>
+          <p class="page-head__eyebrow">HEALTH RECORD</p>
+          <h1>건강기록</h1>
+          <p class="page-head__desc">체중 변화와 최근 건강 기록을 한 화면에서 확인합니다.</p>
+        </div>
+        <div class="page-head__actions">
+          <!-- 반려견 전환 — health-record-01.js 의 pet-select change 이벤트와 연결 -->
+          <label class="sr-only" for="pet-select">반려견 선택</label>
+          <select class="pet-select" id="pet-select">
+            <option value="1">토모 · 5살</option>
+            <option value="2">보리 · 3살</option>
+          </select>
+          <button class="btn btn--primary" id="open-record-dialog" type="button">새 기록 추가</button>
+        </div>
+      </header>
+
+      <!-- ============================================================
+           대시보드 요약 섹션
+           ─ 체중 변화 차트 (chart-panel)
+           ─ 최근 단일 기록 요약 (summary-panel)
+           ─ 이상 징후 알림 (alert-panel, 기본 hidden)
+           ============================================================ -->
+      <section class="health-overview health-overview--classic" aria-label="건강 현황 요약">
+
+        <!-- 체중 변화 차트 패널 -->
+        <article class="panel chart-panel">
+          <div class="panel__head">
+            <div>
+              <h2 class="panel__title">최근 8주 체중 변화</h2>
+              <span class="panel__meta">kg · 측정일 기준</span>
+            </div>
+            <!-- 기간 탭 — health-record-01.js 의 period-tab click 이벤트와 연결 -->
+            <div class="period-tabs" role="group" aria-label="차트 기간 선택">
+              <button class="period-tab" data-period="4" type="button">4주</button>
+              <button class="period-tab is-active" data-period="8" type="button">8주</button>
+              <button class="period-tab" data-period="12" type="button">12주</button>
+            </div>
+          </div>
+          <!-- [접근성] canvas 에 aria-label 부여 -->
+          <div class="chart-wrap">
+            <canvas id="weight-chart" aria-label="체중 변화 차트" role="img"></canvas>
+          </div>
+        </article>
+
+        <!-- 최근 단일 기록 요약 패널
+             health-record-01.js 의 renderLatestSummary() 가 값을 채움 -->
+        <article class="panel summary-panel" aria-labelledby="latest-title">
+          <div class="pet-profile">
+            <div class="pet-profile__avatar" aria-hidden="true">🐶</div>
+            <div>
+              <h2 class="pet-profile__name" id="latest-title">최근 기록</h2>
+              <p class="pet-profile__info" id="latest-date">-</p>
+            </div>
+          </div>
+          <div class="metric-list">
+            <div class="metric-row">
+              <span class="metric-row__label">체중</span>
+              <span class="metric-row__value" id="latest-weight">-</span>
+            </div>
+            <!-- 섭취 칼로리는 여기서 입력받지 않음
+                 식단분석(diet.html)에 기록한 사료 + 간식 + 사람음식을 합산한 값
+                 [추후 적용] health-record.js 가 GET /api/diet/log 로 읽어와 채움 -->
+            <div class="metric-row">
+              <span class="metric-row__label">오늘 섭취</span>
+              <span class="metric-row__value" id="latest-calories">-</span>
+            </div>
+            <div class="metric-row">
+              <span class="metric-row__label">배변</span>
+              <div id="latest-poop-container"></div>
+            </div>
+            <div class="metric-row">
+              <span class="metric-row__label">컨디션</span>
+              <div id="latest-condition-container"></div>
+            </div>
+          </div>
+
+        <!-- 먹은 것은 여기서 기록하지 않음 - 식단분석으로 유도 -->
+        <a class="btn btn--secondary btn--sm btn--full" href="./diet.html">식단 기록하러 가기</a>
+
+        </article>
+
+        <!-- 이상 징후 알림 패널
+             [API 연동] GET /api/pets/:petId/health/alerts 응답이 있을 때만 노출
+             응답이 없으면 hidden 유지 -->
+        <article class="panel alert-panel" aria-labelledby="alert-title"
+                 id="health-alert-box">
+          <div class="alert-panel__icon" aria-hidden="true">!</div>
+          <div class="alert-panel__body">
+            <h2 class="alert-panel__title" id="alert-title">확인할 변화</h2>
+            <!-- 사용자 데이터이므로 JS 에서 textContent 로만 삽입 -->
+            <p class="alert-panel__text" id="health-alert-text">-</p>
+          </div>
+          <span class="status-chip status-chip--caution">주의</span>
+        </article>
+      </section>
+
+      <!-- ============================================================
+           전체 건강 기록 목록 테이블 섹션
+           ─ 필터 셀렉트로 전체 / 주의 / 정상 기록 전환
+           ─ 기록이 없으면 .empty-state 노출
+           ============================================================ -->
+      <section class="panel records-panel records-panel--table"
+               aria-labelledby="records-title">
+        <div class="panel__head">
+          <div>
+            <h2 class="panel__title" id="records-title">건강 기록</h2>
+            <span class="panel__meta">체중 · 식사량 · 배변 · 컨디션</span>
+          </div>
+          <div class="records-toolbar">
+            <!-- [접근성] 셀렉트에 sr-only label 연결 -->
+            <label class="sr-only" for="record-filter">기록 상태 필터</label>
+            <select class="filter-select" id="record-filter">
+              <option value="all">전체 기록</option>
+              <option value="caution">주의 기록</option>
+              <option value="normal">정상 기록</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 테이블 뷰 — renderTableRecords() 가 tbody 를 채움 -->
+        <table class="records-table">
+          <thead>
+            <tr>
+              <th>측정일</th>
+              <th>체중</th>
+              <th>식사량</th>
+              <th>배변</th>
+              <th>컨디션</th>
+            </tr>
+          </thead>
+          <tbody id="health-record-list"></tbody>
+        </table>
+
+        <!-- [추후 적용] 모바일 등 대체용 타임라인 리스트 -->
+        <div class="timeline-list" id="health-record-timeline" hidden></div>
+
+        <!-- 기록이 비어 있을 때 표시 — 행동 버튼 반드시 포함 -->
+        <div class="empty-state" id="health-record-empty" hidden>
+          <div>
+            <p class="empty-state__title">기록이 없습니다</p>
+            <p class="empty-state__desc">첫 건강 기록을 추가하세요.</p>
+            <button class="btn btn--primary" id="empty-add-record" type="button">
+              새 기록 추가
+            </button>
+          </div>
+        </div>
+      </section>
+  </div>
+
+  </main>
+
+  <!-- ============================================================
+       기록 추가 모달 대화상자
+       [API 연동] POST /api/pets/:petId/health/records
+       요청 본문 { date, weight, meal, poop, condition, note }
+       ============================================================ -->
+  <dialog class="health-dialog" id="record-dialog">
+    <form class="record-form" id="health-form" novalidate>
+      <div class="record-form__head">
+        <div>
+          <p class="page-head__eyebrow">NEW RECORD</p>
+          <h2>건강 기록 추가</h2>
+        </div>
+        <!-- [접근성] 닫기 버튼에 aria-label 부여 -->
+        <button class="record-form__close" id="close-record-dialog"
+                type="button" aria-label="닫기">×</button>
+      </div>
+
+      <div class="record-grid">
+        <div class="form-field">
+          <label class="form-field__label" for="record-date">측정일</label>
+          <input class="form-field__input" id="record-date" name="date" type="date" required>
+        </div>
+        <div class="form-field">
+          <label class="form-field__label" for="record-weight">체중(kg)</label>
+          <input class="form-field__input" id="record-weight" name="weight" type="number"
+                 min="0.1" step="0.1" required placeholder="0.0">
+        </div>
+        <div class="form-field">
+          <label class="form-field__label" for="record-poop">배변</label>
+          <select class="form-field__select" id="record-poop" name="poop">
+            <option value="정상">정상</option>
+            <option value="묽음">묽음</option>
+            <option value="딱딱함">딱딱함</option>
+          </select>
+        </div>
+        <div class="form-field form-field--full">
+          <label class="form-field__label" for="record-condition">컨디션</label>
+          <select class="form-field__select" id="record-condition" name="condition">
+            <option value="양호">양호</option>
+            <option value="보통">보통</option>
+            <option value="저하">저하</option>
+          </select>
+        </div>
+        <div class="form-field form-field--full">
+          <label class="form-field__label" for="record-note">메모</label>
+          <!-- 사용자 입력 — JS 에서 textContent 로만 렌더링 -->
+          <textarea class="form-field__textarea" id="record-note" name="note"
+                    placeholder="특이사항이나 관찰한 내용을 적어주세요."></textarea>
+        </div>
+      </div>
+
+      <!-- 서버 응답 메시지 - 성공/실패 인라인 알림 -->
+      <p class="form-message" id="form-message" aria-live="polite"></p>
+
+      <div class="record-form__actions">
+        <button class="btn btn--ghost" id="cancel-record" type="button">취소</button>
+        <!-- 제출 중 disabled 처리 — Ui.setLoading() 사용 -->
+        <button class="btn btn--primary" id="submit-record" type="submit">기록 저장</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- [공통] 푸터 - layout.js 가 components/footer.html 을 삽입 -->
+  <div id="footer-placeholder"></div>
+
+  <!-- ============================================================
+       [공통] 스크립트 - 로드 순서 고정
+
+       layout.js      defer 없이 즉시 실행. window.TomopetAuth 정의
+       Chart.js       layout.js 뒤, 페이지 스크립트 앞 로드 (CDN)
+       api.js         defer. window.TomopetApi 정의 (TomopetAuth 의존)
+       ui.js          defer. window.TomopetUi 정의
+       [페이지].js     defer. 위 세 모듈 및 Chart.js 를 사용
+
+       defer 스크립트는 문서 순서대로 실행되므로
+       페이지 스크립트가 실행될 때 세 모듈이 모두 준비되어 있음
+       ============================================================ -->
+  <script src="./scripts/layout.js"></script>
+  <!-- Chart.js — layout.js 뒤, api.js 앞에 위치해야 차트 초기화 보장 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
+  <script src="./scripts/api.js" defer></script>
+  <script src="./scripts/ui.js" defer></script>
+  <!-- 페이지 전용 스크립트 -->
+  <script src="./scripts/health-record.js" defer></script>
+</body>
+</html>

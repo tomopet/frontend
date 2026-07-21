@@ -1,245 +1,260 @@
 /* ============================================================
-   TOMOPET | index.css
-   메인(홈) 페이지 전용 스타일
-   적용 범위: index.html
+   TOMOPET | styles/index.css
+   검색 키워드: 홈, 히어로, 검색바, 검색 패널, 검색어 칩, 바로가기, 통계, 캐릭터 비주얼
+   홈 전용
+
+   로드 순서: variables -> common -> components -> index
+
+   중앙 단일 컬럼 구조입니다.
+   검색이 유일한 주요 액션이 되도록 그 주변을 비우고 색을 절제했습니다.
    ============================================================ */
 
 
-/* ------------------------------------------------------------
-   히어로
-   ------------------------------------------------------------ */
-/* 컨테이너 밖까지 배경을 채우기 위해 음수 마진 사용
-   그라데이션은 히어로에만 적용 - 여러 곳에 쓰면 산만해짐 */
-.hero {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  align-items: center;
-  gap: var(--spacing-2xl);
-  margin-inline: calc(var(--spacing-lg) * -1);
-  padding: var(--spacing-3xl) var(--spacing-lg);
-  background: linear-gradient(135deg,
-              var(--color-bg) 0%,
-              var(--color-primary-light) 100%);
-  border-radius: var(--radius-xl);
-  overflow: hidden;
+/* 히어로가 헤더 바로 아래에서 시작하도록 site-main 의 기본 여백을 제거 */
+.site-main--flush {
+  padding-top: 0;
 }
 
-/* 좌측 세로 바로 시선 유도 */
-.hero__eyebrow {
-  position: relative;
-  margin-bottom: var(--spacing-sm);
-  padding-left: var(--spacing-sm);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.02em;
+
+/* ------------------------------------------------------------
+   히어로 - 슬로건 + 캐릭터 + 검색
+   ------------------------------------------------------------ */
+
+/* 검색 섹션 - 틴트 밴드
+   본문이 순백이라 검색 영역에 색을 깔아 시선을 모음
+   헤더(진한 브랜드 색) → 히어로(연한 틴트) → 본문(흰색) 순으로 옅어짐 */
+.hero {
+  padding-top: var(--spacing-3xl);
+  padding-bottom: var(--spacing-2xl);
+  background-color: var(--color-primary-light);
+}
+
+.hero__inner {
+  text-align: center;
+}
+
+.hero__title {
+  margin-bottom: var(--spacing-lg);
+  /* 18px regular 은 페이지의 첫 문장치고 존재감이 없었음
+     32px bold 로 "어디를 봐야 하는지"를 명확히 함 */
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  /* 틴트 배경 위이므로 secondary 대신 deep 계열을 씀 */
   color: var(--color-primary-deep);
 }
 
-/* 순수 장식 요소
-   브랜드 색은 클릭 가능한 것에만 쓴다는 규칙에 따라
-   현재 텍스트 색을 그대로 물려받음 */
-.hero__eyebrow::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  translate: 0 -50%;
-  width: 3px;
-  height: 14px;
-  background-color: currentColor;
-  border-radius: var(--radius-full);
-  opacity: 0.5;
-}
-
-/* 40px + 타이트한 자간/행간
-   본문(14px)과 3배 가까이 벌려야 위계가 명확히 보임 */
-.hero__title {
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-bold);
-  line-height: 1.18;
-  letter-spacing: -0.035em;
-  color: var(--color-deep);
-}
-
-.hero__desc {
-  margin-top: var(--spacing-sm);
-  font-size: var(--font-size-lg);
-  line-height: var(--line-height-loose);
-  color: var(--color-text-secondary);
-}
-
-.hero__cta {
-  display: flex;
-  gap: var(--spacing-xs);
-  margin-top: var(--spacing-lg);
-}
-
-/* 정사각형 이미지를 우측에 놓는 배치는 랜딩페이지 클리셰
-   세로 비율 + 미세한 회전으로 손으로 놓은 사진처럼 보이게 함 */
+/* 캐릭터 비주얼 - 핏펫 아이콘처럼 작고 귀엽게
+   타이틀과 검색 사이에서 숨 고르는 역할이라 크지 않아도 됨
+   실사/일러스트는 hero__visual-img 로 넣으면 원을 꽉 채움 */
 .hero__visual {
   position: relative;
-  /* 쌓임 맥락 생성
-     없으면 아래 ::before 의 z-index:-1 이 .hero 배경 뒤로 숨음 */
-  z-index: 0;
+  display: grid;
+  place-items: center;
+  width: 160px;
+  height: 160px;
+  margin: 0 auto var(--spacing-xl);
+  overflow: hidden;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-full);
 }
 
-.hero__visual .thumb {
-  aspect-ratio: 4 / 5;
-  background-color: var(--color-primary-light);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
-  rotate: 2deg;
-  transition: rotate var(--transition-slow);
-}
-
-.hero__visual:hover .thumb {
-  rotate: 0deg;
-}
-
-/* 뒤에 겹쳐진 액센트 색 카드 - 깊이감 */
-.hero__visual::before {
-  content: "";
+.hero__visual-img {
   position: absolute;
   inset: 0;
-  background-color: var(--color-accent-light);
-  border-radius: var(--radius-xl);
-  rotate: -3deg;
-  z-index: -1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-
-/* ------------------------------------------------------------
-   서비스 통계
-   ------------------------------------------------------------ */
-/* 흰 카드에 4칸 균등 분할 + 세로 구분선은 전형적인 랜딩페이지 패턴
-   박스를 없애고 좌측 정렬로 풀어 본문의 일부처럼 읽히게 함 */
-.stats {
-  margin-block: var(--spacing-2xl);
-}
-
-.stats__list {
-  display: flex;
-  gap: var(--spacing-3xl);
-}
-
-.stats__item {
+/* 이미지가 들어오기 전까지의 임시 캐릭터 */
+.hero__visual-placeholder {
   display: grid;
-  gap: 2px;
+  place-items: center;
+  width: 112px;
+  height: 112px;
 }
 
-.stats__value {
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
-  color: var(--color-deep);
-}
-
-.stats__label {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-}
-
-
-/* ------------------------------------------------------------
-   인기 게시글 - 매거진 레이아웃
-
-   3열 균등 그리드는 무엇이 중요한지 알려주지 않음
-   첫 카드를 좌측에 크게 배치하고 나머지 2개를 우측에 쌓음
-   API 가 limit=3 으로 고정이므로 :first-child 만으로 처리 가능
-   ------------------------------------------------------------ */
-.popular-posts .card-grid {
-  grid-template-columns: 1.35fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: var(--spacing-md);
-}
-
-.popular-posts .card-grid > :first-child {
-  grid-row: span 2;
-}
-
-.popular-posts .card-grid > :first-child .thumb {
-  aspect-ratio: 4 / 3;
-}
-
-.popular-posts .card-grid > :first-child .card__title {
-  font-size: var(--font-size-xl);
-  letter-spacing: -0.01em;
-}
-
-/* 우측 작은 카드는 가로형으로 - 이미지 좌측, 텍스트 우측 */
-.popular-posts .card-grid > :not(:first-child) .card__link {
-  display: grid;
-  grid-template-columns: 112px minmax(0, 1fr);
-  align-items: center;
-}
-
-.popular-posts .card-grid > :not(:first-child) .thumb {
-  aspect-ratio: 1 / 1;
+.hero__visual-placeholder img {
+  width: 100%;
   height: 100%;
 }
 
 
 /* ------------------------------------------------------------
-   AI 분석 배너
+   통합 검색 - 페이지의 유일한 주요 액션
    ------------------------------------------------------------ */
-/* AI 기능은 액센트(세이지)로 통일
-   AI 분석 안전 판정, 건강 정상 상태와 같은 색 언어를 씀 */
-.ai-banner {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-lg);
-  margin-block: var(--spacing-2xl);
-  padding: var(--spacing-xl);
-  background-color: var(--color-accent-light);
-  border-radius: var(--radius-xl);
+
+
+
+/* 아이콘 바로가기는 흰 본문 영역에 위치 */
+
+
+
+
+/* ------------------------------------------------------------
+   아이콘 바로가기
+
+   칩 배경을 중성으로 통일하고 아이콘에만 색을 씀
+   6개가 제각각이면 시선이 분산되므로 두 계열로만 나눔
+     식사 관련(식단·밥상)  = 테라코타
+     건강 관련(기록·AI)    = 세이지
+   기능의 성격이 색으로 구분되고 화면 단조로움도 줄어듦
+   ------------------------------------------------------------ */
+
+.quick-nav {
+  /* 검색바 제거 후 히어로의 주 동선이 됨
+     캐릭터의 margin-bottom 이 이미 간격을 주므로 추가 여백 없음 */
+  margin-top: 0;
 }
 
-.ai-banner__icon {
+/* 컨테이너가 1200px 이므로 아이콘이 가운데 몰리지 않도록 폭을 넓힘
+   5개 × 약 110px = 아이콘 사이가 적당히 벌어짐
+   (사료추천 제거로 6개 -> 5개가 되었는데 그리드가 6칸으로 남아
+    빈 칸 때문에 왼쪽으로 쏠려 보이던 문제를 함께 정정) */
+.quick-nav__list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--spacing-md);
+  max-width: 570px;
+  margin: 0 auto;
+}
+
+.quick-item {
+  display: grid;
+  justify-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-2xs);
+  color: var(--color-text);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+
+
+.quick-item__icon {
   display: grid;
   place-items: center;
-  flex-shrink: 0;
-  width: 52px;
-  height: 52px;
-  color: var(--color-text-on-accent);
-  background-color: var(--color-accent);
+  width: 56px;
+  height: 56px;
+  /* 테라코타 히어로 안이므로 아이콘도 테라코타로 통일
+     (세이지 계열 구분은 각 페이지 내부에서만 사용) */
+  color: var(--color-primary-deep);
+  /* 히어로 틴트 위이므로 흰색으로 반전 - 중성 틴트는 배경과 묻힘 */
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
+  transition: background-color var(--transition-fast);
 }
 
-.ai-banner__content {
-  flex: 1;
-  min-width: 200px;
+/* 눌림 표현 - 어두운 테라코타 계열로 확실하게
+   호버: 히어로 배경(#FBEDE6)보다 뚜렷이 어두운 틴트
+   클릭 중: 한 단계 더 (누르고 있다는 감각) */
+.quick-item:hover .quick-item__icon {
+  background-color: #F3D8C5;
+  border-color: transparent;
 }
 
-.ai-banner__title {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-accent-deep);
+.quick-item:active .quick-item__icon {
+  background-color: #EAC3A8;
 }
 
-.ai-banner__desc {
-  margin-top: var(--spacing-2xs);
+.quick-item__label {
   font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
+  text-align: center;
 }
 
 
 /* ------------------------------------------------------------
-   섹션 간 여백
+   콘텐츠 섹션
    ------------------------------------------------------------ */
-.popular-posts {
-  margin-block: var(--spacing-2xl);
+
+.home-section {
+  margin-bottom: var(--spacing-3xl);
 }
 
-/* 섹션마다 배경 톤을 교차시켜 스크롤에 리듬을 만듦
-   전부 흰 배경이면 경계가 보이지 않아 밋밋하게 읽힘 */
-.food-recommend {
-  margin-block: var(--spacing-2xl);
-  margin-inline: calc(var(--spacing-lg) * -1);
-  padding: var(--spacing-xl) var(--spacing-lg);
-  background-color: var(--color-surface-alt);
+.home-section__head {
+  display: flex;
+  /* baseline 은 링크 안의 화살표 svg 때문에 기준선이 틀어져
+     제목과 "전체보기"가 어긋나 보였음 - 크기가 다른 두 요소는
+     세로 중앙으로 맞추는 것이 시각적으로 안정적 */
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.home-section__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-deep);
+}
+
+/* 제목 없이 링크만 있을 때 - 우측 상단 고정
+   margin-left: auto 는 flex 정렬 설정과 무관하게 항상 오른쪽 끝으로 밂 */
+.home-section__head--more-only .home-section__more {
+  margin-left: auto;
+}
+
+.home-section__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  flex-shrink: 0;
+  font-size: var(--font-size-sm);
+  /* 보조 동선은 세이지 - 주 동선(테라코타)과 위계를 나눔 */
+  color: var(--color-accent-deep);
+}
+
+.home-section__more:hover {
+  color: var(--color-accent-hover);
+}
+
+
+/* ------------------------------------------------------------
+   서비스 통계 - 푸터 바로 위 보조 정보
+
+   숫자는 클릭 요소가 아니므로 주 색(테라코타)은 피하되
+   중성색만 쓰면 죽어 보여서 세이지 딥 톤을 줌
+   ------------------------------------------------------------ */
+
+.stats {
+  padding-bottom: var(--spacing-3xl);
+}
+
+.stats__list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: var(--spacing-lg);
+  /* 세이지 틴트 - 숫자(accent-deep)와 한 계열로 묶어
+     페이지 하단을 건강/신뢰 톤으로 마무리 */
+  background-color: var(--color-accent-light);
   border-radius: var(--radius-xl);
 }
 
+.stats__item {
+  display: grid;
+  gap: var(--spacing-2xs);
+  text-align: center;
+}
+
+/* 가운데 항목만 구분선 - 요소를 늘리지 않고 세 칸을 나눔 */
+.stats__item:nth-child(2) {
+  /* 세이지 틴트 위에서 중성 보더는 탁해 보이므로 같은 계열로 */
+  border-right: 1px solid var(--color-accent);
+  border-left: 1px solid var(--color-accent);
+}
+
+.stats__value {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent-deep);
+  /* 로딩 중 "-" 에서 실제 숫자로 바뀔 때 폭이 흔들리지 않게 함 */
+  font-variant-numeric: tabular-nums;
+}
+
+.stats__label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
 

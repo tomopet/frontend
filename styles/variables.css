@@ -1,5 +1,6 @@
 /* ============================================================
    TOMOPET | variables.css
+   검색 키워드: 색상, 디자인 토큰, 변수, 폰트 크기, 여백, 테라코타, 세이지, 그림자, z-index
    전역 디자인 토큰 정의
 
    로드 순서: variables.css -> common.css -> components.css -> [page].css
@@ -35,10 +36,13 @@
   /* [규칙] 브랜드 색은 "클릭할 수 있는 것" 에만 사용
      장식이나 정적 수치(가격, 칼로리)에 쓰면
      사용자가 눌러도 반응이 없어 혼란을 겪음 */
-  --color-primary:          #E8845F;   /* 버튼/칩 배경, 큰 면적 */
-  --color-primary-hover:    #DB7048;
-  --color-primary-light:    #FBEDE6;   /* 틴트 배경 */
-  --color-primary-deep:     #A8502F;   /* 흰/틴트 배경 위 텍스트, 링크 */
+  --color-primary:          #F2701F;   /* 버튼/칩 배경, 큰 면적 */
+  /* 호버는 어둡게가 아니라 밝게 감
+     primary 위에 딥 브라운 글자를 쓰므로 어두워지면 글자 대비가 4.5:1 아래로 떨어짐
+     밝히면 오히려 6.22:1 로 올라감 */
+  --color-primary-hover:    #F58540;
+  --color-primary-light:    #F9E3D8;   /* 틴트 배경 */
+  --color-primary-deep:     #A83A0C;   /* 흰/틴트 배경 위 텍스트, 링크 */
 
   /* 보조 색상 - 앰버. 배지, 하이라이트 */
   --color-secondary:        #F4B47D;
@@ -50,14 +54,24 @@
      둘 다 채도가 낮아 서로를 죽이지 않음
 
      [접근성] 흰 글자 대비 4.55:1 확보를 위해 원안보다 약간 어둡게 조정 */
-  --color-accent:           #567F63;
-  --color-accent-hover:     #4C7158;
-  --color-accent-light:     #E8F0EA;
-  --color-accent-deep:      #3F6B4E;   /* 틴트 배경 위 텍스트, 5.28:1 */
+  --color-accent:           #1F7A52;
+  --color-accent-hover:     #186B48;
+  --color-accent-light:     #DCEDE3;
+  --color-accent-deep:      #146341;   /* 틴트 배경 위 텍스트, 5.28:1 */
 
   /* 딥 톤 - 푸터 배경, 히어로 타이틀. 사용량 약 10%
      기존 팔레트에 검정에 가까운 톤이 없어 화면이 붕 뜨는 문제 해결 */
   --color-deep:             #2E2019;
+
+  /* 푸터 배경과 모달 백드롭 - 다크 모드에서도 어두워야 하므로
+     글자용 --color-deep 과 분리함 */
+  --color-backdrop:         #2E2019;
+
+  /* 헤더 밴드 - 브랜드 색을 강조하는 영역
+     이 배경 위에서 대비 4.5:1 을 넘는 글자색은 --color-text-on-primary 하나뿐임
+     (흰 글자 2.95:1, 흐린 딥 3.46:1 모두 미달)
+     따라서 활성/비활성 메뉴는 색이 아니라 굵기와 밑줄로 구분함 */
+  --color-header-bg:        #F2701F;
   --color-deep-surface:     #3B2A21;   /* 딥 배경 위 카드 */
   --color-deep-border:      #4A362B;
   --color-deep-text:        #EFE4DA;   /* 딥 배경 위 본문 */
@@ -66,21 +80,23 @@
   /* ==========================================================
      [공통] 배경 & 표면
      ========================================================== */
-  --color-bg:               #FDF8F3;   /* 페이지 최하단 배경 */
+  --color-bg:               #FFFFFF;   /* 페이지 배경 - 순백
+                                          카드도 흰색이므로 카드에 테두리가 필수
+                                          (테두리 없으면 카드가 배경에 묻힘) */
   --color-surface:          #FFFFFF;   /* 카드, 패널 배경 */
-  --color-surface-alt:      #F9F3EC;   /* 보조 표면, 이미지 플레이스홀더 */
+  --color-surface-alt:      #F2E8DC;   /* 보조 표면, 이미지 플레이스홀더 */
   --color-surface-hover:    #FBF6F1;   /* 표면 호버 */
 
   /* ==========================================================
      [공통] 텍스트
      ========================================================== */
   --color-text:             #3D2E24;   /* 본문 기본, 흰 배경 13.01:1 */
-  --color-text-secondary:   #7D6555;   /* 보조 설명, 5.43:1 */
+  --color-text-secondary:   #755C4C;   /* 보조 설명, 5.43:1 */
 
   /* [접근성] 기존 #A89384 는 2.77:1 로 미달
      12px 캡션에도 4.5:1 이 필요함
      가장 어두운 표면인 surface-alt(#F9F3EC) 기준으로 산정 */
-  --color-text-muted:       #826B5C;   /* 캡션, 메타, 플레이스홀더 */
+  --color-text-muted:       #7A6151;   /* 캡션, 메타, 플레이스홀더 */
 
   /* primary 배경 위에는 흰 글자 대신 딥 톤을 얹음 (5.91:1) */
   --color-text-on-primary:  #2E2019;
@@ -102,26 +118,26 @@
      AI 분석 안전 판정, 배변 정상, 컨디션 양호가 같은 언어로 묶임
 
      [접근성] 상태 텍스트는 각자의 틴트 배경 위에서 4.5:1 이상 확보 */
-  --color-success:          #4E745B;   /* on success-bg  4.55:1 */
-  --color-success-bg:       #E8F0EA;
-  --color-warning:          #9A621D;   /* on warning-bg  4.50:1 */
-  --color-warning-bg:       #FBF0DF;
-  --color-danger:           #C83434;   /* on danger-bg   4.52:1 */
-  --color-danger-bg:        #FBEAEA;
-  --color-info:             #4570A0;   /* on info-bg     4.52:1 */
-  --color-info-bg:          #EAF1F8;
+  --color-success:          #146341;   /* on success-bg  4.55:1 */
+  --color-success-bg:       #DCEDE3;
+  --color-warning:          #8F5A00;   /* on warning-bg  4.50:1 */
+  --color-warning-bg:       #FBEBCC;
+  --color-danger:           #C4241C;   /* on danger-bg   4.52:1 */
+  --color-danger-bg:        #FBE3E1;
+  --color-info:             #1A5FA8;   /* on info-bg     4.52:1 */
+  --color-info-bg:          #DEEAF7;
 
   /* ==========================================================
      [공통] 커뮤니티 카테고리 컬러
      목록에서 글 종류를 색으로 즉시 구분
      ========================================================== */
   /* 각 색상은 대응하는 틴트 배경 위에서 4.5:1 이상 */
-  --color-category-gallery:     #AA5434;   /* 갤러리 - 테라코타, 4.56:1 */
-  --color-category-gallery-bg:  #FBEDE6;
-  --color-category-recipe:      #3F6B4E;   /* 레시피 - 세이지, 5.28:1 */
-  --color-category-recipe-bg:   #E8F0EA;
-  --color-category-free:        #6E5A8A;   /* 자유 - 라벤더, 5.13:1 */
-  --color-category-free-bg:     #F0EBF5;
+  --color-category-gallery:     #A8400E;   /* 갤러리 - 테라코타, 4.56:1 */
+  --color-category-gallery-bg:  #F9E3D8;
+  --color-category-recipe:      #146341;   /* 레시피 - 세이지, 5.28:1 */
+  --color-category-recipe-bg:   #DCEDE3;
+  --color-category-free:        #5B3F91;   /* 자유 - 라벤더, 5.13:1 */
+  --color-category-free-bg:     #EAE2F5;
 
 
   /* ==========================================================
@@ -145,13 +161,15 @@
 
   --font-size-xs:    0.75rem;    /* 12px - 캡션, 메타 */
   --font-size-sm:    0.8125rem;  /* 13px - 보조 텍스트 */
-  --font-size-md:    0.875rem;   /* 14px - 본문 기본 */
+  --font-size-md:    0.9375rem;  /* 15px - 본문 기본
+                                    14px 는 요즘 서비스 표준(15~16px) 대비 작아
+                                    "전체적으로 작다"는 인상의 원인이 됨 */
   --font-size-lg:    1rem;       /* 16px - 카드 제목 */
   --font-size-xl:    1.125rem;   /* 18px - 섹션 제목 */
   --font-size-2xl:   1.375rem;   /* 22px - 페이지 타이틀 */
-  --font-size-3xl:   2.5rem;     /* 40px - 히어로 타이틀
-                                    본문 14px 대비 약 3배로 위계를 명확히 함
-                                    28px 는 본문과 차이가 적어 밋밋하게 읽힘 */
+  --font-size-3xl:   2rem;       /* 32px - 히어로 타이틀
+                                    나열형 문구(약 24자)가 1024px 에서
+                                    한 줄로 들어가는 최대 크기 */
 
   --font-weight-regular:  400;
   --font-weight-medium:   500;
@@ -181,8 +199,8 @@
      전부 비슷한 값이면 무엇이 컨테이너이고 무엇이 조작 요소인지 구분되지 않음 */
   --radius-sm:    6px;     /* 인풋, 셀렉트 */
   --radius-md:    8px;     /* 버튼 - 작게 */
-  --radius-lg:    18px;    /* 카드 - 크게 */
-  --radius-xl:    28px;    /* 대형 패널 - 더 크게 */
+  --radius-lg:    10px;    /* 카드 - 크게 */
+  --radius-xl:    16px;    /* 대형 패널 - 더 크게 */
   --radius-full:  9999px;  /* 칩, 아바타 */
 
   /* ==========================================================
@@ -238,21 +256,3 @@
    최소 지원 폭: 1024px
    그 이하에서는 --layout-min-width 에 의해 가로 스크롤 발생
    ============================================================ */
-
-
-/* ============================================================
-   [추후 적용] 다크 모드 변수 오버라이드
-   유저 테마 기능 구현 시 theme.css 로 분리 예정
-   ============================================================ */
-/*
-[data-theme="dark"] {
-  --color-bg:             #1C1917;
-  --color-surface:        #292524;
-  --color-surface-alt:    #37312D;
-  --color-text:           #F5F0EB;
-  --color-text-secondary: #C4B5A8;
-  --color-text-muted:     #8A7A6D;
-  --color-border:         #44403C;
-  --color-border-strong:  #57534E;
-}
-*/

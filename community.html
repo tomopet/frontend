@@ -1,7 +1,7 @@
 <!DOCTYPE html>
+<!-- 검색 키워드: 커뮤니티, 게시판, 글 목록 -->
 <html lang="ko">
 <head>
-  <!-- 문서 메타데이터 묶음: 문자 인코딩, 뷰포트, 검색엔진/공유용 설명, 브라우저 탭 제목을 정의한다 -->
   <meta charset="UTF-8">
   <!-- 데스크톱 전용 - 최소 지원 폭 1024px -->
   <meta name="viewport" content="width=1024">
@@ -10,7 +10,6 @@
 
   <!-- [공통] 파비콘 -->
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-
   <!-- ============================================================
        [공통] 스타일 - 로드 순서 고정 (바꾸면 디자인이 깨짐)
          variables -> common -> components -> [내 페이지]
@@ -25,18 +24,15 @@
 <body>
 
   <!-- [공통] 본문 바로가기 - 키보드 접근성. 지우지 말 것 -->
-  <!-- 기본 상태에서는 화면에 보이지 않다가 Tab 키로 포커스가 들어오면 나타나서, 스크린리더/키보드 사용자가 반복되는 헤더 메뉴를 건너뛰고 #main-content 로 바로 이동할 수 있게 해준다 -->
   <a href="#main-content" class="skip-link">본문 바로가기</a>
 
   <!-- [공통] 헤더가 삽입되는 자리. layout.js 가 채움 -->
-  <!-- 처음 렌더링 시점에는 빈 div 이며, layout.js 가 공통 헤더 마크업을 fetch 해 이 자리에 주입한다. 모든 페이지가 이 자리표시자 방식을 공유해 헤더 수정 시 한 파일만 고치면 되게 한다 -->
   <div id="header-placeholder"></div>
 
   <main class="site-main" id="main-content">
     <div class="container">
 
       <!-- 페이지 제목 - h1 은 페이지당 정확히 1개 -->
-      <!-- 제목/설명과 "글 쓰기" 버튼을 한 줄에 배치하는 영역. community__header 가 공통 page-header 레이아웃의 세로 정렬 방식만 덮어써서 이 페이지에 맞게 조정한다 -->
       <div class="page-header community__header">
         <div>
           <h1 class="page-header__title">TOMO Community</h1>
@@ -49,19 +45,15 @@
            폼 상단 배너 - API 오류 시 ui.js 가 여기에 메시지를 씀
            ======================================================== -->
       <p class="banner" id="community-message" role="alert" hidden></p>
-      <!-- role="alert" 는 hidden 이 풀려 내용이 채워지는 순간 스크린리더가 자동으로 읽어주게 만든다. 평소에는 hidden 속성으로 숨겨두고, 오류/알림 메시지가 있을 때만 스크립트가 텍스트를 채우고 hidden 을 제거하는 방식으로 쓰인다 -->
 
-      <!-- 카테고리 필터 도구모음: 제목(h2)과 aria-labelledby 로 연결해 이 section 전체가 "게시글 카테고리" 영역임을 스크린리더에 알린다 -->
       <section class="community__toolbar" aria-labelledby="community-filter-title">
         <h2 class="community__filter-title" id="community-filter-title">게시글 카테고리</h2>
-        <!-- role="group" + aria-label 로 버튼 묶음이 하나의 선택 그룹임을 알린다. 각 버튼의 data-category 값이 실제 필터링 기준이 되고(빈 문자열은 "전체"), is-active 클래스와 aria-pressed 값이 함께 토글되어 시각적 강조와 스크린리더용 선택 상태를 동시에 전달한다 -->
         <div class="community__filters" role="group" aria-label="카테고리 필터">
           <button class="community__filter is-active" type="button" data-category="" aria-pressed="true">전체</button>
           <button class="community__filter" type="button" data-category="free" aria-pressed="false">자유</button>
           <button class="community__filter" type="button" data-category="gallery" aria-pressed="false">갤러리</button>
           <button class="community__filter" type="button" data-category="recipe" aria-pressed="false">레시피</button>
         </div>
-        <!-- aria-live="polite" 로 표시되어, 필터 적용 후 결과 개수 텍스트가 바뀌면 스크린리더가 현재 읽는 내용을 끊지 않고 다음 쉬는 타이밍에 변경 사실을 알려준다 -->
         <p class="community__result" id="community-result" aria-live="polite"></p>
       </section>
 
@@ -71,10 +63,8 @@
            데이터가 없으면 community-empty 를 노출함
            ======================================================== -->
       <ul class="card-grid" id="community-list" aria-label="커뮤니티 게시글 목록"></ul>
-      <!-- ul 자체는 시각적으로 보이는 제목이 없으므로 aria-label 로 목록의 성격을 스크린리더에 알린다. card-grid 클래스가 카드들을 그리드로 배치하는 시각 레이아웃을 담당한다 -->
 
       <!-- 빈 상태 - 반드시 행동 버튼을 포함할 것 -->
-      <!-- 목록 데이터가 없을 때만 노출되는 안내 블록. 기본은 hidden 으로 숨겨져 있고, 목록이 비어있으면 community-list 대신 이 블록의 hidden 이 해제되어 사용자를 "글 쓰기"로 유도한다 -->
       <div class="empty-state" id="community-empty" hidden>
         <p class="empty-state__title" id="community-empty-title">해당 카테고리에 게시글이 없습니다</p>
         <p class="empty-state__desc" id="community-empty-desc">첫 이야기를 남겨보세요.</p>
@@ -84,10 +74,8 @@
       <section class="community__search" aria-labelledby="community-search-title">
         <!-- [공통] 검색은 서버 모드에서 keyword 쿼리, 로컬 모드에서 임시 목록 필터로 동작한다. -->
         <h2 class="community__search-title" id="community-search-title">게시글 검색</h2>
-        <!-- role="search" 로 이 폼이 검색 랜드마크임을 알린다. novalidate 는 브라우저 기본 검증 팝업을 끄고, 대신 스크립트가 community-search-error 영역에 직접 오류 메시지를 넣는 방식으로 검증을 처리한다는 뜻이다 -->
         <form class="community__search-form" id="community-search-form" role="search" novalidate>
           <label class="community__search-label" for="community-search-type">검색 대상</label>
-          <!-- 검색 기준(제목/태그)을 고르는 셀렉트 - 선택값은 search-type 이름으로 폼과 함께 제출/조회 로직에 전달된다 -->
           <select class="form-field__input community__search-select" id="community-search-type" name="search-type">
             <option value="title">글 제목</option>
             <option value="tag">태그</option>
@@ -105,16 +93,13 @@
           <button class="btn btn--primary" type="submit">검색</button>
           <button class="btn btn--secondary" id="community-search-reset" type="button">초기화</button>
         </form>
-        <!-- novalidate 로 꺼둔 브라우저 기본 검증 대신, 스크립트가 유효성 오류 문구를 이 자리에 채우고 hidden 을 해제하는 방식으로 사용자에게 보여준다 -->
         <p class="form-field__error community__search-error" id="community-search-error" hidden></p>
         <p class="community__search-hint" id="community-search-hint">태그 검색은 #태그명처럼 정확히 입력해주세요.</p>
       </section>
 
       <!-- [API 연동] 서버의 totalCount를 기준으로 한 페이지씩 목록을 이동한다. -->
-      <!-- nav 랜드마크에 aria-label 로 "게시글 페이지"임을 알린다. 페이지가 하나뿐일 때는 hidden 으로 감춰두고, 이전/다음 버튼과 그 사이 상태 텍스트로 구성된다 -->
       <nav class="community__pagination" id="community-pagination" aria-label="게시글 페이지" hidden>
         <button class="btn btn--secondary" id="community-page-prev" type="button">이전</button>
-        <!-- aria-live="polite" 로 페이지 번호가 바뀔 때마다 스크린리더가 현재 위치를 다시 안내한다 -->
         <span class="community__page-status" id="community-page-status" aria-live="polite"></span>
         <button class="btn btn--secondary" id="community-page-next" type="button">다음</button>
       </nav>
@@ -123,7 +108,6 @@
   </main>
 
   <!-- [공통] 푸터가 삽입되는 자리. layout.js 가 채움 -->
-  <!-- header-placeholder 와 동일한 방식의 자리표시자 - layout.js 가 공통 푸터 마크업을 불러와 이 자리에 채워 넣는다 -->
   <div id="footer-placeholder"></div>
 
 
@@ -132,14 +116,10 @@
          layout(즉시) -> api(defer) -> ui(defer) -> [내 페이지](defer)
        layout.js 에만 defer 가 없음. 순서를 바꾸면 동작하지 않음
        ============================================================ -->
-  <!-- layout.js 는 defer 없이 즉시 실행되어 header/footer placeholder 를 최대한 빨리 채운다. 이후 defer 스크립트들은 문서 파싱이 끝난 뒤 이 순서 그대로 실행된다 -->
   <script src="./scripts/layout.js"></script>
-  <!-- api.js 는 window.TomopetApi 전역을 노출해 이후 스크립트가 서버 통신(GET/POST 등)에 공통으로 사용하게 한다 -->
   <script src="./scripts/api.js" defer></script>
-  <!-- ui.js 는 window.TomopetUi 전역을 노출해 DOM 생성, 목록 렌더링, 폼 메시지 표시 같은 공통 UI 유틸을 제공한다 -->
   <script src="./scripts/ui.js" defer></script>
   <!-- 커뮤니티 전용 동작: 파일명은 페이지명과 같은 community.js를 사용한다. -->
-  <!-- 이 페이지에서만 필요한 로직(카테고리 필터, 검색, 목록 로딩 등)을 담당하며, 앞서 로드된 TomopetApi/TomopetUi 전역에 의존한다 -->
   <script src="./scripts/community.js" defer></script>
 
 </body>

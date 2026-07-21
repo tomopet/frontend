@@ -1,5 +1,6 @@
 /* ============================================================
    TOMOPET | scripts/index.js
+   검색 키워드: 홈, 메인, 통계, 인기 밥상, 바로가기, 스켈레톤
    메인(홈) 페이지 - 진입점
 
    의존
@@ -8,9 +9,10 @@
      ui.js      window.TomopetUi
 
    연동 엔드포인트
-     GET /api/stats                        { recipeCount, memberCount, dogCount }
+     GET /api/stats                        { recipeCount, memberCount, petCount }
      GET /api/posts?sort=popular&limit=3
-     GET /api/food?limit=3
+
+   홈 검색바는 제거됨 - 검색은 식단 페이지의 음식 검색 모달로 일원화
 
    세 요청은 서로 독립적이므로 병렬로 보내고
    각 로더가 자체적으로 catch 하므로
@@ -33,7 +35,7 @@
     var mapping = [
       ["stat-recipe-count", stats.recipeCount],
       ["stat-member-count", stats.memberCount],
-      ["stat-dog-count", stats.dogCount]
+      ["stat-pet-count", stats.petCount]
     ];
 
     mapping.forEach(function (pair) {
@@ -48,7 +50,11 @@
       renderStats(stats);
     } catch (error) {
       console.error("통계 로딩 실패:", error);
-      /* 실패 시 마크업의 초기값 "-" 를 그대로 유지 */
+      /* 실패 시 스켈레톤이 무한히 깜빡이지 않도록 "-" 로 교체 */
+      ["stat-recipe-count", "stat-member-count", "stat-pet-count"].forEach(function (id) {
+        var el = $(id);
+        if (el) el.textContent = "-";
+      });
     }
   }
 
@@ -111,67 +117,14 @@
 
 
   /* ==========================================================
-     맞춤 사료 추천
-     ========================================================== */
-
-  function createFoodCard(food) {
-    var item = Ui.createEl("li", "card card--clickable");
-
-    var link = Ui.createEl("a", "card__link");
-    link.href = "./food-detail.html?foodId=" + encodeURIComponent(food.foodId);
-
-    link.appendChild(Ui.createThumb(food.imageUrl, food.name, "thumb--square"));
-
-    var body = Ui.createEl("div", "card__body");
-    body.appendChild(Ui.createEl("p", "card__desc", food.brand || "-"));
-    body.appendChild(Ui.createEl("h3", "card__title", food.name || "이름 없음"));
-
-    var meta = Ui.createEl("div", "card__meta");
-    meta.appendChild(Ui.createEl("strong", null, Ui.formatPrice(food.price)));
-    body.appendChild(meta);
-
-    link.appendChild(body);
-    item.appendChild(link);
-    return item;
-  }
-
-  async function loadFoodRecommend() {
-    var list = $("food-recommend-list");
-    var empty = $("food-recommend-empty");
-
-    try {
-      var data = await Api.get("/api/food?limit=3");
-      Ui.renderList(list, Api.toList(data), createFoodCard, empty);
-    } catch (error) {
-      console.error("사료 추천 로딩 실패:", error);
-      Ui.renderList(list, [], createFoodCard, empty);
-    }
-  }
-
-
-  /* ==========================================================
-     로그인 상태에 따른 히어로 CTA 조정
-     ========================================================== */
-
-  function adjustHeroCta() {
-    if (!window.TomopetAuth || !window.TomopetAuth.isLoggedIn()) return;
-
-    var startBtn = document.querySelector('.hero__cta a[href="./login.html"]');
-    if (!startBtn) return;
-
-    /* 이미 로그인했다면 "밥상 자랑하러 가기" 대신 글쓰기로 바로 유도 */
-    startBtn.href = "./post-write.html";
-    startBtn.textContent = "레시피 공유하기";
-  }
-
-
-  /* ==========================================================
      초기화
      ========================================================== */
 
   document.addEventListener("DOMContentLoaded", function () {
-    adjustHeroCta();
 
-    Promise.all([loadStats(), loadPopularPosts(), loadFoodRecommend()]);
+    /* 세 요청은 서로 독립적이므로 병렬로 보냄
+       각 로더가 자체적으로 try / catch 하므로
+       하나가 실패해도 나머지 섹션은 정상 렌더링됨 */
+    Promise.all([loadStats(), loadPopularPosts()]);
   });
 })();

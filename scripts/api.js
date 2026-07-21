@@ -1,5 +1,6 @@
 /* ============================================================
    TOMOPET | scripts/api.js
+   검색 키워드: API, 통신, 요청, 응답, 에러 처리, 토큰, 인증 헤더, 401, 목록 정규화
    HTTP 통신 공통 모듈
 
    적용 범위: 전체 페이지 공통
@@ -10,7 +11,7 @@
 
    제공
      window.TomopetApi.get / post / put / patch / del
-     window.TomopetApi.upload      FormData 전송
+     window.TomopetApi.upload      FormData 전송 (options.method 로 PUT 가능)
      window.TomopetApi.toMessage   오류를 사용자 문구로 변환
      window.TomopetApi.toList      배열 또는 {items:[]} 정규화
 
@@ -25,7 +26,7 @@
      README 의 REST API 표준 문법은 아래 구조입니다.
 
        try {
-         const response = await fetch("/api/dogs");
+         const response = await fetch("/api/pets");
          if (!response.ok) throw new Error("네트워크 응답 에러");
          const data = await response.json();
        } catch (error) {
@@ -41,13 +42,27 @@
   "use strict";
 
   /* ==========================================================
-     설정
+     설정 - API 서버 주소 (환경 자동 감지)
 
-     API 서버가 같은 오리진이면 BASE_URL 을 빈 문자열로 둠
-     별도 도메인에 배포했다면 여기만 바꾸면 전 페이지에 적용됨
-       예: "https://api.tomopet.com"
+     로컬(localhost)에서 열면 -> 로컬 백엔드(스프링부트 :8080)로 요청
+     배포 주소에서 열면      -> 아래 DEPLOY_API_URL 로 요청
+
+     [확인 필요] Railway 배포가 끝나면 DEPLOY_API_URL 에
+     실제 주소를 넣을 것 (예: "https://tomopet.up.railway.app")
+     비어 있는 동안 배포본은 같은 오리진(/api -> 404)으로 동작하며
+     각 화면이 빈 상태로 처리하므로 깨지지는 않음
+
+     백엔드 포트가 8080 이 아니면 LOCAL_API_URL 만 바꾸면 됨
+     검색 키워드: API 주소, 백엔드 연결, 서버 주소, 포트
      ========================================================== */
-  var BASE_URL = "";
+  var LOCAL_API_URL = "http://localhost:8080";
+  var DEPLOY_API_URL = "";
+
+  var BASE_URL =
+    ["localhost", "127.0.0.1"].includes(window.location.hostname)
+      ? LOCAL_API_URL
+      : DEPLOY_API_URL;
+
   var DEFAULT_TIMEOUT = 10000;
 
 
@@ -80,7 +95,8 @@
   function handleUnauthorized() {
     if (!window.TomopetAuth) return;
     window.TomopetAuth.clearSession();
-    window.location.replace("./login.html");
+    /* 재로그인 후 하던 페이지로 되돌아오도록 현재 위치를 실어 보냄 */
+    window.location.replace(window.TomopetAuth.loginUrl());
   }
 
 
@@ -221,9 +237,15 @@
       return request("DELETE", path, undefined, options);
     },
 
-    /* 이미지 등 파일 전송 - FormData 를 그대로 넘김 */
+    /* 이미지 등 파일 전송 - FormData 를 그대로 넘김
+
+       기본은 POST 이며, 수정처럼 다른 메서드가 필요하면
+       options.method 로 지정함
+         Api.upload("/api/pets", formData)                       등록
+         Api.upload("/api/pets/3", formData, { method: "PUT" })  수정 */
     upload: function (path, formData, options) {
-      return request("POST", path, formData, options);
+      options = options || {};
+      return request(options.method || "POST", path, formData, options);
     },
 
     toMessage: toMessage,

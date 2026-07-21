@@ -1,5 +1,6 @@
 /* ============================================================
    TOMOPET | scripts/layout.js
+   검색 키워드: 헤더, 푸터, 공통 레이아웃, 세션, 로그인 상태, 로그아웃, 인증 가드, 리다이렉트
    공통 레이아웃 로더 + 인증 상태 관리
 
    적용 범위: 전체 페이지 공통
@@ -83,12 +84,35 @@
       return Boolean(this.getToken());
     },
 
-    /* 로그인 필수 페이지에서 호출
-       replace 를 쓰면 뒤로가기로 되돌아오지 않음 */
+    /* 로그인 후 원래 페이지로 되돌아올 수 있도록
+       현재 위치(파일명 + 쿼리)를 redirect 로 실어 보냄
+
+       pathname 전체가 아니라 파일명만 쓰는 이유
+         GitHub Pages 는 /저장소명/ 하위에 배포되어
+         전체 경로를 쓰면 로컬과 배포 환경의 경로가 달라짐 */
+    loginUrl: function () {
+      var page = window.location.pathname.split("/").pop() || "index.html";
+      var target = page + window.location.search;
+      /* 로그인 페이지 자신을 redirect 로 넣으면 무한 순환 */
+      if (page === "login.html") return "./login.html";
+      return "./login.html?redirect=" + encodeURIComponent(target);
+    },
+
+    /* ========================================================
+       인증 가드 - 사용하지 않기로 결정 (백엔드 주도 방식)
+
+       프론트에서 선제적으로 로그인 페이지로 막지 않습니다.
+       비로그인 접근 여부는 백엔드가 401 로 판정하고,
+       401 을 받으면 api.js 의 handleUnauthorized 가
+       로그인 페이지로 보냅니다 (loginUrl 로 복귀 경로 포함).
+
+       각 페이지의 requireAuth() 호출은 남겨둠
+         나중에 프론트 가드가 다시 필요해지면
+         이 함수만 고치면 전 페이지에 적용되기 때문
+       검색 키워드: 인증 가드, 로그인 막기
+       ======================================================== */
     requireAuth: function () {
-      if (this.isLoggedIn()) return true;
-      window.location.replace("./login.html");
-      return false;
+      return true;
     },
 
     logout: function () {
@@ -150,8 +174,7 @@
   /* 하위 페이지는 상위 목록 페이지를 활성 표시 */
   var NAV_PARENT_MAP = {
     "post-detail": "community",
-    "post-write": "community",
-    "food-detail": "food-recommend"
+    "post-write": "community"
   };
 
   function markActiveNav() {

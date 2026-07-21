@@ -1,7 +1,7 @@
 <!DOCTYPE html>
+<!-- 검색 키워드: 게시글 상세, 댓글, 좋아요 -->
 <html lang="ko">
 <head>
-  <!-- 문서 메타데이터 묶음: 문자 인코딩, 뷰포트, 검색엔진/공유용 설명, 브라우저 탭 제목을 정의한다 -->
   <meta charset="UTF-8">
   <!-- 데스크톱 전용 - 프로젝트 최소 지원 폭 1024px -->
   <meta name="viewport" content="width=1024">
@@ -20,19 +20,15 @@
 
 <body>
   <!-- [접근성] 키보드 사용자가 반복 메뉴를 건너뛸 수 있도록 유지 -->
-  <!-- 평소에는 화면 밖으로 숨겨져 있다가 Tab 포커스가 들어오면 나타나 #main-content 로 바로 이동시켜, 헤더 메뉴를 매번 거치지 않게 해준다 -->
   <a href="#main-content" class="skip-link">본문 바로가기</a>
 
   <!-- [공통] layout.js가 공통 헤더를 삽입 -->
-  <!-- 처음에는 빈 div 이며, layout.js 가 공통 헤더 마크업을 불러와 이 자리에 채워 넣는다 -->
   <div id="header-placeholder"></div>
 
   <main class="site-main" id="main-content">
     <div class="container container--narrow">
-      <!-- 목록으로 되돌아가는 링크와, 글쓴이에게만 노출되는 수정/삭제 액션을 한 줄에 배치하는 상단 바 -->
       <div class="post-detail__topbar">
         <a href="./community.html" class="btn btn--ghost">← 목록으로</a>
-        <!-- 기본은 hidden 으로 숨겨두고, 조회된 게시글이 현재 로그인한 사용자의 글일 때만 스크립트가 hidden 을 해제해 수정/삭제 버튼을 보여준다 -->
         <div class="post-detail__owner-actions" id="post-owner-actions" hidden>
           <a class="btn btn--secondary" id="post-edit-link" href="./post-write.html">수정하기</a>
           <button class="btn btn--danger" id="post-delete-button" type="button">삭제하기</button>
@@ -40,46 +36,36 @@
       </div>
 
       <!-- API 오류와 처리 결과를 알리는 공통 배너 -->
-      <!-- role="alert" 이므로 hidden 이 풀려 텍스트가 채워지는 순간 스크린리더가 자동으로 읽는다 -->
       <p class="banner post-detail__message" id="post-detail-message" role="alert" hidden></p>
 
       <!-- 게시글 조회가 끝나기 전까지 숨김 -->
-      <!-- 데이터가 도착하기 전에는 article 전체를 숨겨, "게시글을 불러오는 중입니다" 같은 임시 텍스트가 사용자 눈에 잠깐이라도 완성된 게시글처럼 보이지 않게 막는다 -->
       <article class="post-detail" id="post-detail" hidden>
         <header class="post-detail__header">
           <p class="post-detail__category" id="post-category"></p>
           <!-- 페이지당 h1은 정확히 하나 -->
-          <!-- 초기 텍스트는 로딩 placeholder 이며, 조회가 끝나면 스크립트가 실제 게시글 제목으로 바꿔 넣는다 -->
           <h1 class="post-detail__title" id="post-title">게시글을 불러오는 중입니다</h1>
           <div class="post-detail__meta">
             <span id="post-author"></span>
-            <!-- time 요소로 작성 일시를 의미론적으로 표시 - 브라우저/스크린리더가 날짜 정보임을 인식할 수 있게 한다 -->
             <time id="post-created-at"></time>
           </div>
         </header>
 
-        <!-- 첨부 이미지가 있을 때만 스크립트가 hidden 을 해제하고 썸네일을 채워 넣는 갤러리 영역. aria-label 로 이미지 묶음의 성격을 스크린리더에 알린다 -->
         <div class="post-detail__images" id="post-image-gallery" aria-label="게시글 첨부 이미지" hidden></div>
-        <!-- 게시글 본문 텍스트가 채워지는 자리 -->
         <p class="post-detail__content" id="post-content"></p>
 
         <div class="post-detail__actions">
-          <!-- aria-pressed 로 좋아요 눌림 여부를 스크린리더에 전달하는 토글 버튼. 안의 span 은 좋아요 수 숫자만 갱신하기 위한 자리다 -->
           <button class="btn btn--secondary post-detail__like" id="post-like-button" type="button" aria-pressed="false">
             좋아요 <span id="post-like-count">0</span>
           </button>
         </div>
       </article>
 
-      <!-- 게시글 본문(article)과 마찬가지로 데이터 조회가 끝날 때까지 hidden 으로 숨겨진다. aria-labelledby 로 이 section 전체가 "댓글" 영역임을 스크린리더에 알린다 -->
       <section class="comments" id="comments-section" aria-labelledby="comments-title" hidden>
         <div class="comments__heading">
           <h2 class="comments__title" id="comments-title">댓글</h2>
-          <!-- 댓글 총 개수 배지 - 목록이 갱신될 때마다 스크립트가 텍스트를 다시 계산해 넣는다 -->
           <span class="comments__count" id="comment-count">0개</span>
         </div>
 
-        <!-- 댓글 작성 폼 -->
         <form class="comments__form" id="comment-form">
           <label class="form-field__label" for="comment-content">댓글 작성</label>
           <textarea
@@ -91,7 +77,6 @@
             placeholder="서로를 배려하는 댓글을 남겨주세요."
             required
           ></textarea>
-          <!-- 댓글 내용 검증 실패 시 스크립트가 오류 문구를 채우고 hidden 을 해제하는 자리 -->
           <p class="form-field__error" id="comment-content-error" hidden></p>
           <div class="comments__form-actions">
             <span class="comments__limit">최대 500자</span>
@@ -99,9 +84,7 @@
           </div>
         </form>
 
-        <!-- 댓글 목록이 채워지는 자리 -->
         <ul class="comments__list" id="comment-list"></ul>
-        <!-- 댓글이 하나도 없을 때만 노출되는 안내 블록. 행동 버튼(comment-focus-button)은 클릭 시 위 댓글 textarea 로 포커스를 옮겨 바로 작성을 시작할 수 있게 유도하는 용도다 -->
         <div class="empty-state comments__empty" id="comment-empty" hidden>
           <p class="empty-state__title">아직 댓글이 없습니다</p>
           <p class="empty-state__desc">첫 댓글을 남겨보세요.</p>
@@ -109,7 +92,6 @@
         </div>
       </section>
 
-      <!-- 네이티브 dialog 요소로 만든 게시글 삭제 확인 모달. aria-labelledby/aria-describedby 로 제목과 설명 문단을 다이얼로그와 연결해, 열렸을 때 스크린리더가 목적을 바로 알 수 있게 한다. 실제 표시/닫힘은 스크립트가 dialog 의 showModal()/close() 를 호출해 제어한다 -->
       <dialog class="post-delete-dialog" id="post-delete-dialog" aria-labelledby="post-delete-title" aria-describedby="post-delete-description">
         <h2 class="post-delete-dialog__title" id="post-delete-title">게시글을 삭제할까요?</h2>
         <p class="post-delete-dialog__description" id="post-delete-description">삭제한 게시글은 복구할 수 없습니다.</p>
@@ -119,7 +101,6 @@
         </div>
       </dialog>
 
-      <!-- 댓글 삭제 확인용 별도 다이얼로그 - 위 게시글 삭제 다이얼로그와 같은 구조/스타일을 재사용하되, 대상이 댓글이라는 점만 다르다 -->
       <dialog class="post-delete-dialog" id="comment-delete-dialog" aria-labelledby="comment-delete-title" aria-describedby="comment-delete-description">
         <h2 class="post-delete-dialog__title" id="comment-delete-title">댓글을 삭제할까요?</h2>
         <p class="post-delete-dialog__description" id="comment-delete-description">삭제한 댓글은 복구할 수 없습니다.</p>
@@ -132,17 +113,12 @@
   </main>
 
   <!-- [공통] layout.js가 공통 푸터를 삽입 -->
-  <!-- header-placeholder 와 동일하게, layout.js 가 공통 푸터 마크업을 불러와 채워 넣는 자리 -->
   <div id="footer-placeholder"></div>
 
   <!-- [공통] 스크립트 로드 순서 고정 -->
-  <!-- layout.js 는 defer 없이 즉시 실행되어 헤더/푸터를 먼저 채운다 -->
   <script src="./scripts/layout.js"></script>
-  <!-- api.js 는 window.TomopetApi 전역을 노출해 서버 통신을 공통으로 처리한다 -->
   <script src="./scripts/api.js" defer></script>
-  <!-- ui.js 는 window.TomopetUi 전역을 노출해 DOM 생성/렌더링/폼 메시지 표시 등 공통 UI 유틸을 제공한다 -->
   <script src="./scripts/ui.js" defer></script>
-  <!-- 이 페이지 전용 로직(게시글 조회, 좋아요, 댓글 CRUD, 삭제 다이얼로그 제어 등)을 담당하며 앞서 로드된 전역들에 의존한다 -->
   <script src="./scripts/post-detail.js" defer></script>
 </body>
 </html>
