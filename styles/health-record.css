@@ -1,469 +1,426 @@
+@charset "UTF-8";
+
 /* ============================================================
-   TOMOPET | health-record-01.css
-   검색 키워드: 건강기록, 차트, 대시보드
-   강아지 건강 기록 대시보드 페이지 전용 스타일
-
-   적용 범위: health-record.html
-   로드 순서: variables.css → common.css → components.css → 이 파일
-
-   담당: 협업자
+   TOMOPET | styles/health-record.css
+   건강기록 대시보드 전용 스타일시트
    ============================================================ */
 
-
 /* ------------------------------------------------------------
-   기본 테마 변수 맵핑
-   variables.css 에 정의된 토큰을 로컬 별칭으로 재참조.
-   직접 수정하지 말고 variables.css 를 통해 변경할 것.
-   login.css / password-reset.css 와 동일한 방식으로 var() 상속.
+   1. 페이지 헤더
    ------------------------------------------------------------ */
-/* ------------------------------------------------------------
-   기본 레이아웃 및 폰트
-   common.css 리셋 위에 페이지 기반 서체를 덮어씀
-   ------------------------------------------------------------ */
-body {
-  color: var(--color-deep);
-  font-family: Pretendard, "Noto Sans KR", Arial, sans-serif;
-}
-
-
-
-
-
 .page-head {
   display: flex;
-  align-items: flex-end;
   justify-content: space-between;
-  gap: 30px;
-  margin-bottom: 18px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: var(--space-4, 16px);
+  margin-bottom: var(--space-6, 24px);
 }
 
-/* 섹션 레이블 - 협업가이드 카피 톤: 영문 대문자로 카테고리 표기 */
 .page-head__eyebrow {
-  margin: 0 0 7px;
-  color: var(--color-primary-deep);
+  font-size: var(--font-size-xs, 12px);
   font-weight: 700;
-  font-size: var(--font-size-xs);
+  color: var(--color-primary, #F2701F);
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
 }
 
 .page-head h1 {
-  margin: 0;
-  font-size: var(--font-size-2xl);
-  line-height: 1.25;
-  letter-spacing: -.02em;
+  font-size: var(--font-size-2xl, 24px);
+  font-weight: 700;
+  color: var(--color-text-main, #111111);
+  margin-bottom: 4px;
 }
 
 .page-head__desc {
-  margin: 7px 0 0;
-  color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm, 14px);
+  color: var(--color-text-sub, #666666);
 }
 
 .page-head__actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-2, 8px);
 }
 
-
-/* ------------------------------------------------------------
-   입력 및 폼 필드 컨트롤
-   login.css 의 .form-field 구조를 참고한 인풋/셀렉트 스타일
-   ------------------------------------------------------------ */
-
-/* 반려견 선택 셀렉트 */
 .pet-select {
-  min-width: 128px;
-  height: 38px;
-  padding: 0 12px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: white;
-  color: var(--color-deep);
-  outline: none;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border, #e5e5e5);
+  border-radius: var(--radius-md, 8px);
+  font-size: var(--font-size-sm, 14px);
+  background-color: var(--color-surface, #ffffff);
 }
-
-.pet-select:focus {
-  border-color: var(--color-primary);
-}
-
-
-
-
-
-
 
 /* ------------------------------------------------------------
-   패널 컨테이너 공통
-   대시보드 내 모든 카드에 공통으로 적용
+   2. 대시보드 요약 섹션 및 패널
    ------------------------------------------------------------ */
+.health-overview {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-5, 20px);
+  margin-bottom: var(--space-6, 24px);
+}
+
+@media (max-width: 992px) {
+  .health-overview {
+    grid-template-columns: 1fr;
+  }
+}
+
 .panel {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xl);
-  background: var(--color-surface);
-  box-shadow: 0 2px 0 rgba(90, 54, 37, 0.02);
+  padding: var(--space-5, 20px);
+  background: var(--color-surface, #ffffff);
+  border: 1px solid var(--color-border, #e5e5e5);
+  border-radius: var(--radius-lg, 12px);
 }
 
 .panel__head {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  margin-bottom: 16px;
+  align-items: center;
+  margin-bottom: var(--space-4, 16px);
 }
 
 .panel__title {
-  margin: 0;
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-lg, 18px);
+  font-weight: 600;
+  color: var(--color-text-main, #111111);
 }
 
 .panel__meta {
-  color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-xs, 12px);
+  color: var(--color-text-sub, #666666);
 }
 
-/* 대시보드 2열 그리드 구조 */
-.health-overview {
-  display: grid;
-  gap: 18px;
-  margin-bottom: 18px;
-}
-
-/* 클래식 레이아웃: 차트(2fr) + 요약(270px), 알림은 전체 폭 */
-.health-overview--classic {
-  grid-template-columns: minmax(0, 2fr) 270px;
-}
-
-.health-overview--classic .alert-panel {
-  grid-column: 1 / -1;
-}
-
-
-/* ------------------------------------------------------------
-   체중 변화 차트 위젯
-   Chart.js canvas 래퍼 — 높이를 고정해 반응형 없이 안정적 렌더링
-   ------------------------------------------------------------ */
-.chart-panel {
-  padding: 21px 22px;
-  min-height: 320px;
-}
-
-.chart-wrap {
-  position: relative;
-  height: 235px;
-}
-
-/* 기간 탭 — is-active 클래스는 health-record-01.js 가 토글 */
-.period-tabs {
-  display: flex;
-  gap: 6px;
-}
-
-.period-tab {
-  min-width: 46px;
-  height: 29px;
-  padding: 0 10px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-full);
-  background: white;
-  color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
-}
-
-/* 활성 기간 탭 — primary 계열 색상 적용 */
-.period-tab.is-active {
-  border-color: var(--color-primary);
-  color: var(--color-primary-deep);
-  background: var(--color-primary-light);
-}
-
-
-/* ------------------------------------------------------------
-   최근 기록 요약 위젯
-   반려견 프로필 + 체중·식사량·배변·컨디션 지표 목록
-   ------------------------------------------------------------ */
-.summary-panel {
-  padding: 20px;
-}
-
+/* 요약 패널 내부 */
 .pet-profile {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: var(--space-3, 12px);
+  margin-bottom: var(--space-4, 16px);
 }
 
 .pet-profile__avatar {
-  display: grid;
-  place-items: center;
-  width: 46px;
-  height: 46px;
-  border-radius: var(--radius-lg);
-  background: var(--color-primary-light);
-  font-size: 22px;
-}
-
-.pet-profile__name {
-  margin: 0 0 4px;
-  font-size: var(--font-size-md);
-}
-
-.pet-profile__info {
-  margin: 0;
-  color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
+  font-size: 24px;
+  background: var(--color-bg-sub, #f5f5f5);
+  padding: 8px;
+  border-radius: 50%;
 }
 
 .metric-list {
-  display: grid;
-  gap: 9px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2, 8px);
+  margin-bottom: var(--space-4, 16px);
 }
 
 .metric-row {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  padding: 11px 0;
-  border-bottom: 1px solid #EFE2D9;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--color-border, #e5e5e5);
 }
 
 .metric-row:last-child {
-  border-bottom: 0;
+  border-bottom: none;
 }
 
 .metric-row__label {
-  color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm, 14px);
+  color: var(--color-text-sub, #666666);
 }
 
 .metric-row__value {
-  font-size: var(--font-size-sm);
-  font-weight: 800;
+  font-size: var(--font-size-sm, 14px);
+  font-weight: 600;
+  color: var(--color-text-main, #111111);
 }
 
-
 /* ------------------------------------------------------------
-   이상 징후 알림 위젯
-   [API 연동] GET /api/pets/:petId/health/alerts 응답이 있을 때만 노출
-   건강 화면 카피는 담백하게: "최근 2주간 체중이 12% 줄었어요" 형식
+   3. 알림 패널 (Alert Panel)
    ------------------------------------------------------------ */
 .alert-panel {
-  padding: 18px 20px;
+  grid-column: span 2;
   display: flex;
   align-items: center;
-  gap: 14px;
-  border: 1.5px solid var(--color-warning);
+  gap: var(--space-3, 12px);
+  background-color: var(--color-accent-light, #EEF6F2);
+  border: 1px solid var(--color-accent-border, #CCE3D7);
+  border-radius: var(--radius-md, 8px);
+  transition: all 0.2s ease;
+}
+
+.alert-panel.is-caution {
+  background-color: #FFF9E6;
+  border-color: #FFE58F;
+}
+
+@media (max-width: 992px) {
+  .alert-panel {
+    grid-column: span 1;
+  }
 }
 
 .alert-panel__icon {
-  display: grid;
-  place-items: center;
-  width: 38px;
-  height: 38px;
-  flex: 0 0 auto;
-  border-radius: var(--radius-md);
-  background: var(--color-warning-bg);
-  color: var(--color-warning);
-  font-weight: 900;
+  width: 24px;
+  height: 24px;
+  background-color: var(--color-accent, #428260);
+  color: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.alert-panel.is-caution .alert-panel__icon {
+  background-color: #FFE58F;
+  color: #8C6B00;
 }
 
 .alert-panel__body {
-  min-width: 0;
   flex: 1;
 }
 
 .alert-panel__title {
-  margin: 0 0 4px;
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm, 14px);
+  font-weight: 700;
+  color: var(--color-accent-deep, #2D5A43);
+}
+
+.alert-panel.is-caution .alert-panel__title {
+  color: #8C6B00;
 }
 
 .alert-panel__text {
-  margin: 0;
-  color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-xs, 12px);
+  color: var(--color-accent-deep, #2D5A43);
 }
 
-
-
-
-
-
-
-
+.alert-panel.is-caution .alert-panel__text {
+  color: #8C6B00;
+}
 
 /* ------------------------------------------------------------
-   기록 목록 테이블
+   4. 차트 및 탭
+   ------------------------------------------------------------ */
+.period-tabs {
+  display: flex;
+  background: var(--color-bg-sub, #f5f5f5);
+  padding: 3px;
+  border-radius: var(--radius-md, 8px);
+}
+
+.period-tab {
+  border: none;
+  background: none;
+  padding: 4px 12px;
+  font-size: var(--font-size-xs, 12px);
+  font-weight: 500;
+  color: var(--color-text-sub, #666666);
+  border-radius: var(--radius-sm, 4px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.period-tab.is-active {
+  background: var(--color-surface, #ffffff);
+  color: var(--color-primary, #F2701F);
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chart-wrap {
+  position: relative;
+  width: 100%;
+  height: 260px;
+}
+
+/* ------------------------------------------------------------
+   5. 히스토리 테이블
    ------------------------------------------------------------ */
 .records-panel {
-  padding: 20px 22px;
-}
-
-.records-panel--table {
-  min-height: 260px;
-}
-
-.records-toolbar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* 필터 셀렉트 — login.css 의 폼 스타일과 동일한 구조 */
-.filter-select {
-  height: 31px;
-  padding: 0 10px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: white;
-  color: var(--color-deep);
-  font-size: var(--font-size-xs);
+  margin-bottom: var(--space-6, 24px);
 }
 
 .records-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: var(--font-size-xs);
-}
-
-.records-table th {
-  padding: 10px 8px;
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-text-muted);
   text-align: left;
-  font-weight: 700;
+  font-size: var(--font-size-sm, 14px);
 }
 
+.records-table th,
 .records-table td {
-  padding: 13px 8px;
-  border-bottom: 1px solid #F0E5DE;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border, #e5e5e5);
   vertical-align: middle;
 }
 
-.records-table tr:last-child td {
-  border-bottom: 0;
+.records-table th {
+  background-color: var(--color-bg-sub, #f9f9f9);
+  color: var(--color-text-sub, #666666);
+  font-weight: 600;
 }
 
-/* [추후 적용] 타임라인 리스트 뷰 (모바일 대체용) */
-.timeline-list {
-  display: grid;
-  gap: 10px;
+.filter-select {
+  padding: 6px 12px;
+  border: 1px solid var(--color-border, #e5e5e5);
+  border-radius: var(--radius-md, 6px);
+  font-size: var(--font-size-xs, 12px);
 }
-
-.timeline-item {
-  display: grid;
-  grid-template-columns: 72px 1fr auto;
-  gap: 14px;
-  align-items: center;
-  padding: 12px 13px;
-  border: 1px solid #F0E2D8;
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
-}
-
-.timeline-item__date {
-  color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
-}
-
-.timeline-item__main {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  font-size: var(--font-size-xs);
-}
-
-.timeline-item__main strong {
-  font-size: var(--font-size-sm);
-}
-
-
-
-
-
 
 /* ------------------------------------------------------------
-   기록 추가 모달 대화상자
-   password-reset.css 의 .reset-panel 구조를 참고한 패널 방식
+   6. 상태 칩 (3중 가이드라인 준수: 색상 + 도형 + 텍스트)
+   ------------------------------------------------------------ */
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: var(--font-size-xs, 12px);
+  font-weight: 500;
+}
+
+.status-chip::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.status-chip--normal {
+  background-color: #E6F7ED;
+  color: #0E703C;
+}
+.status-chip--normal::before {
+  background-color: #0E703C;
+}
+
+.status-chip--caution {
+  background-color: #FFF0E6;
+  color: #D94800;
+}
+.status-chip--caution::before {
+  background-color: #D94800;
+  border-radius: 1px;
+}
+
+/* ------------------------------------------------------------
+   7. 대화상자 모달 (<dialog>)
    ------------------------------------------------------------ */
 .health-dialog {
-  width: 520px;
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-sm);
-}
-
-/* 모달 배경 오버레이 */
-.health-dialog::backdrop {
-  background: rgba(46, 32, 25, .38);
-}
-
-.record-form {
+  border: none;
+  border-radius: var(--radius-lg, 12px);
   padding: 24px;
+  max-width: 480px;
+  width: 90%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.health-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .record-form__head {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 18px;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.record-form__head h2 {
-  margin: 0;
-  font-size: var(--font-size-lg);
-}
-
-/* 닫기 버튼 — login.css 의 탭 버튼과 동일한 크기 패턴 */
 .record-form__close {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: white;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--color-text-sub, #666666);
 }
 
-/* 폼 2열 그리드 — .form-field--full 로 전체 폭 점유 */
 .record-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 13px;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
 }
-
 
 .form-field--full {
-  grid-column: 1 / -1;
+  grid-column: span 2;
 }
 
-
-
-
-
-
-/* ------------------------------------------------------------
-   폼 인라인 메시지
-   login.css 의 .auth-form__message 와 동일한 역할.
-   aria-live="polite" 로 스크린리더에 변경 알림.
-   ------------------------------------------------------------ */
-.form-message {
-  min-height: 18px;
-  margin: 12px 0 0;
-  color: var(--color-danger);
-  font-size: var(--font-size-xs);
+.form-field__label {
+  display: block;
+  font-size: var(--font-size-xs, 12px);
+  font-weight: 600;
+  margin-bottom: 4px;
 }
 
-.form-message.is-success {
-  color: var(--color-accent);
+.form-field__input,
+.form-field__select,
+.form-field__textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border, #cccccc);
+  border-radius: var(--radius-md, 6px);
+  font-size: var(--font-size-sm, 14px);
+  box-sizing: border-box;
 }
 
-/* 모달 하단 버튼 그룹 */
 .record-form__actions {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-  margin-top: 14px;
-  padding-top: 14px;
-  border-top: 1px solid var(--color-border);
+  margin-top: 20px;
+}
+
+.form-message {
+  font-size: var(--font-size-xs, 12px);
+  color: var(--color-danger, #d93025);
+  margin-top: 8px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 32px 16px;
+}
+
+.empty-state__title {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.empty-state__desc {
+  font-size: var(--font-size-xs, 12px);
+  color: var(--color-text-sub, #888888);
+  margin-bottom: 16px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* ------------------------------------------------------------
+   8. 스켈레톤 애니메이션
+   ------------------------------------------------------------ */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  height: 18px;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
