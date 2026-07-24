@@ -489,8 +489,5 @@
     /* 최초 데이터 로드 */
     loadConversations();
   });
-<<<<<<< HEAD
 
 })();
-=======
->>>>>>> db7f489f7426883cac8a15fa1bb02cefea32f9a6
