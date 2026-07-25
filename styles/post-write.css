@@ -20,6 +20,7 @@
   justify-content: space-between;
 }
 
+/* 작성·수정·업로드 오류 배너와 폼 카드 사이의 세로 간격을 확보한다. */
 .post-write__message {
   margin-bottom: var(--spacing-lg);
 }
@@ -60,10 +61,17 @@
   opacity: 0;
 }
 
-/* 숨겨진 input 대신 실제로 보이는 알약 모양 버튼 - 사용자에게는 이 span 이 라디오 버튼처럼 보인다 */
+/* 숨겨진 input 대신 실제로 보이는 알약 모양 버튼 - 높이는 42px로 통일하고, 가로폭은 글자 너비와 좌우 패딩에 맞춰 자연스럽게 결정한다 */
 .post-write__category span {
-  display: block;
-  padding: var(--spacing-xs) var(--spacing-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.625rem;
+  padding-inline: var(--spacing-md);
+  text-align: center;
+  font-size: var(--font-size-md);
+  line-height: 1;
+  white-space: nowrap;
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-full);
   color: var(--color-text-secondary);
@@ -85,6 +93,7 @@
   box-shadow: var(--shadow-focus);
 }
 
+/* 라벨과 글자 수 카운터 사이에 최소 간격을 두면서 양끝 정렬 규칙을 보완한다. */
 .post-write__label-row {
   gap: var(--spacing-md);
 }
@@ -102,6 +111,7 @@
   min-height: var(--spacing-3xl);
 }
 
+/* 파일 선택 버튼과 선택된 파일명 안내를 같은 줄에 일정한 간격으로 배치한다. */
 .post-write__image-control {
   gap: var(--spacing-sm);
 }
@@ -136,7 +146,7 @@
   background-color: var(--color-surface);
 }
 
-/* aspect-ratio: 1/1 로 정사각형 비율을 고정하고, object-fit: cover 로 원본 이미지 비율과 무관하게 정사각형을 꽉 채우도록 잘라 보여줘 그리드 칸 크기를 균일하게 유지한다 */
+/* 작성 단계의 작은 썸네일은 aspect-ratio: 1/1 칸에 object-fit: cover로 넣는다. 이미지를 늘여 찌그러뜨리지 않고 원본 비율을 유지한 채 중앙 일부만 잘라 미리보기 칸 크기를 통일한다. 상세 조회에서는 contain을 사용해 원본 전체를 보여준다. */
 .post-write__preview-image {
   display: block;
   width: 100%;
@@ -201,6 +211,14 @@
   color: inherit;
   background: transparent;
   cursor: pointer;
+}
+
+/* 하단 액션 영역에서는 공통 버튼과 btn--lg의 서로 다른 최소 높이를 덮어써 두 버튼을 같은 48px 높이와 내부 여백으로 맞춘다 */
+.post-write__actions .btn {
+  min-height: 3rem;
+  height: 3rem;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--font-size-lg);
 }
 
 /* 폼 맨 아래 취소/제출 버튼이 놓이는 영역 - border-top 으로 위 콘텐츠와 구분선을 그어, 여기부터가 폼을 마무리하는 액션 영역임을 시각적으로 분리한다 */

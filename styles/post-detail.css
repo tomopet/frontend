@@ -23,6 +23,7 @@
   gap: var(--spacing-xs);
 }
 
+/* 게시글 조회·좋아요·댓글 API 오류를 본문 카드 위에서 일정한 간격으로 표시한다. */
 .post-detail__message {
   margin-bottom: var(--spacing-lg);
 }
@@ -53,6 +54,7 @@
   color: var(--color-deep);
 }
 
+/* 상세 페이지의 게시글 제목은 공통 본문보다 큰 디자인 토큰으로 정보 위계를 만든다. */
 .post-detail__title {
   margin-bottom: var(--spacing-sm);
   font-size: var(--font-size-2xl);
@@ -75,13 +77,14 @@
   margin-top: var(--spacing-lg);
 }
 
-/* object-fit: cover 로 원본 이미지 비율과 무관하게 지정된 높이(20rem)를 꽉 채우면서 잘라 보여줘, 갤러리 칸 크기를 균일하게 유지한다 */
+/* 고정된 20rem 갤러리 칸 안에서 object-fit: contain으로 원본 전체와 종횡비를 보존한다. 남는 영역은 보조 표면색으로 채워 서로 다른 비율의 이미지도 찌그러지거나 잘리지 않게 한다. */
 .post-detail__image {
   display: block;
   width: 100%;
   height: 20rem;
   border-radius: var(--radius-lg);
-  object-fit: cover;
+  object-fit: contain;
+  background-color: var(--color-surface-alt);
 }
 
 /* white-space: pre-wrap 으로 작성자가 입력한 줄바꿈/공백을 그대로 보존하고, overflow-wrap: anywhere 로 긴 영단어·URL도 컨테이너 밖으로 넘치지 않게 강제로 줄바꿈한다 */
@@ -134,6 +137,7 @@
   margin-bottom: var(--spacing-lg);
 }
 
+/* 댓글 섹션 제목은 게시글 제목보다 한 단계 작은 토큰으로 보조 영역임을 나타낸다. */
 .comments__title {
   font-size: var(--font-size-xl);
   color: var(--color-deep);
@@ -197,6 +201,7 @@
   margin-top: var(--spacing-sm);
 }
 
+/* 댓글이 없을 때 공용 빈 상태가 입력 폼과 붙지 않도록 위쪽 간격을 둔다. */
 .comments__empty {
   margin-top: var(--spacing-lg);
 }

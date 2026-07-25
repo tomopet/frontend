@@ -1,276 +1,318 @@
 (function () {
   "use strict";
 
-  // 전역 변수 선언
+  // [공통] 페이지 스크립트는 직접 fetch하거나 DOM 유틸리티를 재구현하지 않고 공용 API/UI/인증 모듈을 사용한다.
   var Api = window.TomopetApi;
   var Ui = window.TomopetUi;
+  var Auth = window.TomopetAuth;
   var $ = Ui.$;
+
+  // 현재 게시글과 삭제 대상을 보관하고, 좋아요 중복 요청은 별도 플래그로 잠근다.
   var postId = null;
-  var currentPost = null;
   var pendingCommentId = null;
   var likePending = false;
 
-  // URL에서 게시글 ID 추출
+  // API의 영문 카테고리 값을 화면에 표시할 한글 라벨로 변환한다.
+  var CATEGORY_LABELS = {
+    gallery: "갤러리",
+    recipe: "레시피",
+    free: "자유"
+  };
+
+  // 목록/홈이 전달하는 정확한 계약인 ?postId= 값을 읽고, 없으면 페이지 안에 접근 오류를 표시한다.
   function getPostId() {
-    var urlParams = new URLSearchParams(window.location.search);
-    var id = urlParams.get("postId");
+    var params = new URLSearchParams(window.location.search);
+    var id = (params.get("postId") || "").trim();
+
     if (!id) {
-      Ui.setFormMessage($("post-detail-message"), "잘못된 접근입니다. 게시글 번호를 확인해주세요.", "danger");
+      Ui.setFormMessage(
+        $("post-detail-message"),
+        "잘못된 접근입니다. 게시글 번호를 확인해주세요.",
+        "danger"
+      );
       return null;
     }
+
     return id;
   }
 
-  // 이미지 URL 정규화
+  // 공개 상세 조회는 허용하되 좋아요·댓글·삭제 같은 변경 동작 직전에만 로그인을 요구한다.
+  function requireActionAuth() {
+    if (!Auth.requireAuth()) return false;
+    if (Auth.isLoggedIn()) return true;
+
+    window.location.replace(Auth.loginUrl ? Auth.loginUrl() : "./login.html");
+    return false;
+  }
+
+  // 현재 로그인 사용자와 작성자 ID를 문자열로 맞춰 비교해 숫자/문자열 응답 차이를 흡수한다.
+  function isOwnedByCurrentUser(authorId) {
+    var user = Auth.getUser();
+    return Boolean(
+      user &&
+      user.userId !== undefined &&
+      authorId !== undefined &&
+      String(user.userId) === String(authorId)
+    );
+  }
+
+  // 상세 API가 허용하는 images, imageUrls, imageUrl 세 형태를 URL 문자열 배열 하나로 정규화한다.
   function normalizeImageUrls(post) {
-    var images = [];
-    if (post.images && Array.isArray(post.images)) {
-      images = post.images;
-    } else if (post.imageUrls && Array.isArray(post.imageUrls)) {
-      images = post.imageUrls;
-    } else if (post.imageUrl) {
-      images = [post.imageUrl];
+    var rawImages = [];
+
+    if (post && Array.isArray(post.images)) {
+      rawImages = post.images;
+    } else if (post && Array.isArray(post.imageUrls)) {
+      rawImages = post.imageUrls;
+    } else if (post && post.imageUrl) {
+      rawImages = [post.imageUrl];
     }
 
-    return images.map(function (img) {
-      if (typeof img === "string") {
-        return { imageUrl: img };
-      }
-      if (img && !img.imageUrl && img.url) {
-        return { imageUrl: img.url };
-      }
-      return img;
-    }).filter(function (img) {
-      return img && img.imageUrl;
+    return rawImages.map(function (image) {
+      if (typeof image === "string") return image;
+      return image && (image.imageUrl || image.url);
+    }).filter(function (url) {
+      return typeof url === "string" && url.length > 0;
     });
   }
 
-  // 게시글 렌더링
+  // 기존 갤러리를 비운 뒤 안전한 DOM 생성 방식으로 첨부 이미지와 대체 텍스트를 다시 구성한다.
+  function renderImages(post) {
+    var gallery = $("post-image-gallery");
+    var imageUrls = normalizeImageUrls(post);
+
+    Ui.clearChildren(gallery);
+    gallery.hidden = imageUrls.length === 0;
+
+    imageUrls.forEach(function (url, index) {
+      var image = Ui.createEl("img", "post-detail__image");
+      image.src = url;
+      image.alt = (post.title || "게시글") + " 첨부 이미지 " + (index + 1);
+      gallery.appendChild(image);
+    });
+  }
+
+  // 게시글 본문, 메타 정보, 이미지, 좋아요 상태와 작성자 전용 액션을 한 번에 화면에 반영한다.
   function renderPost(post) {
-    if (!post) return;
-
-    currentPost = post;
-
-    var categoryEl = $("post-category");
-    var titleEl = $("post-title");
-    var authorEl = $("post-author");
-    var createdAtEl = $("post-created-at");
-    var imageGalleryEl = $("post-image-gallery");
-    var contentEl = $("post-content");
-    var likeButtonEl = $("post-like-button");
-    var likeCountEl = $("post-like-count");
-    var ownerActionsEl = $("post-owner-actions");
-    var editLinkEl = $("post-edit-link");
-
-    // 카테고리 렌더링
-    var categoryLabels = {
-      gallery: "갤러리",
-      recipe: "레시피",
-      free: "자유"
-    };
-    categoryEl.textContent = categoryLabels[post.category] || "";
-
-    // 제목 렌더링
-    titleEl.textContent = post.title || "제목 없음";
-
-    // 작성자 렌더링
-    authorEl.textContent = post.authorNickname || "익명";
-
-    // 작성일 렌더링
-    createdAtEl.textContent = Ui.formatDate(post.createdAt);
-
-    // 이미지 렌더링
-    var images = normalizeImageUrls(post);
-    if (images.length > 0) {
-      Ui.clearChildren(imageGalleryEl);
-      images.forEach(function (img) {
-        var imgEl = Ui.createEl("img", "post-detail__image");
-        imgEl.src = img.imageUrl;
-        imgEl.alt = "게시글 이미지";
-        imageGalleryEl.appendChild(imgEl);
-      });
-      imageGalleryEl.hidden = false;
-    } else {
-      imageGalleryEl.hidden = true;
+    if (!post || typeof post !== "object") {
+      throw new Error("게시글 응답 형식이 올바르지 않습니다.");
     }
 
-    // 내용 렌더링
-    contentEl.textContent = post.content || "";
+    $("post-category").textContent = CATEGORY_LABELS[post.category] || "";
+    $("post-title").textContent = post.title || "제목 없음";
+    $("post-author").textContent = post.authorNickname || "익명";
 
-    // 좋아요 상태 렌더링
-    var isLiked = Boolean(post.likedByMe || post.isLiked);
-    var likeCount = Math.max(0, Number(post.likeCount) || 0);
-    likeButtonEl.classList.toggle("is-liked", isLiked);
-    likeButtonEl.setAttribute("aria-pressed", String(isLiked));
-    likeCountEl.textContent = likeCount;
-
-    // 소유자 액션 렌더링
-    var currentUser = window.TomopetAuth.getUser();
-    if (currentUser && String(currentUser.userId) === String(post.authorId)) {
-      ownerActionsEl.hidden = false;
-      editLinkEl.href = "./post-write.html?postId=" + encodeURIComponent(postId);
+    var createdAt = $("post-created-at");
+    createdAt.textContent = Ui.formatDate(post.createdAt);
+    if (post.createdAt) {
+      createdAt.dateTime = post.createdAt;
     } else {
-      ownerActionsEl.hidden = true;
+      createdAt.removeAttribute("datetime");
     }
 
-    // 게시글 및 댓글 섹션 표시
+    $("post-content").textContent = post.content || "";
+    renderImages(post);
+
+    var likeButton = $("post-like-button");
+    var liked = Boolean(post.likedByMe || post.isLiked);
+    likeButton.classList.toggle("is-liked", liked);
+    likeButton.setAttribute("aria-pressed", String(liked));
+    $("post-like-count").textContent = String(Math.max(0, Number(post.likeCount) || 0));
+
+    var ownerActions = $("post-owner-actions");
+    var isOwner = isOwnedByCurrentUser(post.authorId);
+    ownerActions.hidden = !isOwner;
+    if (isOwner) {
+      $("post-edit-link").href =
+        "./post-write.html?postId=" + encodeURIComponent(postId);
+    }
+
     $("post-detail").hidden = false;
     $("comments-section").hidden = false;
   }
 
-  // 댓글 항목 생성
+  // 댓글 한 건의 작성자·작성일·본문을 만들고, 본인 댓글에만 삭제 버튼을 연결한다.
   function createCommentItem(comment) {
-    var commentEl = Ui.createEl("li", "comments__item");
+    comment = comment && typeof comment === "object" ? comment : {};
+
+    var item = Ui.createEl("li", "comments__item");
     var commentId = comment.commentId !== undefined ? comment.commentId : comment.id;
+
     if (commentId !== undefined && commentId !== null) {
-      commentEl.id = "comment-" + commentId;
+      item.id = "comment-" + commentId;
     }
 
-    var headerEl = Ui.createEl("div", "comments__item-header");
-    var authorEl = Ui.createEl("span", "comments__author");
-    authorEl.textContent = comment.authorNickname || "익명";
-    headerEl.appendChild(authorEl);
+    var header = Ui.createEl("div", "comments__item-header");
+    header.appendChild(
+      Ui.createEl("span", "comments__author", comment.authorNickname || "익명")
+    );
+    header.appendChild(
+      Ui.createEl("span", "comments__date", Ui.formatDate(comment.createdAt))
+    );
+    item.appendChild(header);
+    item.appendChild(
+      Ui.createEl("p", "comments__content", comment.content || "")
+    );
 
-    var dateEl = Ui.createEl("span", "comments__date");
-    dateEl.textContent = Ui.formatDate(comment.createdAt);
-    headerEl.appendChild(dateEl);
-
-    commentEl.appendChild(headerEl);
-
-    var contentEl = Ui.createEl("p", "comments__content");
-    contentEl.textContent = comment.content || "";
-    commentEl.appendChild(contentEl);
-
-    // 삭제 버튼 추가
-    var currentUser = window.TomopetAuth.getUser();
-    if (currentUser && commentId !== undefined && commentId !== null && String(currentUser.userId) === String(comment.authorId)) {
-      var deleteButtonEl = Ui.createEl("button", "comments__delete");
-      deleteButtonEl.type = "button";
-      deleteButtonEl.textContent = "삭제";
-      deleteButtonEl.onclick = function () {
+    if (
+      commentId !== undefined &&
+      commentId !== null &&
+      isOwnedByCurrentUser(comment.authorId)
+    ) {
+      var deleteButton = Ui.createEl("button", "comments__delete", "삭제");
+      deleteButton.type = "button";
+      deleteButton.setAttribute("aria-label", "댓글 삭제");
+      deleteButton.addEventListener("click", function () {
+        // 실제 삭제는 확인 dialog에서 수행하므로 여기서는 대상 ID만 기억한다.
         pendingCommentId = commentId;
         $("comment-delete-dialog").showModal();
-      };
-      commentEl.appendChild(deleteButtonEl);
+      });
+      item.appendChild(deleteButton);
     }
 
-    return commentEl;
+    return item;
   }
 
-  // 댓글 목록 렌더링
+  // 댓글 응답을 배열로 방어 정규화하고 개수, 목록, 빈 상태를 공용 렌더러로 갱신한다.
   function renderComments(comments) {
-    var commentListEl = $("comment-list");
-    var commentCountEl = $("comment-count");
-    var commentEmptyEl = $("comment-empty");
-
-    if (!comments || comments.length === 0) {
-      commentCountEl.textContent = "0개";
-      commentEmptyEl.hidden = false;
-      Ui.clearChildren(commentListEl);
-      return;
-    }
-
-    commentCountEl.textContent = Ui.formatNumber(comments.length) + "개";
-    commentEmptyEl.hidden = true;
-    Ui.renderList(commentListEl, comments, createCommentItem);
+    var list = Array.isArray(comments) ? comments : [];
+    $("comment-count").textContent = Ui.formatNumber(list.length) + "개";
+    Ui.renderList($("comment-list"), list, createCommentItem, $("comment-empty"));
   }
 
-  // 게시글 로드
-  async function loadPost() {
+  // [API 연동] 현재 게시글의 댓글을 불러오며 실패해도 게시글 본문은 유지하고 오류 배너만 표시한다.
+  async function loadComments() {
     try {
-      var post = await Api.get("/api/posts/" + encodeURIComponent(postId));
+      var data = await Api.get(
+        "/api/posts/" + encodeURIComponent(postId) + "/comments"
+      );
+      renderComments(Api.toList(data));
+    } catch (error) {
+      console.error("댓글 로딩 실패:", error);
+      renderComments([]);
+      Ui.setFormMessage(
+        $("post-detail-message"),
+        Api.toMessage(error, "댓글을 불러오지 못했습니다."),
+        "danger"
+      );
+    }
+  }
+
+  // [API 연동] 게시글 상세를 먼저 그린 다음 댓글을 순서대로 불러와 초기 화면을 완성한다.
+  async function loadPost() {
+    Ui.setFormMessage($("post-detail-message"), "");
+
+    try {
+      var data = await Api.get("/api/posts/" + encodeURIComponent(postId));
+      var post = data && data.post ? data.post : data;
       renderPost(post);
       await loadComments();
     } catch (error) {
-      console.error("게시글 로드 실패:", error);
-      Ui.setFormMessage($("post-detail-message"), Api.toMessage(error), "danger");
+      console.error("게시글 로딩 실패:", error);
       $("post-detail").hidden = true;
       $("comments-section").hidden = true;
+      Ui.setFormMessage(
+        $("post-detail-message"),
+        Api.toMessage(error, "게시글을 불러오지 못했습니다."),
+        "danger"
+      );
     }
   }
 
-  // 댓글 로드
-  async function loadComments() {
-    try {
-      var comments = await Api.get("/api/posts/" + encodeURIComponent(postId) + "/comments");
-      comments = Api.toList(comments);
-      renderComments(comments);
-    } catch (error) {
-      console.error("댓글 로드 실패:", error);
-      Ui.setFormMessage($("post-detail-message"), "댓글을 불러오는 중 오류가 발생했습니다.", "danger");
-    }
-  }
-
-  // 좋아요 처리
+  // 좋아요는 화면을 먼저 갱신하는 낙관적 처리이며, API 실패 시 이전 상태와 개수로 되돌린다.
   async function handleLike() {
-    if (likePending) return;
+    if (likePending || !requireActionAuth()) return;
+
+    var button = $("post-like-button");
+    var count = $("post-like-count");
+    var wasLiked = button.classList.contains("is-liked");
+    var previousCount = Math.max(0, Number(count.textContent) || 0);
 
     likePending = true;
-    var likeButtonEl = $("post-like-button");
-    var likeCountEl = $("post-like-count");
-
-    // UI 상태 변경 (옵티미스틱 업데이트)
-    var isLiked = likeButtonEl.classList.contains("is-liked");
-    likeButtonEl.classList.toggle("is-liked", !isLiked);
-    likeButtonEl.setAttribute("aria-pressed", !isLiked);
-    var currentCount = parseInt(likeCountEl.textContent) || 0;
-    likeCountEl.textContent = isLiked ? Math.max(0, currentCount - 1) : currentCount + 1;
-    likeButtonEl.disabled = true;
+    button.disabled = true;
+    // 서버 응답을 기다리지 않고 즉시 피드백을 주되 아래 catch에서 반드시 롤백한다.
+    button.classList.toggle("is-liked", !wasLiked);
+    button.setAttribute("aria-pressed", String(!wasLiked));
+    count.textContent = String(wasLiked ? Math.max(0, previousCount - 1) : previousCount + 1);
 
     try {
-      await Api.post("/api/posts/" + encodeURIComponent(postId) + "/like", {});
-      // 좋아요 성공 시 상태 유지
+      var result = await Api.post(
+        "/api/posts/" + encodeURIComponent(postId) + "/like",
+        {}
+      );
+
+      if (result && result.likeCount !== undefined) {
+        // 서버가 최종 개수를 반환하면 낙관적으로 계산한 값을 서버 기준으로 보정한다.
+        count.textContent = String(Math.max(0, Number(result.likeCount) || 0));
+      }
+      if (result && (result.likedByMe !== undefined || result.isLiked !== undefined)) {
+        var serverLiked = Boolean(
+          result.likedByMe !== undefined ? result.likedByMe : result.isLiked
+        );
+        button.classList.toggle("is-liked", serverLiked);
+        button.setAttribute("aria-pressed", String(serverLiked));
+      }
     } catch (error) {
       console.error("좋아요 처리 실패:", error);
-      // 상태 롤백
-      likeButtonEl.classList.toggle("is-liked", isLiked);
-      likeButtonEl.setAttribute("aria-pressed", isLiked);
-      likeCountEl.textContent = currentCount;
-      Ui.setFormMessage($("post-detail-message"), Api.toMessage(error, "좋아요 처리에 실패했습니다."), "danger");
+      button.classList.toggle("is-liked", wasLiked);
+      button.setAttribute("aria-pressed", String(wasLiked));
+      count.textContent = String(previousCount);
+      Ui.setFormMessage(
+        $("post-detail-message"),
+        Api.toMessage(error, "좋아요 처리에 실패했습니다."),
+        "danger"
+      );
     } finally {
       likePending = false;
-      likeButtonEl.disabled = false;
+      button.disabled = false;
     }
   }
 
-  // 댓글 제출 처리
+  // 댓글 제출은 빈 문자열을 차단하고 요청 중 버튼을 잠근 뒤 성공 시 목록 전체를 새로 불러온다.
   async function handleCommentSubmit(event) {
     event.preventDefault();
-    var contentEl = $("comment-content");
-    var errorEl = $("comment-content-error");
-    var submitButtonEl = $("comment-submit-button");
+    if (!requireActionAuth()) return;
 
-    var content = contentEl.value.trim();
+    var input = $("comment-content");
+    var errorEl = $("comment-content-error");
+    var submitButton = $("comment-submit-button");
+    var content = input.value.trim();
+
     if (!content) {
-      Ui.setFieldError(contentEl, errorEl, "댓글 내용을 입력해주세요.");
+      Ui.setFieldError(input, errorEl, "댓글 내용을 입력해주세요.");
+      input.focus();
       return;
     }
 
-    Ui.setFieldError(contentEl, errorEl, "");
-    Ui.setLoading(submitButtonEl, true, "댓글 등록 중...");
+    Ui.setFieldError(input, errorEl, "");
+    Ui.setLoading(submitButton, true, "댓글 등록 중...");
 
     try {
-      await Api.post("/api/posts/" + encodeURIComponent(postId) + "/comments", {
-        content: content
-      });
-      contentEl.value = "";
-      Ui.setFieldError(contentEl, errorEl, "");
+      await Api.post(
+        "/api/posts/" + encodeURIComponent(postId) + "/comments",
+        { content: content }
+      );
+      input.value = "";
       await loadComments();
     } catch (error) {
       console.error("댓글 등록 실패:", error);
-      Ui.setFormMessage($("post-detail-message"), Api.toMessage(error, "댓글 등록에 실패했습니다."), "danger");
+      Ui.setFormMessage(
+        $("post-detail-message"),
+        Api.toMessage(error, "댓글 등록에 실패했습니다."),
+        "danger"
+      );
     } finally {
-      Ui.setLoading(submitButtonEl, false, "등록");
+      Ui.setLoading(submitButton, false);
     }
   }
 
-  // 게시글 삭제 확인
+  // 게시글 삭제 확인 버튼의 실제 API 호출을 담당하며 성공하면 커뮤니티 목록으로 이동한다.
   async function confirmPostDelete() {
-    var dialog = $("post-delete-dialog");
-    var confirmButton = $("post-delete-confirm");
+    if (!requireActionAuth()) return;
 
-    // 확인 버튼 잠금
-    Ui.setLoading(confirmButton, true, "삭제 중...");
+    var dialog = $("post-delete-dialog");
+    var button = $("post-delete-confirm");
+    Ui.setLoading(button, true, "삭제 중...");
 
     try {
       await Api.del("/api/posts/" + encodeURIComponent(postId));
@@ -278,56 +320,74 @@
       window.location.href = "./community.html";
     } catch (error) {
       console.error("게시글 삭제 실패:", error);
-      Ui.setFormMessage($("post-detail-message"), Api.toMessage(error, "게시글 삭제에 실패했습니다."), "danger");
-      Ui.setLoading(confirmButton, false, "삭제");
+      Ui.setFormMessage(
+        $("post-detail-message"),
+        Api.toMessage(error, "게시글 삭제에 실패했습니다."),
+        "danger"
+      );
+      Ui.setLoading(button, false);
     }
   }
 
-  // 댓글 삭제 확인
+  // 기억해 둔 댓글 ID를 이용해 삭제하고, 성공하면 ID를 비운 뒤 최신 댓글 목록을 다시 표시한다.
   async function confirmCommentDelete() {
-    if (pendingCommentId === null || pendingCommentId === undefined) return;
+    if (
+      pendingCommentId === null ||
+      pendingCommentId === undefined ||
+      !requireActionAuth()
+    ) {
+      return;
+    }
 
     var dialog = $("comment-delete-dialog");
-    var confirmButton = $("comment-delete-confirm");
-
-    // 확인 버튼 잠금
-    Ui.setLoading(confirmButton, true, "삭제 중...");
+    var button = $("comment-delete-confirm");
+    Ui.setLoading(button, true, "삭제 중...");
 
     try {
-      await Api.del("/api/posts/" + encodeURIComponent(postId) + "/comments/" + encodeURIComponent(pendingCommentId));
-      Ui.setLoading(confirmButton, false);
+      await Api.del(
+        "/api/posts/" + encodeURIComponent(postId) +
+        "/comments/" + encodeURIComponent(pendingCommentId)
+      );
       dialog.close();
       pendingCommentId = null;
       await loadComments();
     } catch (error) {
       console.error("댓글 삭제 실패:", error);
-      Ui.setFormMessage($("post-detail-message"), Api.toMessage(error, "댓글 삭제에 실패했습니다."), "danger");
-      Ui.setLoading(confirmButton, false, "삭제");
+      Ui.setFormMessage(
+        $("post-detail-message"),
+        Api.toMessage(error, "댓글 삭제에 실패했습니다."),
+        "danger"
+      );
+    } finally {
+      Ui.setLoading(button, false);
     }
   }
 
-  // 이벤트 바인딩
+  // 정적 HTML에 있는 좋아요·댓글·두 삭제 dialog의 이벤트를 한 곳에서 연결한다.
   function bindEvents() {
-    $("post-like-button").onclick = handleLike;
-    $("comment-form").onsubmit = handleCommentSubmit;
-    $("post-delete-button").onclick = function () {
+    $("post-like-button").addEventListener("click", handleLike);
+    $("comment-form").addEventListener("submit", handleCommentSubmit);
+    $("post-delete-button").addEventListener("click", function () {
       $("post-delete-dialog").showModal();
-    };
-    $("post-delete-cancel").onclick = function () {
+    });
+    $("post-delete-cancel").addEventListener("click", function () {
       $("post-delete-dialog").close();
-    };
-    $("post-delete-confirm").onclick = confirmPostDelete;
-    $("comment-delete-cancel").onclick = function () {
+    });
+    $("post-delete-confirm").addEventListener("click", confirmPostDelete);
+    $("comment-delete-cancel").addEventListener("click", function () {
       $("comment-delete-dialog").close();
       pendingCommentId = null;
-    };
-    $("comment-delete-confirm").onclick = confirmCommentDelete;
-    $("comment-focus-button").onclick = function () {
+    });
+    $("comment-delete-confirm").addEventListener("click", confirmCommentDelete);
+    $("comment-focus-button").addEventListener("click", function () {
       $("comment-content").focus();
-    };
+    });
+    $("comment-content").addEventListener("input", function () {
+      Ui.setFieldError($("comment-content"), $("comment-content-error"), "");
+    });
   }
 
-  // DOM 로드 후 초기화
+  // DOM 준비 후 postId를 먼저 검증해 잘못된 접근에서는 API 요청과 이벤트 연결을 모두 중단한다.
   document.addEventListener("DOMContentLoaded", function () {
     postId = getPostId();
     if (!postId) return;

@@ -32,10 +32,18 @@
   gap: var(--spacing-xs);
 }
 
-/* 알약 모양의 토글형 필터 버튼 기본 스타일 - 상태 전환(색/테두리/배경)에 트랜지션을 줘 클릭 반응이 부드럽게 보이도록 한다 */
+/* 알약 모양의 토글형 필터 버튼 - 높이는 42px로 통일하고, 가로폭은 글자 너비와 좌우 패딩에 맞춰 자연스럽게 결정한다 */
 .community__filter {
-  padding: var(--spacing-xs) var(--spacing-md);
-  border: thin solid var(--color-border-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.625rem;
+  padding-inline: var(--spacing-md);
+  text-align: center;
+  font-size: var(--font-size-md);
+  line-height: 1;
+  white-space: nowrap;
+  border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-full);
   color: var(--color-text-secondary);
   background-color: var(--color-surface);
@@ -89,6 +97,7 @@
   background-color: var(--color-surface);
 }
 
+/* 검색 카드의 제목은 페이지 h1보다 작은 섹션 제목 토큰을 사용한다. */
 .community__search-title {
   font-size: var(--font-size-lg);
   color: var(--color-deep);
@@ -101,6 +110,7 @@
   gap: var(--spacing-sm);
 }
 
+/* 검색 대상 셀렉트 앞의 라벨을 보조 텍스트 크기와 굵기로 구분한다. */
 .community__search-label {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
@@ -110,6 +120,14 @@
 /* 검색 대상(제목/태그) 셀렉트는 폭을 고정해 옆의 입력창 폭이 안정적으로 유지되게 한다 */
 .community__search-select {
   width: 8rem;
+}
+
+/* 셀렉트의 한글 글리프가 기본 내부 높이에서 잘리지 않도록 충분한 세로 공간을 확보하고, 검색 영역의 모든 컨트롤 높이를 48px로 통일한다 */
+.community__search-select,
+.community__search-input,
+.community__search-form .btn {
+  min-height: 3rem;
+  height: 3rem;
 }
 
 /* 검색어 입력창은 flex: 1 로 남는 가로 공간을 모두 차지해 폼의 주된 입력 영역이 넓게 보이도록 한다 */
@@ -141,10 +159,12 @@
   border-radius: var(--radius-lg);
   background-color: var(--color-surface);
 }
+/* 모드 제목은 일반 본문 크기로, 현재 상태는 오른쪽 끝의 흐린 보조 텍스트로 표시한다. */
 .community__mode-title { font-size: var(--font-size-md); color: var(--color-deep); }
 .community__mode-status { margin-left: auto; font-size: var(--font-size-sm); color: var(--color-text-muted); }
 
 /* [API 연동] 페이지 이동은 화면 폭에 따라 재배치하지 않는 데스크톱 전용 구성이다. */
 /* 이전/다음 버튼과 그 사이 상태 텍스트를 가로 중앙에 모아 배치한다. min-width 로 상태 텍스트 영역의 최소 폭을 고정해 "1/2" 같은 페이지 번호 자릿수가 바뀌어도 버튼 위치가 좌우로 흔들리지 않게 한다 */
 .community__pagination { display: flex; align-items: center; justify-content: center; gap: var(--spacing-md); margin-top: var(--spacing-xl); }
+/* 페이지 숫자는 고정폭 숫자를 사용해 자릿수가 바뀔 때 중앙 정렬이 흔들리지 않게 한다. */
 .community__page-status { min-width: 8rem; text-align: center; font-variant-numeric: tabular-nums; color: var(--color-text-secondary); }
