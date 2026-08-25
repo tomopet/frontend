@@ -186,3 +186,40 @@
   margin-top: var(--spacing-xl);
   border-top: 1px solid var(--color-border);
 }
+
+/* 취소는 왼쪽 끝에 두고 임시저장·게시하기는 오른쪽에 묶는다.
+   .post-write__actions 가 space-between 이므로 묶지 않으면 세 요소가 균등 분산된다. */
+.post-write__actions-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.post-write__draft-status {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* 임시저장 복원 안내 - 저장된 글이 있을 때만 노출된다. */
+.post-write__draft {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface-alt);
+}
+
+.post-write__draft-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.post-write__draft-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--spacing-xs);
+}

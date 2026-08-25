@@ -1,0 +1,688 @@
+@charset "UTF-8";
+
+/* ============================================================
+   TOMOPET | styles/daily-log.css
+   검색 키워드: 달력, 데일리로그, 통합 기록, 체중, 비만도, 급여평균, 산책, 배변
+   식단 달력 (daily-log) 전용
+
+   로드 순서: variables -> common -> components -> daily-log
+
+   diet.html / health-record.html 제거에 따라
+   음식 검색 모달(food-log, food-result, food-picked)과
+   체중 추이 모달(period-tabs, chart-wrap)에 쓰이던 스타일을
+   이 파일로 옮겨왔습니다. (두 파일에 각각 있던 것을 통합)
+
+   모달, 폼 필드, 버튼, 빈 상태는 components.css 의
+   공통 클래스를 그대로 사용하므로 여기서 다시 정의하지 않음
+   ============================================================ */
+
+
+/* ------------------------------------------------------------
+   페이지 헤더 - 아이 선택
+   ------------------------------------------------------------ */
+
+.page-header__actions .form-field__select {
+  min-width: 160px;
+}
+
+
+/* ------------------------------------------------------------
+   2단 레이아웃 - 달력(1.6) | 지표 3카드(1)
+   ------------------------------------------------------------ */
+
+.daily-log-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(280px, 1fr);
+  gap: var(--spacing-lg);
+  align-items: start;
+}
+
+
+/* ------------------------------------------------------------
+   달력 패널
+   ------------------------------------------------------------ */
+
+.calendar-panel {
+  padding: var(--spacing-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.calendar-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.calendar-panel__month {
+  min-width: 8em;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-deep);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 범례 */
+.calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.calendar-legend__item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.calendar-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-full);
+}
+
+.calendar-dot--diet { background-color: var(--color-primary); }
+.calendar-dot--walk { background-color: var(--color-accent); }
+.calendar-dot--poop { background-color: var(--color-danger); }
+.calendar-dot--note { background-color: var(--color-text-muted); }
+
+/* 요일 헤더 */
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--spacing-2xs);
+}
+
+/* 날짜칸 - 이전/다음 달 채움칸은 빈 div, 실제 날짜는 button */
+.calendar-cell {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2px;
+  padding-top: var(--spacing-xs);
+  color: var(--color-text);
+  background-color: transparent;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.calendar-cell:hover:not(.calendar-cell--pad) {
+  background-color: var(--color-surface-hover);
+}
+
+.calendar-cell--pad {
+  color: var(--color-text-muted);
+  opacity: 0.35;
+  cursor: default;
+}
+
+.calendar-cell__num {
+  font-size: var(--font-size-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 오늘 - 테두리 강조 */
+.calendar-cell--today {
+  border-color: var(--color-primary);
+}
+
+/* 선택일 - 채운 배경. 색만으로 구분하지 않도록 굵은 글자도 함께 */
+.calendar-cell--selected {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.calendar-cell--selected .calendar-cell__num {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-on-primary);
+}
+
+.calendar-cell__dots {
+  display: flex;
+  gap: 3px;
+  min-height: 7px;
+}
+
+
+/* ------------------------------------------------------------
+   지표 3카드
+   ------------------------------------------------------------ */
+
+.metric-cards {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.metric-card {
+  display: grid;
+  gap: var(--spacing-2xs);
+  padding: var(--spacing-md);
+  text-align: left;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.metric-card--action {
+  cursor: pointer;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.metric-card--action:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.metric-card__label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* 정적 수치이므로 브랜드 색 대신 딥 톤 (클릭 오인 방지) */
+.metric-card__value {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-card__hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* 비만도/급여평균 판정 색 - 상태는 색만으로 구분하지 않고
+   hint 텍스트("저체중" 등)를 항상 함께 표시함 */
+.metric-card__value--under { color: var(--color-info); }
+.metric-card__value--normal { color: var(--color-success); }
+.metric-card__value--over { color: var(--color-danger); }
+.metric-card__value--unknown { color: var(--color-text-muted); }
+
+
+/* ------------------------------------------------------------
+   하루 상세
+   ------------------------------------------------------------ */
+
+.day-detail {
+  grid-column: 1 / -1;
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.day-detail__head {
+  margin-bottom: var(--spacing-md);
+}
+
+.day-detail__title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-deep);
+}
+
+.day-detail__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.day-detail__block--wide {
+  grid-column: 1 / -1;
+}
+
+.day-detail__block-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.day-detail__block-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-deep);
+}
+
+.day-detail__empty {
+  padding: var(--spacing-md) 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.day-detail__row {
+  display: flex;
+  gap: var(--spacing-lg);
+  align-items: flex-start;
+}
+
+.day-detail__field {
+  flex: 0 0 160px;
+}
+
+.day-detail__field--wide {
+  flex: 1;
+}
+
+.day-detail__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--spacing-sm);
+}
+
+
+/* ------------------------------------------------------------
+   식사 / 산책 목록
+
+   food-log__item 계열 클래스와 형태를 맞춰 통일감을 줌
+   ------------------------------------------------------------ */
+
+.meal-list,
+.walk-list {
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+.meal-list__item,
+.walk-list__item {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-md);
+}
+
+.meal-list__head,
+.walk-list__head {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.meal-list__time,
+.walk-list__time {
+  flex-shrink: 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+.meal-list__foods {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meal-list__calories {
+  flex-shrink: 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+.walk-list__memo {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meal-list__remove,
+.walk-list__remove {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.meal-list__remove:hover,
+.walk-list__remove:hover {
+  color: var(--color-danger);
+  background-color: var(--color-danger-bg);
+}
+
+.meal-list__photos {
+  display: flex;
+  gap: var(--spacing-2xs);
+  margin-top: var(--spacing-xs);
+}
+
+.meal-list__photo {
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-sm);
+}
+
+.meal-list__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+/* ------------------------------------------------------------
+   배변 4버튼
+
+   choice-group 과 같은 원리 - 색 + 테두리 + 굵기 3중 표시
+   ------------------------------------------------------------ */
+
+.poop-buttons {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.poop-btn {
+  flex: 1;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  text-align: center;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.poop-btn:hover {
+  border-color: var(--color-border-strong);
+}
+
+.poop-btn.is-active {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary-deep);
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary);
+}
+
+/* 딱딱함/무름/설사는 이상 신호이므로 선택 시 경고색 계열로 구분 */
+.poop-btn[data-poop="hard"].is-active,
+.poop-btn[data-poop="soft"].is-active,
+.poop-btn[data-poop="diarrhea"].is-active {
+  color: var(--color-danger);
+  background-color: var(--color-danger-bg);
+  border-color: var(--color-danger);
+}
+
+
+/* ------------------------------------------------------------
+   음식 검색 모달 (diet.js 에서 이식)
+   ------------------------------------------------------------ */
+
+.food-log {
+  display: grid;
+  gap: var(--spacing-2xs);
+  margin-bottom: var(--spacing-md);
+}
+
+.food-log__item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-md);
+}
+
+/* 금지 식품이 섞인 항목 - 색 + 테두리 2중 표시 */
+.food-log__item--toxic {
+  background-color: var(--color-danger-bg);
+  box-shadow: inset 0 0 0 1px var(--color-danger);
+}
+
+.food-log__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.food-log__name {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.food-log__meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.food-log__calories {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-deep);
+  font-variant-numeric: tabular-nums;
+}
+
+.food-log__remove {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.food-log__remove:hover {
+  color: var(--color-danger);
+  background-color: var(--color-danger-bg);
+}
+
+.food-result {
+  display: grid;
+  gap: var(--spacing-2xs);
+  max-height: 200px;
+  margin-bottom: var(--spacing-md);
+  overflow-y: auto;
+}
+
+.food-result__button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  width: 100%;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  text-align: left;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.food-result__button:hover {
+  background-color: var(--color-surface-alt);
+  border-color: var(--color-border-strong);
+}
+
+.food-result__button.is-selected {
+  color: var(--color-primary-deep);
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary);
+}
+
+.food-result__meta {
+  flex-shrink: 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.food-result__toxic {
+  flex-shrink: 0;
+  padding: 0 var(--spacing-2xs);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-danger);
+  background-color: var(--color-danger-bg);
+  border-radius: var(--radius-full);
+}
+
+.food-result__empty {
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.food-picked {
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-md);
+}
+
+.food-picked__info {
+  margin-bottom: var(--spacing-sm);
+}
+
+.food-picked__name {
+  display: block;
+  font-size: var(--font-size-md);
+  color: var(--color-deep);
+}
+
+.food-picked__meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.food-picked__row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
+}
+
+.food-picked__amount {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+
+/* 사진 미리보기 */
+.meal-photo-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
+}
+
+.meal-photo-preview__item {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  overflow: hidden;
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-md);
+}
+
+.meal-photo-preview__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.meal-photo-preview__remove {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  color: var(--color-text-on-dark);
+  background-color: rgb(46 32 25 / 60%);
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  line-height: 1;
+}
+
+
+/* ------------------------------------------------------------
+   체중 추이 모달 (health-record.html 에서 이식)
+   ------------------------------------------------------------ */
+
+.period-tabs {
+  display: inline-flex;
+  gap: 2px;
+  margin-bottom: var(--spacing-md);
+  padding: 3px;
+  background-color: var(--color-surface-alt);
+  border-radius: var(--radius-md);
+}
+
+.period-tab {
+  padding: var(--spacing-2xs) var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.period-tab:hover {
+  color: var(--color-text);
+}
+
+.period-tab.is-active {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary-deep);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.chart-wrap {
+  position: relative;
+  width: 100%;
+  height: 280px;
+}

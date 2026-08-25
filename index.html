@@ -87,28 +87,19 @@
           <h2 class="sr-only" id="quick-nav-title">주요 기능 바로가기</h2>
 
             <ul class="quick-nav__list">
+              <!-- 식단분석 + 건강기록 2개가 daily-log.html(식단 달력) 하나로 통합됨
+                   (docs/HANDOFF.md, docs/DAILY-LOG-SPEC.md 참고) -->
               <li>
-                <a class="quick-item" href="./diet.html">
+                <a class="quick-item" href="./daily-log.html">
                   <span class="quick-item__icon" aria-hidden="true">
                     <svg width="23" height="23" viewBox="0 0 24 24" fill="none">
-                      <path d="M4 13h16a8 8 0 0 1-16 0Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-                      <path d="M6 13a6 6 0 0 1 12 0" stroke="currentColor" stroke-width="1.6"/>
-                      <path d="M3 21h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                      <rect x="4" y="5" width="16" height="15" rx="2" stroke="currentColor" stroke-width="1.6"/>
+                      <path d="M4 9.5h16" stroke="currentColor" stroke-width="1.6"/>
+                      <path d="M8 3v3.5M16 3v3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                      <path d="M8.5 13.5l1.8 1.8L14.5 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                   </span>
-                  <span class="quick-item__label">식단분석</span>
-                </a>
-              </li>
-              <li>
-                <a class="quick-item" href="./health-record.html">
-                  <span class="quick-item__icon" aria-hidden="true">
-                    <svg width="23" height="23" viewBox="0 0 24 24" fill="none">
-                      <path d="M4 19V5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                      <path d="M4 19h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                      <path d="M7 15l4-5 3 3 4-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                  <span class="quick-item__label">건강기록</span>
+                  <span class="quick-item__label">식단 달력</span>
                 </a>
               </li>
               <li>

@@ -57,22 +57,128 @@
 - [ ] `thumbnailUrl` 없으면 프론트가 플레이스홀더 처리 (null 허용)
 - [ ] 0건일 때 빈 배열 `[]` — null 이나 404 를 주지 말 것
 
-## 3. 식단
+## 3. 식단 달력 (daily-log.html)
 
-### GET /api/food-items?keyword=
+diet.html(식단분석) + health-record.html(건강기록)이 daily-log.html 하나로
+통합되면서 `POST /api/diet/log`, `GET/POST /api/pets/:petId/health/records` 는
+**더 이상 쓰지 않습니다.** 아래 5개로 대체되었습니다.
+설계 근거는 `docs/DAILY-LOG-SPEC.md` 참고.
+
+### GET /api/food-items?keyword= (기존, 변경 없음)
 - [ ] **비로그인(토큰 없음) 요청 시 어떻게 응답하는지 결정 필요**
       현재 프론트는 로그인 후에만 호출하지만, 401 이면 로그인으로 튕기는 동작이 맞는지 확인
 - [ ] 한글 keyword 는 URL 인코딩되어 옴 (`%EB%8B%AD...`) — 디코딩 확인
 - [ ] 2글자 미만은 프론트가 안 보내지만, 서버도 방어 검증 권장
 
-### POST /api/diet/log
-- [ ] 요청: `{ petId, date, items: [{ foodItemId, amountG }] }`
-- [ ] 응답: `{ "items": [...서버 계산 칼로리 포함...], "analysis": {...} }`
-      → 응답의 items 로 화면을 다시 그리므로 **요청 items 를 그대로 돌려주면 안 되고 칼로리 계산 포함**해야 함
-- [ ] 성공 시 프론트가 "식단이 기록됐어요" 토스트를 띄움 — 200 이 아닌 201 을 줘도 동작하는지 확인 (프론트는 2xx 전부 성공 처리)
+### GET /api/pets/:petId/daily-log?date=YYYY-MM-DD (신규)
+- [ ] 그날 기록이 없으면 **404** (프론트가 "기록 없음"으로 처리, 에러 아님)
+- [ ] 응답:
+      ```json
+      {
+        "weight": 5.4,
+        "poop": "normal",
+        "poopMemo": "",
+        "note": "",
+        "meals": [
+          { "time": "08:30", "items": [
+              { "foodItemId": 12, "name": "닭가슴살", "amountG": 100, "calories": 165, "isToxic": false }
+            ], "photos": [{ "url": "https://..." }] }
+        ],
+        "walks": [{ "time": "19:00", "memo": "동네 한 바퀴" }]
+      }
+      ```
+      `poop` 은 `"normal" | "hard" | "soft" | "diarrhea" | null` 넷 중 하나
+
+### POST /api/pets/:petId/daily-log (신규)
+- [ ] 요청:
+      ```json
+      {
+        "petId": 3, "date": "2026-08-20",
+        "weight": 5.4, "poop": "normal", "poopMemo": "", "note": "",
+        "meals": [{ "time": "08:30", "items": [{ "foodItemId": 12, "amountG": 100 }] }],
+        "walks": [{ "time": "19:00", "memo": "동네 한 바퀴" }]
+      }
+      ```
+- [ ] 응답: 저장된 하루 기록을 GET 과 같은 형태로 반환 (meals.items 에 **서버 계산 칼로리 포함**)
+      → 사진은 아직 파일 업로드가 없어 `photos` 는 프론트가 보내지 않음 (로컬 미리보기만, [확인 필요] 업로드 연동 시 `Api.upload` 로 별도 처리)
+- [ ] 프론트는 이 API 를 식사/산책 추가·삭제, 체중/배변/특이사항 저장 때마다 매번 **하루 전체를 통째로** 보냄 (부분 업데이트 아님)
+
+### GET /api/pets/:petId/daily-log/summary?month=YYYY-MM (신규)
+- [ ] 달력 점 표시 전용. 그 달에 기록이 있는 날짜만 내려줘도 됨 (없는 날짜는 프론트가 점 없음으로 처리)
+- [ ] 응답: `[{ "date": "2026-08-03", "diet": true, "walk": false, "poopAbnormal": true, "note": false }, ...]`
+      또는 `{ "items": [...] }` (프론트가 `Api.toList` 로 정규화)
+- [ ] `poopAbnormal` 은 그날 `poop` 이 `hard`/`soft`/`diarrhea` 중 하나면 true
+
+### GET /api/pets/:petId/daily-log/calorie-stats?days=7 (신규)
+- [ ] 최근 N일(기본 7일) 평균 섭취 열량. 응답: `{ "avgKcal": 342, "days": 7 }`
+- [ ] 기록이 하나도 없으면 `avgKcal: 0` 또는 `null` — 프론트가 "기록이 쌓이면 표시돼요"로 처리
+
+### GET /api/pets/:petId/weight?range=week|month|year (신규)
+- [ ] 응답: `[{ "date": "2026-08-13", "weight": 5.4 }, ...]` (오래된 순 → 최신 순 정렬, 마지막 항목을 "최신 체중"으로 씀)
+- [ ] 기록이 없으면 빈 배열 `[]`
+
+### GET /api/breeds/standards (신규, [확인 필요])
+- [ ] 품종별 표준체중. 지금은 `scripts/breed-standards.js` 의 프론트 mock 표를 그대로 씀
+- [ ] 연동 시점에 이 API 로 교체 예정 — **RER/MER 계산 공식은 프론트와 반드시 동일해야 함**
+      (`RER = 70 × 체중^0.75`, `MER = RER × 활동계수`, 기본 활동계수 1.6)
 
 ### GET /api/users/me/pets
 - [ ] 0마리면 빈 배열 — 프론트가 "아이 등록하기" 빈 상태를 띄움
+- [ ] `breed`, `weight` 필드가 있어야 daily-log 의 비만도/급여평균 카드가 동작함 (없으면 "표준 없음"/"-"로 표시)
+
+## 3-2. 커뮤니티 (community / post-detail / post-write)
+
+프론트 구현이 끝나 실제로 호출하는 엔드포인트입니다.
+
+### GET /api/posts?page=&size=&category=&keyword=&tag=
+- [ ] `page` 는 **1부터** 시작 (0 기반이면 첫 페이지가 비어 보임)
+- [ ] `size` 기본 12 — 프론트가 항상 명시해서 보냄
+- [ ] `category` 는 `"free" | "gallery" | "recipe"`, 전체 조회 시 **파라미터 자체를 생략**함
+- [ ] `keyword` 는 글 제목 부분 일치
+- [ ] **`tag` 는 `#` 을 뗀 순수 태그명**으로 옴 (`#산책` → `tag=산책`)
+- [ ] 응답: `{ "items": [...], "totalCount": 25, "totalPages": 3 }`
+      → `totalPages` 가 없으면 프론트가 `totalCount` 로 계산하고, 둘 다 없으면 추정함.
+        **`totalCount` 만이라도 주는 것을 권장** (없으면 결과 개수 표시가 부정확해짐)
+- [ ] 카드가 쓰는 필드: `postId`, `title`, `category`, `authorNickname`, `likeCount`, `thumbnailUrl`
+- [ ] 0건일 때 빈 배열 — null 이나 404 를 주지 말 것
+
+### GET /api/posts/:postId
+- [ ] 상세가 쓰는 필드:
+      `postId`, `title`, `content`, `category`, `authorId`, `authorNickname`,
+      `createdAt`(ISO 8601), `likeCount`, `liked`(boolean), `tags`(배열),
+      `imageUrls`(배열) 또는 `imageUrl`(단일) — 프론트가 둘 다 받아 배열로 통일함
+- [ ] **`authorId` 필수** — 없으면 본인 글이어도 수정/삭제 버튼이 안 뜸
+      (프론트가 `me.userId === post.authorId` 로 판정)
+- [ ] `liked` 는 **요청한 사용자 기준**의 좋아요 여부
+- [ ] 없는 글은 404 — 프론트가 오류 배너를 띄우고 댓글 요청은 보내지 않음
+
+### POST /api/posts/:postId/like
+- [ ] 토글 방식 (같은 API 로 누르면 좋아요, 다시 누르면 취소)
+- [ ] 응답: `{ "liked": true, "likeCount": 13 }`
+      → 프론트는 먼저 화면을 바꾼 뒤 이 값으로 다시 맞춤.
+        **응답을 주지 않아도 동작하지만**, 여러 기기에서 누르면 화면과 서버가 어긋남
+- [ ] 실패 시 프론트가 이전 상태로 되돌리므로 오류를 삼키지 말 것
+
+### GET / POST /api/posts/:postId/comments
+- [ ] 목록 응답 필드: `commentId`, `authorId`, `authorNickname`, `content`, `createdAt`
+- [ ] **`authorId` 필수** — 없으면 본인 댓글에도 삭제 버튼이 안 뜸
+- [ ] 작성 요청: `{ "content": "..." }` — 작성자는 토큰에서 판단
+- [ ] 작성 성공 후 프론트가 목록을 **다시 조회**하므로, 응답 본문 형식은 자유
+- [ ] 0건일 때 빈 배열
+
+### DELETE /api/posts/:postId/comments/:commentId
+- [ ] 남의 댓글 삭제 요청은 403 (프론트가 버튼을 숨기지만 우회 가능)
+
+### POST /api/posts · PUT /api/posts/:postId  (둘 다 multipart/form-data)
+- [ ] 필드: `category`, `title`, `content`, `tags`(같은 이름으로 여러 번), `images`(파일, 최대 3장)
+- [ ] **`tags` 는 같은 키로 반복 전송됨** — `tags=산책&tags=간식` 형태로 받아야 함
+- [ ] 이미지 제한: 장당 5MB · 최대 3장 · JPG/PNG/WEBP
+      → **서버에서도 반드시 검증**할 것. 클라이언트 검증은 우회됨
+- [ ] `PUT` 에서 `images` 가 비어 있으면 **기존 이미지를 유지**해야 함
+      (프론트는 새로 고르지 않으면 파일을 아예 보내지 않음)
+- [ ] `POST` 응답에 **`postId` 를 포함**할 것
+      → 프론트가 등록 직후 `post-detail.html?postId=` 로 이동함.
+        없으면 목록으로 보내지므로 방금 쓴 글을 못 봄
 
 ## 4. 연동 시나리오 테스트 (수동, 순서대로)
 
@@ -113,17 +219,20 @@
 ## 8. 아직 프론트가 호출하지 않는 엔드포인트 (구현 예정 순서는 ROADMAP 참고)
 
 ```
-게시글    GET/POST/PUT/DELETE /api/posts
-          POST /api/posts/:postId/like
-댓글      GET/POST/DELETE /api/posts/:postId/comments
 반려견    GET/POST/PUT/DELETE /api/pets
-건강기록  GET/POST /api/pets/:petId/health/records
-          GET /api/pets/:petId/health/alerts
+          GET /api/breeds
 AI 채팅   GET/POST /api/chats, /api/chats/:chatId/messages
 사용자    GET /api/users/me
           PUT /api/users/me/password
           DELETE /api/users/me
 ```
+
+게시글·댓글 엔드포인트는 **프론트 구현이 끝나 이제 실제로 호출합니다.**
+규약은 3-2 섹션에 정리했습니다.
+식단 달력(daily-log) 엔드포인트 5종은 3번 섹션에 있습니다.
+
+(예전 건강기록 전용 API `/api/pets/:petId/health/records`, `/health/alerts` 와
+식단 전용 `POST /api/diet/log` 는 daily-log 통합으로 폐기되었습니다. 구현하지 마세요.)
 
 ## 부록. 소셜 로그인 (가장 마지막 순서)
 
