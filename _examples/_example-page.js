@@ -86,7 +86,7 @@
      ========================================================== */
   document.addEventListener("DOMContentLoaded", function () {
     /* 로그인 필수 페이지라면 아래 주석을 해제할 것
-       (post-write, health-record, my-page 가 해당)
+       (post-write, daily-log, my-page 가 해당)
 
     if (!window.TomopetAuth.requireAuth()) return;
     */

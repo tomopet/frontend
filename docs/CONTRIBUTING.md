@@ -4,8 +4,8 @@
 
 | 담당 | 범위 |
 |---|---|
-| SG | `index.html` `login.html` `password-reset*.html` `terms.html` `privacy.html` + 공통 모듈 + 헤더/푸터 |
-| 협업자 | `community` `post-write` `post-detail` `health-record` `` `` `ai-chat` `my-page` |
+| SG | `index.html` `login.html` `password-reset*.html` `terms.html` `privacy.html` `daily-log.html` + 공통 모듈 + 헤더/푸터 |
+| 협업자 | `community` `post-write` `post-detail` `ai-chat` `my-page` |
 
 남은 작업의 상세 순서와 페이지별 주의점은 [ROADMAP.md](./ROADMAP.md) 에 있습니다.
 
@@ -27,7 +27,7 @@
 feat/community
 feat/post-write
 feat/my-page
-feat/health-record
+feat/daily-log
 ```
 
 ### 처음 한 번 (저장소 받기)
@@ -254,7 +254,7 @@ README 의 REST API 표준 문법(`async / await` + `try / catch`)을 그대로 
 })();
 ```
 
-로그인이 필요한 페이지: `post-write` `health-record` `my-page`
+로그인이 필요한 페이지: `post-write` `daily-log` `my-page`
 
 ---
 
@@ -281,7 +281,7 @@ var postId = params.get("postId");   // "id" 아님
 
 ```
 community.html      -> data-nav="community"
-health-record.html  -> data-nav="health-record"
+daily-log.html      -> data-nav="daily-log"
 .html -> data-nav=""
 ai-chat.html        -> data-nav="ai-chat"
 ```

@@ -66,7 +66,10 @@
           <span class="comments__count" id="comment-count">0개</span>
         </div>
 
-        <form class="comments__form" id="comment-form">
+        <!-- novalidate - 검증은 post-detail.js 가 담당한다.
+             브라우저 기본 말풍선은 프로젝트 오류 표시(.form-field__error)와
+             모양도 문구도 달라 화면마다 오류가 다르게 보인다. -->
+        <form class="comments__form" id="comment-form" novalidate>
           <label class="form-field__label" for="comment-content">댓글 작성</label>
           <textarea
             class="form-field__textarea"

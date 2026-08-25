@@ -34,6 +34,16 @@
 
       <p class="banner post-write__message" id="post-write-message" role="alert" hidden></p>
 
+      <!-- 임시저장 복원 안내 - 저장된 글이 있을 때만 post-write.js 가 노출한다.
+           이미지는 파일 객체라 저장되지 않으므로 문구로 미리 알린다. -->
+      <div class="post-write__draft" id="post-draft-restore" hidden>
+        <p class="post-write__draft-text" id="post-draft-text">임시저장된 글이 있습니다.</p>
+        <div class="post-write__draft-actions">
+          <button class="btn btn--secondary btn--sm" id="post-draft-load" type="button">불러오기</button>
+          <button class="btn btn--ghost btn--sm" id="post-draft-discard" type="button">지우기</button>
+        </div>
+      </div>
+
       <form class="post-write" id="post-form" novalidate>
         <fieldset class="post-write__fieldset">
           <legend class="form-field__label">카테고리</legend>
@@ -96,12 +106,13 @@
               name="images"
               type="file"
               accept="image/jpeg,image/png,image/webp"
+              aria-describedby="post-image-limit"
               multiple
             >
             <label class="btn btn--dashed" for="post-image-input">이미지 선택</label>
             <span class="post-write__file-name" id="post-image-name">선택된 이미지 없음</span>
           </div>
-          <p class="form-field__hint" id="post-image-limit">JPG, PNG, WEBP · 최대 3장 · 장당 1MB</p>
+          <p class="form-field__hint" id="post-image-limit">JPG, PNG, WEBP · 최대 3장 · 장당 5MB</p>
           <p class="form-field__error" id="post-image-error" hidden></p>
           <div class="post-write__preview" id="post-image-preview-wrap" hidden>
             <ul class="post-write__preview-grid" id="post-image-preview-list" aria-label="선택한 이미지 미리보기"></ul>
@@ -128,7 +139,13 @@
 
         <div class="post-write__actions">
           <a href="./community.html" class="btn btn--secondary">취소</a>
-          <button class="btn btn--primary btn--lg" id="post-submit-button" type="submit">게시하기</button>
+          <!-- 우측 묶음 - .post-write__actions 가 space-between 이라
+               버튼을 그대로 늘리면 세 개가 균등 분산되어 취소가 멀어진다. -->
+          <div class="post-write__actions-right">
+            <span class="post-write__draft-status" id="post-draft-status" aria-live="polite"></span>
+            <button class="btn btn--secondary" id="post-draft-save" type="button">임시저장</button>
+            <button class="btn btn--primary btn--lg" id="post-submit-button" type="submit">게시하기</button>
+          </div>
         </div>
       </form>
     </div>

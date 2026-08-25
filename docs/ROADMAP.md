@@ -16,8 +16,12 @@
 | 로그인 / 회원가입 | 완료 |
 | 비밀번호 재설정 | 완료 |
 | 이용약관 / 개인정보처리방침 | 초안 완료 (법률 검토 필요) |
-| 나머지 8개 페이지 | HTML · CSS 완료, JS 미구현 |
+| 식단 달력 (`daily-log.html`) | **완료** — diet.html + health-record.html 통합, diet/health-record 관련 파일 전부 제거됨 |
+| my-page | 완료 (검증 6건 통과) |
+| 커뮤니티 (`community` `post-detail` `post-write`) | **완료** — 브라우저 검증 70여 항목 통과 |
+| ai-chat | 팀원 구현본 유지 (백엔드 AI 연동 대기) |
 | 모달 컴포넌트 | 완료 (`<dialog>` 기반, components.css) |
+| 의존성 예외 | Chart.js(CDN) — `daily-log.html` 체중 추이 차트. "Vanilla JS 의존성0" 방침의 유일한 예외 |
 | 백엔드 | 없음 |
 
 ---
@@ -26,9 +30,12 @@
 
 | 담당 | 파일 |
 |---|---|
-| SG | `index` `login` `password-reset` `password-reset-confirm` `terms` `privacy` + 공통 모듈 3개 + `header` `footer` |
-| 협업자 | `community` `post-write` `post-detail` `health-record` `` `` `ai-chat` `my-page` |
+| SG | `index` `login` `password-reset` `password-reset-confirm` `terms` `privacy` `daily-log` `community` `post-detail` `post-write` + 공통 모듈 3개 + `header` `footer` |
+| 협업자 | `ai-chat` `my-page` + 각 페이지 HTML/CSS 퍼블리싱 |
 | 백엔드 | Spring Boot + MySQL + JWT |
+
+`daily-log` 는 diet(SG) + health-record(협업자, mock 데이터) 통합 과정에서 SG 가 이어받아 완성했습니다.
+`community` `post-detail` `post-write` 는 HTML/CSS 는 협업자가 퍼블리싱하고 JS 는 SG 가 구현했습니다.
 
 ---
 
@@ -38,16 +45,17 @@
 
 ```
 0. 모달 컴포넌트          ← 완료 (SG)
-1. community.js
-2. post-detail.js
-3. post-write.js
+1. community.js           ← 완료 (SG)
+2. post-detail.js         ← 완료 (SG)
+3. post-write.js          ← 완료 (SG) - 임시저장 버튼 추가로 마크업 일부 수정
 4. my-page.js             ← 완료 (SG)
-5. .js
-6. .js
-7. health-record.js       ← Chart.js 필요
-8. ai-chat.js             ← 백엔드 AI 필요
-9. 소셜 로그인             ← 백엔드 OAuth 필요
+5. daily-log.js           ← 완료 (SG) - Chart.js 필요, diet.js + health-record.js 통합
+6. ai-chat.js             ← 백엔드 AI 필요 (팀원 구현본 있음, 유지)
+7. 소셜 로그인             ← 백엔드 OAuth 필요
 ```
+
+프론트 페이지 JS 는 ai-chat(팀원 담당)을 빼고 전부 구현이 끝났습니다.
+남은 것은 백엔드 연동과 비개발 항목입니다.
 
 ---
 
@@ -118,107 +126,123 @@ form.addEventListener("submit", async function (event) {
 
 ---
 
-## 1. community.js — 4건
+## 1. community.js — 완료 (7항목)
 
-**만들 파일** — `community.html`(루트) · `styles/community.css` · `scripts/community.js`
-브랜치 `feat/community` 에서 작업 후 PR (CONTRIBUTING 섹션 0)
+`community.html`(루트) · `styles/community.css` · `scripts/community.js`
 
-| 기능 | 엔드포인트 |
+| 기능 | 연결 지점 |
 |---|---|
-| 목록 조회 | `GET /api/posts?page=1&size=12` |
-| 카테고리 필터 | `GET /api/posts?category=recipe` |
-| 검색 | `GET /api/posts?keyword=연어` |
-| 페이지네이션 | 응답의 `totalPages` 사용 |
+| 목록 조회 + 카드 렌더 | `GET /api/posts?page=&size=` → `#community-list` |
+| 카테고리 필터 | `GET /api/posts?category=recipe` → `.community__filter` |
+| 제목 검색 | `GET /api/posts?keyword=연어` |
+| 태그 검색 | `GET /api/posts?tag=연어` — `#` 을 떼고 보냄 |
+| 검색 초기화 | `#community-search-reset` |
+| 페이지네이션 | 응답의 `totalPages` (없으면 `totalCount` 로 계산) |
+| 빈 상태 문구 분기 | 검색 결과 없음 / 카테고리 없음 / 글 없음 |
 
-### 반드시 지킬 것
+한 페이지는 12개입니다. `card-grid` 가 3열이라 3의 배수여야 줄이 안 비어 보입니다.
 
-카드 링크는 **홈과 동일한 형식**이어야 합니다.
+### 지킨 계약
+
+카드 링크는 홈과 동일한 형식입니다. 배지 매핑도 `index.js` 의 `CATEGORY_BADGE` 와 같습니다.
 
 ```js
 link.href = "./post-detail.html?postId=" + encodeURIComponent(post.postId);
 ```
 
-배지 클래스도 홈과 같은 매핑을 씁니다. `index.js` 의 `CATEGORY_BADGE` 를 복사하세요.
+필터·검색이 바뀌면 항상 1페이지로 되돌립니다.
+3페이지를 보던 중 필터를 바꾸면 결과가 1페이지뿐이라 빈 화면이 나오기 때문입니다.
 
-```js
-gallery -> badge--gallery
-recipe  -> badge--recipe
-free    -> badge--free
-```
+### 만들지 않은 것
 
-빈 상태에는 이미 행동 버튼이 들어 있습니다. 지우지 마세요.
+`community.css` 에 `.community__mode-switch` `.community__mode-title` `.community__mode-status`
+세 선택자가 남아 있지만 **서버/로컬 모드 전환 UI 는 만들지 않기로 했습니다.**
+서버 조회만 하고 실패하면 빈 상태로 처리합니다. 위 CSS 는 현재 쓰이지 않습니다.
 
 ---
 
-## 2. post-detail.js — 4건
+## 2. post-detail.js — 완료 (10항목)
 
-**만들 파일** — `post-detail.html`(루트) · `styles/post-detail.css` · `scripts/post-detail.js`
-브랜치 `feat/post-detail` 에서 작업 후 PR (CONTRIBUTING 섹션 0)
+`post-detail.html`(루트) · `styles/post-detail.css` · `scripts/post-detail.js`
 
 | 기능 | 엔드포인트 |
 |---|---|
 | 상세 조회 | `GET /api/posts/:postId` |
+| 게시글 삭제 | `DELETE /api/posts/:postId` |
 | 좋아요 토글 | `POST /api/posts/:postId/like` |
 | 댓글 목록 | `GET /api/posts/:postId/comments` |
-| 댓글 작성 / 삭제 | `POST` / `DELETE /api/posts/:postId/comments/:commentId` |
+| 댓글 작성 | `POST /api/posts/:postId/comments` |
+| 댓글 삭제 | `DELETE /api/posts/:postId/comments/:commentId` |
 
-### 반드시 지킬 것
+### 지킨 계약
 
 ```js
 var params = new URLSearchParams(window.location.search);
-var postId = params.get("postId");   // "id" 아님. 홈이 이 이름으로 링크를 만듦
-if (!postId) { /* 잘못된 접근 처리 */ }
+var postId = params.get("postId");   // "id" 아님. 홈과 목록이 이 이름으로 링크를 만듦
 ```
 
-본인 글일 때만 수정/삭제 버튼을 노출합니다.
+본인 글일 때만 수정/삭제를 노출하고, 수정 링크에 `postId` 를 붙입니다.
 
 ```js
-var me = window.TomopetAuth.getUser();
-ownerActions.hidden = !me || me.userId !== post.authorId;
+var isOwner = Boolean(me && post.authorId && me.userId === post.authorId);
 ```
 
-`#post-main-image` 는 `src` 속성이 없습니다. 빈 `src` 는 현재 페이지를
-이미지로 다시 내려받기 때문입니다. JS 가 채우세요.
+댓글도 같은 방식으로 본인 것에만 삭제 버튼을 답니다.
 
-```js
-if (post.imageUrl) {
-  mainImage.src = post.imageUrl;
-  mainImage.hidden = false;
-}
-```
+### 이미지 갤러리
+
+`#post-image-gallery` 안에 `.post-detail__image` 를 JS 가 만들어 넣습니다.
+서버가 `imageUrls` 배열을 주기도 하고 `imageUrl` 하나만 주기도 해서 배열로 통일해 다룹니다.
+이미지가 없으면 빈 격자가 남지 않도록 갤러리를 통째로 숨깁니다.
 
 ### 좋아요 낙관적 갱신
 
-응답을 기다리면 반응이 느립니다. 먼저 UI 를 바꾸고 실패 시 되돌리세요.
+먼저 화면을 바꾸고 실패하면 되돌립니다.
+요청이 오가는 중에 또 누르면 카운트가 어긋나므로 `likePending` 으로 막습니다.
+서버가 확정값(`liked`, `likeCount`)을 주면 그것으로 다시 맞춥니다.
 
-```js
-var liked = btn.classList.toggle("is-liked");
+### 카테고리 배지
 
-try {
-  await Api.post("/api/posts/" + postId + "/like");
-} catch (error) {
-  console.error("좋아요 실패:", error);
-  btn.classList.toggle("is-liked");   // 롤백
-}
-```
+`#post-category` 에 `.badge--*` 클래스를 **JS 가 부여합니다.**
+`post-detail.css` 는 기본 색만 담당하고 카테고리 색은 `components.css` 가 맡습니다.
 
 ---
 
-## 3. post-write.js — 8건 (가장 무거움)
+## 3. post-write.js — 완료 (10항목)
 
-**만들 파일** — `post-write.html`(루트) · `styles/post-write.css` · `scripts/post-write.js`
-브랜치 `feat/post-write` 에서 작업 후 PR (CONTRIBUTING 섹션 0)
+`post-write.html`(루트) · `styles/post-write.css` · `scripts/post-write.js`
 
 | 기능 | 비고 |
 |---|---|
-| 작성 / 수정 분기 | `?postId=` 가 있으면 수정 모드 |
-| 이미지 미리보기 | `FileReader` |
-| 이미지 업로드 | `FormData` + `Api.upload` |
-| 태그 입력 | Enter 로 추가, Backspace 로 삭제 |
-| 글자 수 카운터 | `maxlength` 와 동기화 |
-| 임시 저장 | localStorage 또는 API |
-| 카테고리 선택 | 라디오 |
+| 작성 / 수정 분기 | `?postId=` 가 있으면 수정 모드 (`GET` 으로 기존 값을 채움) |
+| 제목 / 내용 카운터 | `maxlength` 와 동기화 |
+| 이미지 검증 | 최대 3장 · 장당 5MB · JPG/PNG/WEBP |
+| 이미지 미리보기 | `URL.createObjectURL` + 개별 삭제 시 즉시 해제 |
+| 태그 입력 | Enter 추가 / Backspace 삭제 / 최대 5개 / 중복·공백 거부 |
+| 폼 검증 | 제목·내용 필수 |
+| 제출 | `POST /api/posts` · `PUT /api/posts/:postId` (둘 다 FormData) |
+| 임시저장 | 수동 버튼 + localStorage (**새 글 모드에서만**) |
 | 이탈 경고 | `beforeunload` |
+| 로그인 필수 | `requireAuth()` |
+
+### 마크업을 수정한 부분
+
+이 페이지는 JS 만으로 끝나지 않고 마크업을 두 군데 고쳤습니다.
+
+1. **임시저장 버튼 추가** — `.post-write__actions-right` 로 우측 묶음을 만들고
+   그 안에 `#post-draft-save` 와 상태 표시 `#post-draft-status` 를 넣었습니다.
+   `.post-write__actions` 가 `space-between` 이라 묶지 않으면 세 요소가 균등 분산됩니다.
+   복원 안내 `#post-draft-restore` 도 폼 위에 추가했습니다.
+2. **이미지 용량 문구 정정** — 마크업에는 "장당 1MB", 이 문서에는 5MB 로 적혀 있어
+   어긋나 있었습니다. ROADMAP 기준(5MB)에 맞춰 마크업 문구를 고쳤습니다.
+
+### 임시저장은 새 글에서만
+
+수정 모드에서도 저장하면 원본과 초안이 뒤섞여 어느 쪽이 최신인지 알 수 없습니다.
+수정 모드에서는 `#post-draft-save` 를 숨깁니다.
+
+**이미지는 임시저장되지 않습니다.** `File` 객체는 직렬화되지 않기 때문이며,
+복원 안내 문구에 이 사실을 함께 적었습니다.
 
 ### `Content-Type` 을 직접 넣지 마세요
 
@@ -227,32 +251,22 @@ try {
 await fetch(url, { headers: { "Content-Type": "multipart/form-data" }, body: formData });
 
 /* 올바름 */
-var formData = new FormData();
-formData.append("title", title);
-formData.append("image", file);
 await Api.upload("/api/posts", formData);
+await Api.upload("/api/posts/3", formData, { method: "PUT" });
 ```
 
 `api.js` 가 `FormData` 를 감지해 `Content-Type` 을 자동으로 생략합니다.
 
-### 미리보기 후 objectURL 해제
-
-```js
-var url = URL.createObjectURL(file);
-preview.src = url;
-preview.onload = function () { URL.revokeObjectURL(url); };
-```
-
-해제하지 않으면 이미지를 바꿀 때마다 메모리가 누적됩니다.
-
 ### 파일 크기와 형식 검증
 
 ```js
-var MAX_SIZE = 5 * 1024 * 1024;   // 5MB
-var ALLOWED = ["image/jpeg", "image/png", "image/webp"];
+var MAX_IMAGE_COUNT = 3;
+var MAX_IMAGE_SIZE = 5 * 1024 * 1024;   // 5MB
+var ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 ```
 
-서버에서도 반드시 검증해야 합니다. 클라이언트 검증은 우회됩니다.
+**서버에서도 반드시 검증해야 합니다.** 클라이언트 검증은 우회됩니다.
+값을 바꾸면 `post-write.html` 의 `#post-image-limit` 안내 문구도 함께 고치세요.
 
 ---
 
@@ -294,101 +308,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
 ---
 
-## 5. health-record.js — 9건
+## 5. daily-log.js — 완료 (diet.js + health-record.js 통합)
 
-**만들 파일** — `health-record.html`(루트) · `styles/health-record.css` · `scripts/health-record.js`
-브랜치 `feat/health-record` 에서 작업 후 PR (CONTRIBUTING 섹션 0)
+**만들었던 파일** — `daily-log.html`(루트) · `styles/daily-log.css` · `scripts/daily-log.js`
 
-| 기능 | 엔드포인트 |
-|---|---|
-| 최근 기록 | `GET /api/pets/:petId/health/latest` |
-| 기록 목록 | `GET /api/pets/:petId/health/records` |
-| 기록 추가 | `POST /api/pets/:petId/health/records` |
-| 오늘 섭취 (읽기) | `GET /api/diet/log?petId=&date=` |
-| 이상 징후 | `GET /api/pets/:petId/health/alerts` |
+`diet.html`(식단분석, SG 담당)과 `health-record.html`(건강기록, 협업자 담당·mock 데이터)이
+따로 존재하면 같은 날의 섭취 칼로리를 두 화면에서 각각 다뤄야 해서
+"먹은 것"과 "몸 상태"가 어긋날 위험이 있었습니다.
+이를 막기 위해 두 페이지를 `daily-log.html` 하나로 합쳤습니다.
+설계 근거는 `docs/DAILY-LOG-SPEC.md`, 엔드포인트 규약은
+`docs/INTEGRATION-CHECKLIST.md` 3번 섹션 참고.
 
-### 먹은 것은 여기서 기록하지 않습니다
+옛 엔드포인트 `GET/POST /api/pets/:petId/health/records`, `GET /api/pets/:petId/health/alerts`,
+`POST /api/diet/log` 는 **더 이상 쓰지 않습니다.** 백엔드는 구현하지 마세요.
 
-건강기록은 **몸 상태**만 다룹니다. 체중 · 배변 · 컨디션 · 메모.
+### 이식된 것
 
-**섭취량은 식단분석(`diet.html`)에서 기록합니다.**
-사료뿐 아니라 간식·사람음식까지 합산해야 정확하기 때문입니다.
+- 음식 검색 모달 (diet.js) → 식사 추가 모달 안으로, 한 끼에 여러 음식을 담을 수 있게 확장
+- 체중 추이 Chart.js 차트 (health-record.js) → 체중 카드 클릭 시 모달로, 파괴 후 재생성 패턴 유지
+- 배변 상태는 4버튼(정상/딱딱함/무름/설사)으로 단순화, 색만으로 구분하지 않고 텍스트 병기
 
-```
-건강기록  =  몸 상태     체중 · 배변 · 컨디션
-식단분석  =  먹은 것     사료 + 간식 + 사람음식
-```
+### 건강 화면 카피 톤은 유지
 
-요약 패널의 `latest-calories` 는 **읽기 전용**입니다.
-`GET /api/diet/log?petId=&date=` 로 받아서 표시만 하세요.
-
-```js
-/* 예: "340 / 450 kcal" */
-$("latest-calories").textContent =
-  Ui.formatNumber(data.analysis.calories.actual) + " / " +
-  Ui.formatNumber(data.analysis.calories.target) + " kcal";
-```
-
-여기서 또 입력받으면 사용자가 하루에 두 번 기록하게 되고,
-값이 어긋났을 때 어느 게 맞는지 알 수 없습니다.
-
-### Chart.js 를 추가해야 합니다
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
-```
-
-`layout.js` 뒤, `health-record.js` 앞에 넣으세요.
-
-### 차트를 다시 그릴 때는 반드시 파괴 후 생성
-
-```js
-var chartInstance = null;
-
-function renderChart(data) {
-  if (chartInstance) chartInstance.destroy();   // 없으면 메모리 누수 + 툴팁 중복
-  chartInstance = new Chart(canvas, config);
-}
-```
-
-### 상태는 색만으로 구분하지 마세요
-
-적록색약 사용자에게 세이지(정상)와 앰버(주의)는 **1.84:1**, 사실상 같은 색입니다.
-`.status-chip` 이 색 + 도형 + 텍스트를 함께 표시합니다.
-
-```js
-/* 기존 상태 클래스를 모두 제거한 뒤 부여할 것 */
-el.classList.remove("status-chip--normal", "status-chip--caution",
-                    "status-chip--danger", "status-chip--none");
-el.classList.add("status-chip--" + tone);
-el.textContent = label;
-```
-
-| 값 | 텍스트 | 클래스 |
-|---|---|---|
-| `NORMAL` (배변) | 정상 | `--normal` |
-| `SOFT` | 묽음 | `--caution` |
-| `HARD` | 딱딱함 | `--caution` |
-| `NORMAL` (컨디션) | 평소와 같음 | `--normal` |
-| `ACTIVE` | 평소보다 활발함 | `--normal` |
-| `LETHARGIC` | 평소보다 무기력함 | `--caution` |
-| 값 없음 | 기록 없음 | `--none` |
-
-### 카피 톤을 분리하세요
-
-건강 화면은 사용자가 불안한 순간입니다. 친근한 어투를 쓰지 마세요.
+건강 관련 블록(체중·배변·특이사항, 비만도·급여평균 카드)은 여전히 담백한 어투를 씁니다.
 
 ```
 지양: 우리 아이한테 무슨 일이 있나 봐요
 지향: 최근 2주간 체중이 12% 줄었어요
 ```
-
-### 이상 징후 판정 기준
-
-| 항목 | 기준 |
-|---|---|
-| 체중 | 2주간 ±10% 변화 |
-| 식욕 | 3일 연속 평소보다 적음 |
 
 ---
 
